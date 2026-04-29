@@ -437,7 +437,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
       </div>
       <!-- 右上角：齒輪 + 倒數 -->
       <div class="flex flex-col items-end gap-1">
-        <button class="gear-btn on" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
+        <button class="gear-btn" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
         <div style="text-align:right">
           <div class="cd-digits" id="cdDigits">23天 09:15:05</div>
           <button onclick="showCdSettings()" style="font-size:.65rem;color:var(--text3);background:none;border:none;cursor:pointer;display:block;margin-top:1px">VBP 倒數 ▾</button>
@@ -458,7 +458,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 </header>
 
 <!-- 管理員工具列（預設隱藏，點右上 ⚙️ 齒輪才會出現） -->
-<div id="adminBar" style="">
+<div id="adminBar" style="display:none">
   <div class="admin-bar">
     <span style="font-size:.7rem;font-weight:800;color:var(--violet)">⚙️ 管理員模式</span>
     <button class="btn btn-ghost btn-sm" onclick="showExport()">⬇️ 下載 HTML</button>
@@ -471,65 +471,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
      ════════════════════════════════════════════════ -->
 <!-- ⚠️ 此區塊由 JavaScript 自動填入，請勿在此手動寫內容 -->
 <main id="main" class="px-3 pt-2 pb-28">
-    <div class="day-hdr">
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">5/30 (六)</div>
-          <div style="font-size:.73rem;opacity:.85;margin-top:3px">📍 西面→台灣</div>
-        </div>
-        <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35)" onclick="addNewItem('day8')">＋ 新增行程</button>
-      </div>
-    </div><div class="period-hdr">🌅 上午</div>
-    <div class="trip-card  " id="card-d8-1" style="animation-delay:0s">
-      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
-        
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-1','day8','上午',-1)" title="往上移">↑</button>
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-1','day8','上午',1)" title="往下移">↓</button>
-        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-1','day8')">✏️</button>
-        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-1','day8')">🗑️</button>
-      </div>
-      <div style="padding-right:100px"><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:6px"><span class="time-chip">⏰ 08:30</span></div><div style="margin-bottom:5px">
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
-      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">7:30 起床／8:30 出發</span>
-      <span class="cat-badge c-集合出發">集合出發</span>
-    </div>
-  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">🔺早餐(自行處理)</div></div>
-      
-    </div>
-    <div class="trip-card  has-bottom" id="card-d8-2" style="animation-delay:0.03s">
-      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
-        
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-2','day8','上午',-1)" title="往上移">↑</button>
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-2','day8','上午',1)" title="往下移">↓</button>
-        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-2','day8')">✏️</button>
-        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-2','day8')">🗑️</button>
-      </div>
-      <div style="padding-right:100px"><div style="margin-bottom:5px">
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
-      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">搭車前往-金海國際機場 第 I 航廈</span>
-      <span class="cat-badge c-交通">交通</span>
-    </div>
-  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">🔺地鐵2號線：西面站→沙上站／🔺釜山金海輕軌：沙上站→機場站(車程約45分鐘)</div></div>
-      <div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap"><a href="https://naver.me/GNRjwFwb" target="_blank" class="map-btn map-btn-naver">
-        <span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a></div>
-    </div>
-    <div class="trip-card c-urgent has-bottom" id="card-d8-3" style="animation-delay:0.06s">
-      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
-        
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-3','day8','上午',-1)" title="往上移">↑</button>
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-3','day8','上午',1)" title="往下移">↓</button>
-        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-3','day8')">✏️</button>
-        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-3','day8')">🗑️</button>
-      </div>
-      <div style="padding-right:100px"><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:6px"><span class="time-chip">⏰ 10:00</span><span class="sb sb-urgent">重要！勿遲到</span></div><div style="margin-bottom:5px">
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
-      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">金海國際機場 第 I 航廈</span>
-      <span class="cat-badge c-交通">交通</span>
-    </div>
-  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">12:15 華航 CI189 → 13:40 抵達台灣</div></div>
-      <div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap"><a href="https://naver.me/GNRjwFwb" target="_blank" class="map-btn map-btn-naver">
-        <span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a></div>
-    </div></main>
+</main>
 
 <!-- ════════════════════════════════════════════════
      底部導覽列
@@ -554,92 +496,101 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   </button>
 </nav>
 
-<div id="modalContainer">
-    <div class="modal-overlay" id="modalOverlay">
-      <div class="modal-box" id="modalBox">
-    <div class="modal-handle"></div>
-    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:8px">⬇️ 下載完整 HTML</h2>
-    <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">下載後覆蓋上傳到 GitHub，成員用舊網址即可看到最新行程，不需要任何操作。</p>
-    <button class="btn btn-teal" style="width:100%;font-size:.88rem;padding:12px" onclick="dlHtml()">⬇️ 下載 HTML 檔案</button>
-    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeModal()">取消</button></div>
-    </div></div>
+<div id="modalContainer"></div>
 <div id="drawerContainer"></div>
 
 
-<!-- ╔══════════════════════════════════════════════════════════════╗
-     ║   ✏️  旅遊 App 修改手冊  ── 只需改這個區塊！                ║
-     ╚══════════════════════════════════════════════════════════════╝
+<!--
+╔══════════════════════════════════════════════════════════════════╗
+║              📖  釜山行程 App — 新手修改完整教學                ║
+║              ✅ 只需修改這份 HTML 一個檔案，不需要任何工具       ║
+╚══════════════════════════════════════════════════════════════════╝
 
-  📌 操作流程（三步驟）
-  ──────────────────────────────────────────────────────────────
-  ① 瀏覽器開啟 HTML → 點右上角 ⚙️ 齒輪進入「管理員模式」
-  ② 直接在 App 內點 ✏️ 編輯行程卡片（最方便！）
-     → 或在下方 JS 資料區直接改程式碼
-  ③ ⚙️ →「⬇️ 下載 HTML」→ 覆蓋上傳到 GitHub
-     → 成員用原本網址即可看到最新版，無需任何操作 ✅
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🚀 日常操作（最快方式）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. 瀏覽器開啟此 HTML 網址
+  2. 點右上角 ⚙️ 齒輪 → 進入「管理員模式」
+  3. 行程卡片右上角出現 ⋯ → 點開可「↑↓ 移動 / ✏️ 編輯 / 🗑️ 刪除」
+  4. 完成後 ⚙️ → 「⬇️ 下載 HTML」→ 上傳 GitHub
+     → 成員用原網址即可看到最新版，什麼都不用做 ✅
 
-  ──────────────────────────────────────────────────────────────
-  📂 六個資料區塊（全部在 <script> 標籤內，依序如下）
-  ──────────────────────────────────────────────────────────────
-  【1】TRIP_META        旅遊名稱、日期範圍、人數、倒數時間
-  【2】TRIP_DAYS        每日行程（最常改這裡）
-  【3】DEFAULT_EXPENSES 費用明細（機票 / 住宿 / 雜費）
-  【4】VBP_DATA         釜山通行證景點圖鑑
-  【5】OFFLINE_INFO     緊急電話 / 交通資訊 / 常用韓語
-  【6】FX_RATE          離線匯率（出發前更新一次即可）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📂 六個資料區塊（在下方 <script> 內，依序排列）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  【1】TRIP_META        → 旅遊名稱、日期、人數、倒數目標
+  【2】TRIP_DAYS        → 每日行程（最常改這裡）
+  【3】DEFAULT_EXPENSES → 費用明細（機票 / 住宿 / 其他）
+  【4】VBP_DATA         → 釜山通行證景點圖鑑資料
+  【5】OFFLINE_INFO     → 緊急電話 / 交通資訊 / 常用韓語
+  【6】FX_RATE          → 離線匯率（出發前手動更新一次）
 
-  ──────────────────────────────────────────────────────────────
-  🎨 換整體配色：改 CSS 最上方 :root 裡的變數值
-  ──────────────────────────────────────────────────────────────
-  --bg       頁面背景    --surface  卡片底色    --border  邊框
-  --text     主要文字    --text2    次要文字    --text3   提示文字
-  --teal     主題色（同時改 --teal-lt 淡底色、--teal-bd 邊框色）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🎨 更換整體配色（改完所有地方自動同步）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  位置：CSS 最上方的 :root { ... } 區塊
+  ┌──────────┬──────────────────────────────────┐
+  │ --bg     │ 頁面背景色（預設淺灰）            │
+  │ --surface│ 卡片底色（預設白色）              │
+  │ --border │ 所有邊框顏色                      │
+  │ --text   │ 主要文字色                        │
+  │ --text2  │ 次要文字（標籤、說明）            │
+  │ --text3  │ 淡色提示文字                      │
+  │ --teal   │ 主題色（同時改 -lt 淡色 -bd 邊框）│
+  └──────────┴──────────────────────────────────┘
 
-  ──────────────────────────────────────────────────────────────
-  🏷️ 新增行程類別（如「購物」）
-  ──────────────────────────────────────────────────────────────
-  步驟 1：CSS 約第 153 行，.cat-badge 區塊加一行：
-            .c-新類別 { background: 底色; color: 文字色; }
-  步驟 2：JS CATS 陣列（約第 2363 行）加入新類別名字串
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🏷️ 新增行程「類別」（例：購物、溫泉…）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  步驟 1 → CSS .cat-badge 區塊加一行：
+              .c-新類別名 { background: 淡底色; color: 深字色; }
+              （例：.c-溫泉 { background: #FFF0F0; color: #C02020; }）
+  步驟 2 → JS CATS 陣列加入 '新類別名'（注意前一行加逗號）
 
-  ──────────────────────────────────────────────────────────────
-  🔴 新增狀態標籤（如「需付押金」）
-  ──────────────────────────────────────────────────────────────
-  步驟 1：JS STATUSES 陣列加入新標籤名
-  步驟 2：CC_MAP  加 '新標籤': 'c-對應class'（決定卡片邊框色）
-  步驟 3：SBC_MAP 加 '新標籤': 'sb-對應class'（決定徽章色）
-  步驟 4：CSS .sb-對應class { background: 顏色; color:#fff; }
-  步驟 5：CSS .c-對應class  { border-color:…; background:…; }
-              .c-對應class::before { background: 顏色; }
-  步驟 6：CSS .status-chip[data-s="新標籤"].selected { background: 顏色; }
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔴 新增行程「狀態標籤」（例：需付押金…）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  共需修改 6 個地方：
+  步驟 1 → JS  STATUSES 陣列加 '新標籤名'
+  步驟 2 → JS  CC_MAP 加 '新標籤名': 'c-新class'
+  步驟 3 → JS  SBC_MAP 加 '新標籤名': 'sb-新class'
+  步驟 4 → CSS 加 .sb-新class { background: 顏色; color: #fff; }
+  步驟 5 → CSS 加 .c-新class  { border-color: 邊框色 !important; background: 底色 !important; }
+                   .c-新class::before { background: 顏色; }
+  步驟 6 → CSS 加 .status-chip[data-s="新標籤名"].selected { background: 顏色; }
 
-  ──────────────────────────────────────────────────────────────
-  ⚠️  JSON 語法提醒
-  ──────────────────────────────────────────────────────────────
-  • 字串值用雙引號：  "值"
-  • 數字不加引號：    123
-  • 布林值不加引號：  true / false
-  • 陣列項目間用逗號，最後一項「不加」逗號
-  ════════════════════════════════════════════════════════════════ -->
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ✍️ 直接修改 JS 資料時的語法規則
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  • 文字值 → 用雙引號："釜山塔"
+  • 數字   → 不加引號：12000
+  • 是/否  → 不加引號：true 或 false
+  • 陣列中最後一筆 → 結尾不加逗號
+  • 改完建議用 App 內 ⚙️ 下載 HTML 再上傳
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ⛔ 以下程式碼區域請勿修改
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  資料區塊【1–6】以下的所有 JS 函數（renderTrip、init 等）
+  為系統邏輯，修改可能造成 App 無法運作
+  例外：STATUSES / CATS / CC_MAP / SBC_MAP 有 🔧 標記的可改
+══════════════════════════════════════════════════════════════════ -->
 
 <script>
 
 /* ════════════════════════════════════════════════════════════
    【1】TRIP_META — 旅遊基本資訊
    ════════════════════════════════════════════════════════════
-   ┌─────────────┬──────────────────────────────────────────┐
-   │ 欄位        │ 說明                                     │
-   ├─────────────┼──────────────────────────────────────────┤
-   │ title       │ App 頂部顯示的旅遊名稱                   │
-   │ emoji       │ 標題前的表情符號（🇰🇷 ✈️ 🌏 等）        │
-   │ dateRange   │ 日期範圍，純文字，例："5/23–5/30"        │
-   │ duration    │ 天數說明，純文字，例："8天7夜"           │
-   │ groupSize   │ 人數，純文字，例："4人"                  │
-   │             │ → 也會帶入公帳計算器的預設人數          │
-   │ cdTarget    │ 倒數目標時間                             │
-   │             │ 格式："YYYY-MM-DDTHH:MM:SS"              │
-   │             │ 也可在 App 右上角「VBP 倒數 ▾」調整     │
-   └─────────────┴──────────────────────────────────────────┘ */
+   👉 這裡改完，App 頂部的名稱、日期徽章會自動更新
+
+   title      → App 頂部標題，例："韓國釜山旅遊"
+   emoji      → 標題前的表情，例：✈️ 🇰🇷 🌏
+   dateRange  → 日期範圍純文字，例："5/23–5/30"
+   duration   → 天數說明，例："8天7夜"
+   groupSize  → 人數，例："4人"（也用於費用公帳計算預設值）
+   cdTarget   → 行程出發倒數目標時間，格式："YYYY-MM-DDTHH:MM"
+                也可在 App 內點「VBP 倒數 ▾」按鈕調整
+   ════════════════════════════════════════════════════════════ */
 const TRIP_META = {
   title:     "韓國釜山旅遊",
   emoji:     "✈️",
@@ -650,47 +601,44 @@ const TRIP_META = {
 };
 
 /* ════════════════════════════════════════════════════════════
-   【2】TRIP_DAYS — 每日行程
+   【2】TRIP_DAYS — 每日行程（最常修改的地方）
    ════════════════════════════════════════════════════════════
+   👉 建議直接在 App 內用 ⚙️ + ⋯ 編輯，不用手動改這裡
+   👉 若要直接改程式碼，格式說明如下：
 
-   每「天」的格式：
-   ┌──────────┬─────────────────────────────────────────────┐
-   │ id       │ 唯一代號，不要重複，例："day1"              │
-   │ date     │ 日期 YYYY-MM-DD，用於「今日自動對焦」       │
-   │ dateLabel│ 頁籤顯示文字，例："5/23 (六)"              │
-   │ area     │ 標題列地區，例："台灣→海雲台"               │
-   │ items    │ 當天行程陣列（見下方格式）                  │
-   └──────────┴─────────────────────────────────────────────┘
+   ── 每「天」的欄位 ──────────────────────────────────────
+   id        → 唯一代號，不重複，例："day1"
+   date      → 日期 YYYY-MM-DD（今天會自動跳到這天）
+   dateLabel → 頂部頁籤顯示文字，例："5/23 (六)"
+   area      → 日期標題旁的地區，例："海雲台→西面"
+   items     → 當天的行程陣列（見下方欄位說明）
 
-   每「行程項目」的格式：
-   ┌──────────┬─────────────────────────────────────────────┐
-   │ id       │ 唯一代號，例："d1-1"（不要重複）            │
-   │ time     │ 時間 "HH:MM"，留空 "" 代表不顯示            │
-   │ period   │ 時段："上午" / "下午" / "晚上"              │
-   │ category │ 類別（影響卡片顏色標籤）：                  │
-   │          │ "景點" / "購物" / "餐廳" / "點心"          │
-   │          │ "交通" / "住宿" / "集合出發"                │
-   │ name     │ 行程名稱（卡片大字）                        │
-   │ nameKo   │ 韓文名稱（卡片小字）可留空 ""               │
-   │ hours    │ 營業時間，可留空 "" 或填 "24小時"            │
-   │ note     │ 灰底備註，可留空 ""                         │
-   │ pass     │ true = 顯示「🎫 釜山PASS」粉紅標籤          │
-   │          │ false = 不顯示                              │
-   │ status   │ 狀態標籤，陣列格式（可多選，空陣列 [] = 無標籤）  │
-   │          │ 例：["重要！勿遲到"]  或  ["現場劃位","已預約"]   │
-   │          │ 可用值："重要！勿遲到" / "已預約" / "需提前預約"  │
-   │          │        "現場劃位" / "Catchtable 預訂" / "NAVER 預訂"│
-   │ nav      │ 導航按鈕（省略此欄 = 不顯示按鈕）：         │
-   │          │ { type:"naver",  url:"https://..." }       │
-   │          │ { type:"google", url:"https://..." }       │
-   │          │ { type:"none" }  ← 強制不顯示             │
-   │          │ ※ url 留空時自動用 name 搜尋               │
-   └──────────┴─────────────────────────────────────────────┘
-
-   💡 狀態對應的卡片顏色（多個狀態時，以第一個有顏色的為主）：
-      重要！勿遲到 → 紅色     已預約      → 青色
-      需提前預約   → 黃色     現場劃位    → 粉色
-      Catchtable   → 橘色     NAVER 預訂  → 綠色
+   ── 每個「行程項目」的欄位 ──────────────────────────────
+   id        → 唯一代號，不重複，例："d1-1"
+   time      → 時間 "HH:MM"，不顯示請填 ""
+   period    → 時段分組："上午" / "下午" / "晚上"
+   category  → 類別標籤（影響左側色條和標籤顏色）：
+               "景點" / "購物" / "餐廳" / "點心"
+               "交通" / "住宿" / "集合出發"
+   name      → 行程名稱（卡片主標題）
+   nameKo    → 韓文名稱，可留空 ""
+   hours     → 營業時間，可留空 ""，例："10:00–21:00"
+   note      → 灰底備註文字，可留空 ""
+   pass      → 是否顯示釜山PASS標籤：true 或 false
+   status    → 狀態標籤陣列（可多選）：
+               []                    → 無標籤
+               ["重要！勿遲到"]      → 紅色卡片
+               ["已預約"]            → 青色卡片
+               ["需提前預約"]        → 黃色卡片
+               ["現場劃位"]          → 粉色卡片
+               ["Catchtable 預訂"]   → 橘色卡片（顯示開啟按鈕）
+               ["NAVER 預訂"]        → 綠色卡片（顯示開啟按鈕）
+   nav       → 地圖導航按鈕：
+               { type:"naver",  url:"https://naver.me/xxx" }
+               { type:"google", url:"https://reurl.cc/xxx" }
+               { type:"none" }   → 不顯示導航按鈕
+               ※ url 留空 "" 時自動用 name 搜尋
+   bookingUrl→ Catchtable/NAVER 預訂頁直連網址，可留空 ""
    ════════════════════════════════════════════════════════════ */
 const TRIP_DAYS = [
   {
@@ -2589,16 +2537,16 @@ const TRIP_DAYS = [
 /* ════════════════════════════════════════════════════════════
    【3】DEFAULT_EXPENSES — 費用明細
    ════════════════════════════════════════════════════════════
-   ┌────────────┬────────────────────────────────────────────┐
-   │ id         │ 唯一代號，例："exp1"（不要重複）            │
-   │ icon       │ 表情符號，純裝飾，例："✈️" "🏨" "🎫"      │
-   │ item       │ 費用名稱，例："機票"                       │
-   │ perPerson  │ 每人費用，數字（NT$），例：10490            │
-   │ total      │ 總費用，數字或 null（null = 不顯示）        │
-   │ note       │ 備註說明，可留空 ""                        │
-   │ editable   │ true = 可在 App 內「✏️ 編輯／刪除」        │
-   │            │ false = 鎖定，僅供顯示                     │
-   └────────────┴────────────────────────────────────────────┘ */
+   👉 也可在 App「💰 費用」頁內直接新增 / 編輯 / 刪除
+
+   id        → 唯一代號，不重複，例："exp1"
+   icon      → 裝飾用 Emoji，例：✈️ 🏨 🎫 🍽️
+   item      → 費用名稱，例："機票"、"住宿-海雲台"
+   perPerson → 每人費用（台幣整數），例：10490
+   total     → 總費用（台幣整數），不想顯示填 null
+   note      → 備註說明，可留空 ""
+   editable  → true = App 內可編輯；false = 鎖定只顯示
+   ════════════════════════════════════════════════════════════ */
 const DEFAULT_EXPENSES = [
   {
     "id": "exp1",
@@ -2650,17 +2598,18 @@ const DEFAULT_EXPENSES = [
 /* ════════════════════════════════════════════════════════════
    【4】VBP_DATA — 釜山通行證景點圖鑑
    ════════════════════════════════════════════════════════════
-   按「區域」分組。每個景點格式：
-   ┌────────────┬────────────────────────────────────────────┐
-   │ name       │ 中文景點名稱                               │
-   │ nameKo     │ 韓文名稱（Naver 搜尋用）                   │
-   │ tiers      │ 通行證類型陣列："FREE" / "BLUE" / "PURPLE"  │
-   │            │ 可同時有多個，例：["FREE","BLUE"]           │
-   │ type       │ 類型標籤："景點"/"體驗"/"娛樂"/"交通"/etc  │
-   │ fee        │ 原價（KRW 韓元，數字）                     │
-   │            │ → 勾選後自動加入「節省金額」統計           │
-   │            │ → 免費景點填 0                             │
-   └────────────┴────────────────────────────────────────────┘ */
+   👉 按「區域」分組，每個區域有 area（地名）和 items（景點陣列）
+
+   每個景點的欄位：
+   name   → 中文景點名稱（圖鑑顯示用）
+   nameKo → 韓文名稱（點 Naver 連結搜尋用）
+   tiers  → 通行證類型陣列，可多選：
+             "FREE"   → 免費通行（綠色標籤）
+             "BLUE"   → 藍色通行證（藍色標籤）
+             "PURPLE" → 紫色通行證（紫色標籤）
+   type   → 景點類型純文字標籤，例："景點" "體驗" "娛樂" "交通"
+   fee    → 原始票價（韓元整數），免費填 0
+   ════════════════════════════════════════════════════════════ */
 const VBP_DATA = [
   {area:"海雲台",items:[
     {name:"海雲台海岸列車",nameKo:"해운대 해변열차",tiers:["FREE","BLUE"],type:"交通",fee:13000},
@@ -2717,17 +2666,12 @@ const VBP_DATA = [
 /* ════════════════════════════════════════════════════════════
    【5】OFFLINE_INFO — 離線資訊（無網路也能查）
    ════════════════════════════════════════════════════════════
-   三個子陣列可自由新增／修改：
+   👉 長按底部「💱 匯率」按鈕可進入此頁面
 
-   emergency（緊急電話）：
-     { label:"說明", value:"號碼" }
-
-   transport（交通資訊）：
-     { label:"項目名稱", value:"內容" }
-
-   phrases（常用韓語）：
-     { ko:"한국어",  ro:"羅馬拼音",  zh:"中文意思" }
-     → 在 App 內點擊韓文可直接複製
+   emergency（緊急電話）→ { label:"說明文字", value:"電話號碼" }
+   transport（交通資訊）→ { label:"項目名稱", value:"內容說明" }
+   phrases（常用韓語）  → { ko:"韓文", ro:"羅馬拼音", zh:"中文意思" }
+                           ※ App 內點擊韓文可直接複製到剪貼簿
    ════════════════════════════════════════════════════════════ */
 const OFFLINE_INFO = {
   emergency: [
@@ -2761,38 +2705,38 @@ const OFFLINE_INFO = {
 };
 
 /* ════════════════════════════════════════════════════════════
-   【6】FX_RATE — 離線匯率（出發前更新一次即可）
+   【6】FX_RATE — 離線匯率（出發前手動更新一次即可）
    ════════════════════════════════════════════════════════════
-   ┌─────────────┬──────────────────────────────────────────┐
-   │ twd_to_krw  │ 1 台幣 = 幾韓元（數字）                  │
-   │             │ 例：42 代表 1 TWD = 42 KRW               │
-   │             │ → 也可在 App「匯率換算」頁即時調整       │
-   │ updated     │ 匯率更新日期，格式 YYYY-MM-DD（純顯示用）│
-   └─────────────┴──────────────────────────────────────────┘ */
+   👉 也可在 App「💱 匯率」頁即時手動調整，不需要改這裡
+
+   twd_to_krw → 1 台幣 = 幾韓元（數字），例：42
+   updated    → 匯率日期（純顯示用），格式 "YYYY-MM-DD"
+                ※ App 頁面會自動顯示今天日期，此欄不影響功能
+   ════════════════════════════════════════════════════════════ */
 const FX_RATE = {
   twd_to_krw: 42,
   updated: "2026-04-28"
 };
 
 /* ══════════════════════════════════════════════════════════════════
-   ⛔ 以下是程式邏輯區 — 一般情況請勿修改
+   ⛔ 以下是程式邏輯區 — 請勿隨意修改
    ══════════════════════════════════════════════════════════════════
-   ✅ 例外（允許修改的地方已加 🔧 標記）：
-      STATUSES 陣列  → 新增/改名狀態標籤
-      CATS 陣列      → 新增/改名行程類別
-      CC_MAP         → 新增狀態對應的卡片邊框 class
-      SBC_MAP        → 新增狀態對應的徽章 class
+   ✅ 允許修改（有 🔧 標記的四個地方）：
+      STATUSES → 新增或改名「狀態標籤」
+      CATS     → 新增或改名「行程類別」
+      CC_MAP   → 新增狀態對應的卡片邊框 CSS class
+      SBC_MAP  → 新增狀態對應的右上角徽章 CSS class
    ══════════════════════════════════════════════════════════════════ */
 
-// ── 應用程式狀態 ──
-let tripDays    = null;       // 行程資料（從 localStorage 或 TRIP_DAYS 讀取）
-let expenses    = null;       // 費用資料
-let currentView = 'trip';     // 目前顯示的頁面：'trip'/'expenses'/'fx'/'offline'
-let currentDay  = null;       // 目前選中的日期 id
-let adminMode   = false;      // 管理員模式開關
-let cdInterval  = null;       // 倒數計時器 ID
-let cdTarget    = null;       // 倒數目標時間
-let vbpChecked  = {};         // VBP 景點勾選狀態 key:name, value:bool
+// ⛔ 以下為程式狀態變數，請勿修改 ──
+let tripDays    = null;  // 行程資料（執行時從 localStorage 或 TRIP_DAYS 讀取）
+let expenses    = null;  // 費用資料
+let currentView = 'trip'; // 目前頁面：'trip'/'expenses'/'fx'/'offline'
+let currentDay  = null;  // 目前選中的日期 id
+let adminMode   = false; // 管理員模式（點 ⚙️ 切換）
+let cdInterval  = null;  // 倒數計時器
+let cdTarget    = null;  // 倒數目標時間
+let vbpChecked  = {};    // VBP 景點勾選狀態
 
 /* ─────────────────────────────────────────────────────────────
    🔧 狀態標籤選項 — 可在這裡新增 / 刪改標籤文字
@@ -2804,11 +2748,8 @@ let vbpChecked  = {};         // VBP 景點勾選狀態 key:name, value:bool
 /* ════════════════════════════════════════════════════════════
    🔧 【可修改】狀態標籤清單
    ════════════════════════════════════════════════════════════
-   這裡的每個字串 = 一個可選的狀態 chip
-   新增標籤：在陣列最後加 '新標籤名'，同時要在：
-     CC_MAP  → 加對應的卡片邊框顏色 class
-     SBC_MAP → 加對應的徽章顏色 class
-     CSS     → 加對應的 .sb-新class{ background:...; color:#fff; }
+   每個字串 = 一個可選的狀態標籤（在編輯行程時出現）
+   新增標籤時需同步修改：CC_MAP、SBC_MAP、CSS（見上方教學）
    ════════════════════════════════════════════════════════════ */
 const STATUSES = [
   '重要！勿遲到',    // 紅色卡片邊框
@@ -2823,9 +2764,7 @@ const STATUSES = [
 /* ════════════════════════════════════════════════════════════
    🔧 【可修改】行程類別清單
    ════════════════════════════════════════════════════════════
-   新增類別步驟：
-   1. 在下方陣列加入新類別名（字串）
-   2. 到 CSS .cat-badge 區塊加 .c-新類別名{ background:底色; color:字色; }
+   新增類別：陣列加字串 → CSS .cat-badge 區塊加對應樣式
    ════════════════════════════════════════════════════════════ */
 const CATS = [
   '',          // （空白 = 不設類別）
@@ -2839,21 +2778,10 @@ const CATS = [
   // ↓ 想加新類別在這裡加，記得前一行結尾要加逗號，並同步更新 CSS
 ];
 
-/* ════════════════════════════════════════════════════════════
-   🔧 【可修改】時段清單
-   ════════════════════════════════════════════════════════════
-   一般不需要改，除非想把時段名稱改成其他文字
-   ════════════════════════════════════════════════════════════ */
+/* 🔧 時段清單（一般不需要改） */
 const PERIODS = ['上午', '下午', '晚上'];
 
-/* ════════════════════════════════════════════════════════════
-   ⚙️ 狀態 → 卡片邊框/背景 CSS class 對照表
-   ════════════════════════════════════════════════════════════
-   如果在 STATUSES 加了新標籤，這裡也要加一行：
-     '新標籤名': 'c-對應class'
-   然後在 CSS 加：  .c-對應class { border-color:...; background:...; }
-                    .c-對應class::before { background: 顏色; }
-   ════════════════════════════════════════════════════════════ */
+/* 🔧 狀態 → 卡片邊框 CSS class（新增狀態標籤時這裡也要加一行） */
 const CC_MAP = {                              // 卡片邊框/背景
   '重要！勿遲到':    'c-urgent',
   '已預約':          'c-booked',
@@ -3003,14 +2931,13 @@ function renderTrip() {
   const icons = { 上午: '🌅', 下午: '☀️', 晚上: '🌙' };
 
   let html = `
-    <div class="day-hdr">
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">${day.dateLabel}</div>
-          <div style="font-size:.73rem;opacity:.85;margin-top:3px">📍 ${day.area}</div>
+    <div class="day-hdr" style="padding:10px 14px">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">${day.dateLabel}</span>
+          <span style="font-size:.9rem;opacity:.85">📍 ${day.area}</span>
         </div>
-        <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35)"
-          onclick="addNewItem('${day.id}')">＋ 新增行程</button>
+        ${adminMode ? `<button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35);font-size:.7rem;padding:5px 10px;flex-shrink:0" onclick="addNewItem('${day.id}')">＋ 新增</button>` : ''}
       </div>
     </div>`;
 
@@ -3024,7 +2951,6 @@ function renderTrip() {
 }
 
 // ── 單一行程卡片渲染 ──
-// 設計原則：無底部按鈕時不加底部 padding，讓卡片盡量小
 function renderCard(it, dayId, idx) {
   // status 統一為陣列（相容舊字串格式）
   const statuses = Array.isArray(it.status) ? it.status : (it.status ? [it.status] : []);
@@ -3074,18 +3000,10 @@ function renderCard(it, dayId, idx) {
     }
   }
 
-  // ⑥ 預訂跳轉按鈕
-  // ───────────────────────────────────────────────────────
-  // 🔧 可修改網址的地方：
-  //    Catchtable App 網址：'catchtable://'
-  //    Catchtable 網頁備用：'https://catchtable.co.kr'
-  //    NAVER App 網址：    'navermap://'
-  //    NAVER 網頁備用：    'https://m.place.naver.com/...'
-  // ───────────────────────────────────────────────────────
+  // ⑥ 預訂跳轉按鈕（Catchtable / NAVER 狀態才顯示）
+  // 預設網址可在行程 ⋯ → ✏️ 編輯 → 「預訂頁網址」欄位修改
   let row6 = '';
   if (statuses.includes('Catchtable 預訂')) {
-    // bookingUrl 有填則直接開啟指定頁，否則開 Catchtable 首頁
-    // 🔧 預設備用網址：'https://catchtable.co.kr'（可在 ✏️ 編輯行程內改為指定訂位頁）
     const ctUrl = it.bookingUrl || 'https://catchtable.co.kr';
     row6 = `<a href="catchtable://"
       onclick="setTimeout(()=>window.open('${ctUrl}','_blank'),800)"
@@ -3093,8 +3011,6 @@ function renderCard(it, dayId, idx) {
       📋 開啟 Catchtable</a>`;
   }
   if (statuses.includes('NAVER 預訂')) {
-    // bookingUrl 有填則直接開啟指定頁，否則用名稱搜尋
-    // 🔧 預設備用網址：NAVER 搜尋頁（可在 ✏️ 編輯行程內改為指定餐廳預訂頁）
     const naverUrl = it.bookingUrl || `https://m.place.naver.com/restaurant/list?query=${encodeURIComponent(it.name)}`;
     row6 += `<a href="navermap://"
       onclick="setTimeout(()=>window.open('${naverUrl}','_blank'),800)"
@@ -3106,21 +3022,26 @@ function renderCard(it, dayId, idx) {
   const bottomRow = [row5, row6].filter(Boolean).join('');
   const hasBottom = !!bottomRow;
 
-  // 移動按鈕（上移 / 下移，同時段內有效）
-  const moveBtn = `
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('${it.id}','${dayId}','${it.period}',-1)" title="往上移">↑</button>
-    <button class="btn btn-ghost btn-xs" onclick="moveItem('${it.id}','${dayId}','${it.period}',1)"  title="往下移">↓</button>`;
+  // ── 三個點選單（管理員模式才顯示，保持一般瀏覽畫面乾淨）──
+  // 點 ⚙️ 齒輪開啟管理員模式後，每張卡右上角會出現 ⋯ 按鈕
+  // 點 ⋯ 可展開：往上移 / 往下移 / 編輯 / 刪除
+  // ⋯ 按鈕：onclick 傳入 this 讓選單能定位到按鈕正下方
+  const adminBtns = adminMode ? `
+    <div style="position:absolute;top:8px;right:8px;z-index:10">
+      <button
+        onclick="openCardMenu(this,'${it.id}','${dayId}','${it.period}',event)"
+        style="width:28px;height:28px;border-radius:8px;border:1.5px solid var(--border);
+               background:var(--surface);color:var(--text2);font-size:1rem;
+               display:flex;align-items:center;justify-content:center;cursor:pointer;
+               box-shadow:var(--shadow-sm);letter-spacing:1px;line-height:1"
+        title="編輯選項">⋯</button>
+    </div>` : '';
 
   return `
     <div class="trip-card ${getCardClass(statuses)} ${hasBottom ? 'has-bottom' : ''}"
       id="card-${it.id}" style="animation-delay:${idx * .03}s">
-      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
-        ${moveBtn}
-        <button class="btn btn-ghost btn-xs" onclick="editItem('${it.id}','${dayId}')">✏️</button>
-        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA"
-          onclick="deleteItem('${it.id}','${dayId}')">🗑️</button>
-      </div>
-      <div style="padding-right:100px">${row1}${row2}${row3}${row4}</div>
+      ${adminBtns}
+      <div style="padding-right:${adminMode ? '38px' : '8px'}">${row1}${row2}${row3}${row4}</div>
       ${hasBottom ? `<div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap">${bottomRow}</div>` : ''}
     </div>`;
 }
@@ -3130,14 +3051,14 @@ function renderCard(it, dayId, idx) {
 function renderExpenses() {
   const total = expenses.reduce((s, e) => s + e.perPerson, 0);
   let html = `
-    <div class="day-hdr mb-4">
-      <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">💰 預估費用明細</div>
+    <div class="day-hdr mb-4" style="padding:10px 14px">
+      <div style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">💰 預估費用明細</div>
     </div>
-    <button class="btn btn-teal btn-sm mb-3 w-full" onclick="addExpense()">＋ 新增費用項目</button>`;
+    ${adminMode ? '<button class="btn btn-teal btn-sm mb-3 w-full" onclick="addExpense()">＋ 新增費用項目</button>' : ''}`;
 
   expenses.forEach(e => {
     html += `
-      <div class="exp-card" style="padding:10px 12px">
+      <div class="exp-card" style="padding:10px 12px;position:relative">
         <div class="flex items-center gap-2">
           <span style="font-size:1.1rem;flex-shrink:0;line-height:1">${e.icon || '💳'}</span>
           <div style="flex:1;min-width:0">
@@ -3146,21 +3067,25 @@ function renderExpenses() {
           </div>
           <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
             <span style="font-weight:800;font-size:.92rem;color:var(--teal)">NT$${e.perPerson.toLocaleString()}</span>
-            <button class="btn btn-ghost btn-xs" style="padding:3px 7px" onclick="editExpense('${e.id}')">✏️</button>
-            <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA;padding:3px 7px"
-              onclick="deleteExpense('${e.id}')">🗑️</button>
+            ${adminMode ? `<button onclick="openExpMenu(this,'${e.id}',event)"
+                style="width:28px;height:28px;border-radius:8px;border:1.5px solid var(--border);
+                       background:var(--surface);color:var(--text2);font-size:1rem;
+                       display:flex;align-items:center;justify-content:center;cursor:pointer;
+                       box-shadow:var(--shadow-sm);line-height:1">⋯</button>` : ''}
           </div>
         </div>
       </div>`;
   });
 
   html += `
-    <div class="exp-card" style="background:var(--teal-lt);border-color:var(--teal-bd)">
+    <div class="exp-card" style="background:var(--teal-lt);border-color:var(--teal-bd);padding:10px 14px">
       <div class="flex justify-between items-center">
-        <span style="font-weight:900;font-size:1rem;color:var(--text)">合計</span>
-        <span style="font-weight:900;font-size:1.4rem;color:var(--teal)">NT$${total.toLocaleString()}</span>
+        <div>
+          <span style="font-weight:900;font-size:.9rem;color:var(--text)">合計</span>
+          <span style="font-size:.68rem;color:var(--text3);margin-left:6px">不含個人消費・預估費用</span>
+        </div>
+        <span style="font-weight:900;font-size:1.25rem;color:var(--teal)">NT$${total.toLocaleString()}</span>
       </div>
-      <div style="font-size:.68rem;color:var(--text3);margin-top:3px">不含個人消費・預估費用</div>
     </div>
 
     <!-- 公帳平分計算器 -->
@@ -3323,9 +3248,11 @@ function renderFx() {
   const quick_krw = [1000, 5000, 10000, 30000, 50000, 100000];
 
   document.getElementById('main').innerHTML = `
-    <div class="day-hdr mb-4">
-      <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">💱 匯率換算</div>
-      <div style="font-size:.73rem;opacity:.85;margin-top:3px">離線使用・更新日期：${FX_RATE.updated}</div>
+    <div class="day-hdr mb-4" style="padding:10px 14px">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">💱 匯率換算</span>
+        <span style="font-size:.9rem;opacity:.85">離線使用・更新日期：${new Date().toLocaleDateString('zh-TW').replace(/\//g,'-')}</span>
+      </div>
     </div>
 
     <div class="fx-card mb-3">
@@ -3333,11 +3260,11 @@ function renderFx() {
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
         <span style="font-size:.72rem;font-weight:800;color:var(--text2);white-space:nowrap">1 TWD =</span>
         <input class="form-input" id="fxRate" type="number" inputmode="decimal" value="${rate}"
-          oninput="calcFx();calcTax();"
+          oninput="calcFx();calcTax();updateQuickFx();"
           style="font-size:1rem;font-family:'DM Mono',monospace;font-weight:500;max-width:110px;text-align:center">
         <span style="font-size:.72rem;font-weight:800;color:var(--text2);white-space:nowrap">KRW</span>
         <button class="btn btn-ghost btn-xs"
-          onclick="document.getElementById('fxRate').value=${rate};calcFx();calcTax();"
+          onclick="document.getElementById('fxRate').value=${rate};calcFx();calcTax();updateQuickFx();"
           style="margin-left:auto;white-space:nowrap">重設</button>
       </div>
 
@@ -3366,15 +3293,15 @@ function renderFx() {
 
     <div class="fx-card">
       <div style="font-weight:800;font-size:.8rem;color:var(--text2);margin-bottom:12px">⚡ 快速換算（點擊帶入）</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div id="quickFxGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
         ${(fxDir === 'twd2krw' ? quick_twd : quick_krw).map(v => {
           const result = fxDir === 'twd2krw'
             ? Math.round(v * rate).toLocaleString() + ' ₩'
             : (v / rate).toFixed(1) + ' NT$';
           const label = fxDir === 'twd2krw' ? `NT$${v.toLocaleString()}` : `₩${v.toLocaleString()}`;
-          return `<button class="fx-quick-btn" onclick="quickFx(${v})">
+          return `<button class="fx-quick-btn" data-val="${v}" onclick="quickFx(${v})">
             <div style="font-weight:800">${label}</div>
-            <div style="font-size:.7rem;color:var(--text3);margin-top:2px">${result}</div>
+            <div class="fx-quick-result" style="font-size:.7rem;color:var(--text3);margin-top:2px">${result}</div>
           </button>`;
         }).join('')}
       </div>
@@ -3404,6 +3331,22 @@ function renderFx() {
         * 台幣換算匯率與上方換算器同步，可手動調整
       </div>
     </div>`;
+}
+
+// 更新快速換算格子的換算結果（不重新渲染整頁，只更新數字）
+function updateQuickFx() {
+  const grid = document.getElementById('quickFxGrid');
+  if (!grid) return;
+  const r = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+  grid.querySelectorAll('.fx-quick-btn').forEach(btn => {
+    const v = parseFloat(btn.dataset.val);
+    const resultEl = btn.querySelector('.fx-quick-result');
+    if (!resultEl) return;
+    const result = fxDir === 'twd2krw'
+      ? Math.round(v * r).toLocaleString() + ' ₩'
+      : (v / r).toFixed(1) + ' NT$';
+    resultEl.textContent = result;
+  });
 }
 
 function setFxDir(dir) { fxDir = dir; renderFx(); }
@@ -3549,11 +3492,6 @@ function openVbpDrawer(filterArea) {
     });
   });
 
-  let savedKrw = 0;
-  VBP_DATA.forEach(a => a.items.forEach(it => { if (vbpChecked[it.name]) savedKrw += (it.fee || 0); }));
-  const fxR     = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
-  const savedTwd = Math.round(savedKrw / fxR);
-
   document.getElementById('drawerContainer').innerHTML = `
     <div class="drawer-overlay" onclick="closeDrawer()"></div>
     <div class="drawer">
@@ -3561,16 +3499,6 @@ function openVbpDrawer(filterArea) {
         <div class="flex items-center justify-between mb-3">
           <h2 style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text)">🗺️ VBP 景點圖鑑</h2>
           <button onclick="closeDrawer()" style="font-size:1.1rem;color:var(--text3);background:none;border:none;cursor:pointer">✕</button>
-        </div>
-        <div style="background:var(--green-lt);border:1.5px solid var(--green-bd);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:.5px">✅ 已勾選節省金額</div>
-            <div id="vbpSavingsKrw" style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--green)">₩${savedKrw.toLocaleString()}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:.65rem;color:var(--text3)">折合台幣</div>
-            <div id="vbpSavingsTwd" style="font-family:'DM Mono',monospace;font-size:1rem;font-weight:700;color:var(--teal)">NT$${savedTwd.toLocaleString()}</div>
-          </div>
         </div>
         ${filterBtns}
       </div>
@@ -3581,17 +3509,89 @@ function openVbpDrawer(filterArea) {
 function toggleVbp(name, fee, checked) {
   vbpChecked[name] = checked;
   saveAll();
-  let savedKrw = 0;
-  VBP_DATA.forEach(a => a.items.forEach(it => { if (vbpChecked[it.name]) savedKrw += (it.fee || 0); }));
-  const fxR     = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
-  const savedTwd = Math.round(savedKrw / fxR);
-  const kEl = document.getElementById('vbpSavingsKrw');
-  const tEl = document.getElementById('vbpSavingsTwd');
-  if (kEl) kEl.textContent = '₩' + savedKrw.toLocaleString();
-  if (tEl) tEl.textContent = 'NT$' + savedTwd.toLocaleString();
 }
 
 function closeDrawer() { document.getElementById('drawerContainer').innerHTML = ''; }
+
+// ── 共用浮動選單（position:fixed，不被卡片裁切）──
+// 所有 ⋯ 按鈕共用同一個 #floatMenu，依按鈕位置定位
+let _floatMenuOpen = false;
+
+function _ensureFloatMenu() {
+  if (!document.getElementById('floatMenu')) {
+    const el = document.createElement('div');
+    el.id = 'floatMenu';
+    el.style.cssText = `
+      display:none;position:fixed;z-index:9999;
+      background:var(--surface);border:1.5px solid var(--border);
+      border-radius:12px;box-shadow:0 8px 32px rgba(26,31,54,.18);
+      min-width:130px;overflow:hidden;
+    `;
+    document.body.appendChild(el);
+    // 點選單外部自動關閉
+    document.addEventListener('click', function(e) {
+      const m = document.getElementById('floatMenu');
+      if (m && !m.contains(e.target)) _hideFloatMenu();
+    });
+  }
+  return document.getElementById('floatMenu');
+}
+
+function _showFloatMenu(btn, html) {
+  const m = _ensureFloatMenu();
+  m.innerHTML = html;
+  m.style.display = 'block';
+  // 計算位置：貼齊按鈕右下角，若超出視窗底部則往上展開
+  const r = btn.getBoundingClientRect();
+  const menuH = m.offsetHeight || 160;
+  const spaceBelow = window.innerHeight - r.bottom;
+  const top = spaceBelow > menuH ? r.bottom + 4 : r.top - menuH - 4;
+  m.style.top  = top + 'px';
+  m.style.left = (r.right - m.offsetWidth) + 'px';
+  _floatMenuOpen = true;
+}
+
+function _hideFloatMenu() {
+  const m = document.getElementById('floatMenu');
+  if (m) m.style.display = 'none';
+  _floatMenuOpen = false;
+}
+
+// 行程卡片 ⋯ 選單
+function openCardMenu(btn, itemId, dayId, period, event) {
+  event.stopPropagation();
+  if (_floatMenuOpen) { _hideFloatMenu(); return; }
+  const row = (label, style, fn) =>
+    `<button onclick="${fn};_hideFloatMenu()"
+      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+             background:none;border:none;cursor:pointer;${style};border-bottom:1px solid var(--border)"
+    >${label}</button>`;
+  _showFloatMenu(btn, `
+    ${row('↑ 往上移','color:var(--text2)',`moveItem('${itemId}','${dayId}','${period}',-1)`)}
+    ${row('↓ 往下移','color:var(--text2)',`moveItem('${itemId}','${dayId}','${period}',1)`)}
+    ${row('✏️ 編輯','color:var(--text)',`editItem('${itemId}','${dayId}')`)}
+    <button onclick="deleteItem('${itemId}','${dayId}');_hideFloatMenu()"
+      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+             background:none;border:none;cursor:pointer;color:var(--red)">🗑️ 刪除</button>
+  `);
+}
+
+// 費用項目 ⋯ 選單
+function openExpMenu(btn, expId, event) {
+  event.stopPropagation();
+  if (_floatMenuOpen) { _hideFloatMenu(); return; }
+  _showFloatMenu(btn, `
+    <button onclick="editExpense('${expId}');_hideFloatMenu()"
+      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+             background:none;border:none;cursor:pointer;color:var(--text);border-bottom:1px solid var(--border)">✏️ 編輯</button>
+    <button onclick="deleteExpense('${expId}');_hideFloatMenu()"
+      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+             background:none;border:none;cursor:pointer;color:var(--red)">🗑️ 刪除</button>
+  `);
+}
+
+// 舊介面相容（保留以防萬一）
+function closeCardMenu() { _hideFloatMenu(); }
 
 // ── 從 VBP 加入行程（可選日期 + 插入位置）──
 function addVbpToTrip(name, nameKo) {
@@ -3866,6 +3866,8 @@ function toggleAdmin() {
   adminMode = !adminMode;
   document.getElementById('gearBtn').classList.toggle('on', adminMode);
   document.getElementById('adminBar').style.display = adminMode ? '' : 'none';
+  // 重新渲染目前頁面，讓 ⋯ 按鈕即時顯示/隱藏
+  renderAll();
 }
 
 function showExport() {
@@ -3931,23 +3933,38 @@ function updateCd() {
 }
 
 function showCdSettings() {
-  const dt = cdTarget.toISOString().slice(0, 16);
   showModal(`
     <div class="modal-handle"></div>
-    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">⏱️ VBP 倒數設定</h2>
-    <div><label class="form-label">目標時間</label>
-      <input type="datetime-local" class="form-input" id="cdInp" value="${dt}"></div>
-    <div class="flex gap-2" style="margin-top:16px">
-      <button class="btn btn-teal" style="flex:1" onclick="saveCd()">儲存</button>
-      <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
+    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:8px">⏱️ 釜山 PASS 倒數設定</h2>
+    <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">啟動後從現在開始計算 PASS 剩餘有效時間</p>
+    <div style="display:grid;gap:10px">
+      <button class="btn btn-teal w-full" onclick="startPassCd(24)" style="font-size:.88rem;padding:12px">
+        🎫 釜山 PASS 24h 倒數（現在起算）</button>
+      <button class="btn btn-gold w-full" onclick="startPassCd(48)" style="font-size:.88rem;padding:12px">
+        🎫 釜山 PASS 48h 倒數（現在起算）</button>
+      <div style="border-top:1px solid var(--border);padding-top:10px">
+        <label class="form-label">或手動設定目標時間</label>
+        <input type="datetime-local" class="form-input" id="cdInp" value="${cdTarget.toISOString().slice(0,16)}">
+        <button class="btn btn-ghost w-full" style="margin-top:8px" onclick="saveCdManual()">設定自訂時間</button>
+      </div>
+      <button class="btn btn-ghost w-full" onclick="closeModal()">取消</button>
     </div>`);
 }
 
-function saveCd() {
+function startPassCd(hours) {
+  const now = new Date();
+  cdTarget = new Date(now.getTime() + hours * 3600000);
+  localStorage.setItem('bs_cd', cdTarget.toISOString());
+  startCd(); closeModal(); showToast('⏱️ ' + hours + 'h PASS 倒數已啟動！');
+}
+
+function saveCdManual() {
   cdTarget = new Date(document.getElementById('cdInp').value);
   localStorage.setItem('bs_cd', cdTarget.toISOString());
   startCd(); closeModal(); showToast('⏱️ 倒數時間已更新');
 }
+
+function saveCd() { saveCdManual(); }
 
 // ── 動態時間高亮（標記「現在」的行程）──
 function highlightCurrentItem() {
@@ -4024,6 +4041,14 @@ function showToast(msg) {
 }
 
 // ── 啟動 ──
+// 若在 LINE 內開啟，自動跳到外部瀏覽器（加 ?openExternalBrowser=1 參數）
+(function(){
+  var ua = navigator.userAgent || '';
+  if (/Line/i.test(ua) && !/openExternalBrowser/.test(location.search)) {
+    var sep = location.search ? '&' : '?';
+    location.replace(location.href + sep + 'openExternalBrowser=1');
+  }
+})();
 init();
 
 // 長按「💱」開啟離線資訊
