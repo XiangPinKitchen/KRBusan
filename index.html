@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
+<html lang="zh-TW"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🇰🇷 釜山旅遊管理 v12</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<title>🇰🇷 釜山旅遊管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=DM+Mono:wght@400;500&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════
-   顏色系統 — 修改這裡就能換整個 App 的配色
+   🎨 顏色系統 — 修改這裡就能換整個 App 的配色
+   ════════════════════════════════════════════════════
+   提示：只需改 :root 內的值，所有地方自動更新
    ════════════════════════════════════════════════════ */
 :root {
   --bg:       #F5F6FA;   /* 頁面背景色 */
-  --surface:  #FFFFFF;   /* 卡片白色 */
+  --surface:  #FFFFFF;   /* 卡片底色 */
   --border:   #E2E6F0;   /* 邊框顏色 */
   --text:     #1A1F36;   /* 主要文字 */
   --text2:    #4A5568;   /* 次要文字 */
@@ -23,219 +22,443 @@
   --teal-lt:  #E8FBF8;
   --teal-bd:  #9FEDE4;
 
-  /* 狀態色 */
-  --red:      #FF6B6B;  --red-lt:  #FFF0F0;  --red-bd:  #FFCECE;
-  --gold:     #F59E0B;  --gold-lt: #FFFBEB;  --gold-bd: #FDE68A;
-  --rose:     #F472B6;  --rose-lt: #FDF2F8;  --rose-bd: #FBCFE8;
-  --violet:   #8B5CF6;  --violet-lt:#F5F3FF; --violet-bd:#DDD6FE;
-  --green:    #10B981;  --green-lt: #ECFDF5; --green-bd: #A7F3D0;
-  --orange:   #F97316;  --orange-lt:#FFF7ED; --orange-bd:#FED7AA;
-  --blue:     #3B82F6;  --blue-lt:  #EFF6FF; --blue-bd:  #BFDBFE;
+  /* 狀態色（格式：顏色 / 淡底色 / 邊框色） */
+  --red:      #FF6B6B;  --red-lt:   #FFF0F0;  --red-bd:   #FFCECE;
+  --gold:     #F59E0B;  --gold-lt:  #FFFBEB;  --gold-bd:  #FDE68A;
+  --rose:     #F472B6;  --rose-lt:  #FDF2F8;  --rose-bd:  #FBCFE8;
+  --violet:   #8B5CF6;  --violet-lt:#F5F3FF;  --violet-bd:#DDD6FE;
+  --green:    #10B981;  --green-lt: #ECFDF5;  --green-bd: #A7F3D0;
+  --orange:   #F97316;  --orange-lt:#FFF7ED;  --orange-bd:#FED7AA;
+  --blue:     #3B82F6;  --blue-lt:  #EFF6FF;  --blue-bd:  #BFDBFE;
 
   --shadow-sm: 0 1px 3px rgba(26,31,54,.06),0 1px 2px rgba(26,31,54,.04);
   --shadow:    0 4px 12px rgba(26,31,54,.08),0 2px 4px rgba(26,31,54,.04);
   --shadow-lg: 0 20px 48px rgba(26,31,54,.14),0 8px 16px rgba(26,31,54,.08);
 }
 
-/* ════════════════════════════════════════════════════
-   全域基礎樣式
-   ════════════════════════════════════════════════════ */
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overscroll-behavior:none}
+/* ════ 全域重設 ════ */
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overscroll-behavior: none; margin: 0; }
 
-/* Header */
-.app-header{background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:50}
+/* ════ 排版工具 ════ */
+.flex        { display: flex; }
+.flex-col    { flex-direction: column; }
+.flex-wrap   { flex-wrap: wrap; }
+.items-start { align-items: flex-start; }
+.items-end   { align-items: flex-end; }
+.items-center{ align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1  { gap: 0.25rem; }
+.gap-2  { gap: 0.5rem; }
+.gap-3  { gap: 0.75rem; }
+.flex-1 { flex: 1; }
+.mb-2   { margin-bottom: 0.5rem; }
+.mb-3   { margin-bottom: 0.75rem; }
+.mb-4   { margin-bottom: 1rem; }
+.mt-1   { margin-top: 0.25rem; }
+.mt-3   { margin-top: 0.75rem; }
+.pt-1   { padding-top: 0.25rem; }
+.pt-2   { padding-top: 0.5rem; }
+.pb-1   { padding-bottom: 0.25rem; }
+.w-full { width: 100%; }
+.overflow-x-auto { overflow-x: auto; }
+.px-3   { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4   { padding-left: 1rem; padding-right: 1rem; }
+.pb-28  { padding-bottom: 7rem; }
 
-/* Countdown bar */
-.cd-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:6px}
-.cd-fill{height:100%;border-radius:3px;background:var(--green);transition:background .5s,width 1s linear}
-.cd-fill.yellow{background:var(--gold)}
-.cd-fill.red{background:var(--red);animation:pulse 1s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
-.cd-digits{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;letter-spacing:1px;color:var(--text)}
+/* ════ Header ════ */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  position: sticky; top: 0; z-index: 50;
+}
+.app-header > div { padding: 16px 16px 12px; }
 
-/* Day tabs */
-.day-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
-.day-tabs::-webkit-scrollbar{display:none}
-.day-tab{padding:6px 13px;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);color:var(--text2);background:var(--surface);transition:all .18s}
-.day-tab:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-lt)}
-.day-tab.active{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:0 4px 12px rgba(10,191,163,.3);font-weight:800}
+/* ════ 倒數計時列 ════ */
+.cd-bar { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; margin-top: 6px; }
+.cd-fill { height: 100%; border-radius: 3px; background: var(--green); transition: background .5s, width 1s linear; }
+.cd-fill.yellow { background: var(--gold); }
+.cd-fill.red    { background: var(--red); animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+.cd-digits { font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 500; letter-spacing: 1px; color: var(--text); }
 
-/* Day header card */
-.day-hdr{background:linear-gradient(135deg,#0ABFA3,#0891B2);border-radius:16px;padding:16px 20px;margin-bottom:14px;color:#fff;box-shadow:0 8px 24px rgba(10,191,163,.25)}
+/* ════ 日期 Tabs ════ */
+.day-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  padding: 6px 13px; border-radius: 20px; font-size: .73rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; border: 1.5px solid var(--border);
+  color: var(--text2); background: var(--surface); transition: all .18s;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.day-tab:hover  { border-color: var(--teal); color: var(--teal); background: var(--teal-lt); }
+.day-tab.active { background: var(--teal); color: #fff; border-color: var(--teal); box-shadow: 0 4px 12px rgba(10,191,163,.3); font-weight: 800; }
 
-/* Period divider */
-.period-hdr{font-size:.66rem;font-weight:800;letter-spacing:2px;color:var(--text3);padding:13px 2px 5px;display:flex;align-items:center;gap:8px}
-.period-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ════ 日期標題卡 ════ */
+.day-hdr {
+  background: linear-gradient(135deg, #0ABFA3, #0891B2);
+  border-radius: 16px; padding: 16px 20px; margin-bottom: 14px;
+  color: #fff; box-shadow: 0 8px 24px rgba(10,191,163,.25);
+}
 
-/* Trip card */
-.trip-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 13px 36px;margin-bottom:8px;box-shadow:var(--shadow-sm);transition:all .2s;position:relative;animation:cardIn .22s ease both}
-.trip-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:14px 0 0 14px;background:var(--border)}
-.trip-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);border-color:#C8D0E4}
-/* 當前行程高亮（▶現在 標籤位移避開編輯鍵） */
-.trip-card.now{border-color:var(--gold)!important;background:var(--gold-lt)!important;box-shadow:0 0 0 3px rgba(245,158,11,.15),var(--shadow)!important}
-.trip-card.now::after{content:'▶ 現在';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.58rem;font-weight:800;padding:2px 10px;border-radius:0 0 8px 8px}
+/* ════ 時段分隔線 ════ */
+.period-hdr {
+  font-size: .66rem; font-weight: 800; letter-spacing: 2px; color: var(--text3);
+  padding: 13px 2px 5px; display: flex; align-items: center; gap: 8px;
+}
+.period-hdr::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* 各狀態左邊框 + 背景 */
-.c-urgent{border-color:var(--red-bd)!important;background:var(--red-lt)!important}.c-urgent::before{background:var(--red)}
-.c-booked{border-color:var(--teal-bd)!important;background:var(--teal-lt)!important}.c-booked::before{background:var(--teal)}
-.c-reserved{border-color:var(--gold-bd)!important;background:var(--gold-lt)!important}.c-reserved::before{background:var(--gold)}
-.c-walkin{border-color:var(--rose-bd)!important;background:var(--rose-lt)!important}.c-walkin::before{background:var(--rose)}
-.c-catchtable{border-color:var(--orange-bd)!important;background:var(--orange-lt)!important}.c-catchtable::before{background:var(--orange)}
-.c-naver{border-color:var(--green-bd)!important;background:var(--green-lt)!important}.c-naver::before{background:var(--green)}
+/* ════ 行程卡片 ════ */
+.trip-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  /* padding-bottom 由 JS 依內容決定：有底部按鈕=40px，否則=20px */
+  padding: 13px 13px 20px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: all .2s;
+  position: relative;
+  animation: cardIn .22s ease both;
+}
+/* 當卡片有底部按鈕時加大底部空間 */
+.trip-card.has-bottom { padding-bottom: 40px; }
+.trip-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 14px 0 0 14px; background: var(--border);
+}
+.trip-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); border-color: #C8D0E4; }
 
-/* Badges */
-.cat-badge{font-size:.63rem;padding:2px 7px;border-radius:10px;font-weight:700;letter-spacing:.3px}
-.c-集合出發{background:#FEE2E2;color:#DC2626}
-.c-景點{background:#DBEAFE;color:#1D4ED8}
-.c-餐廳{background:#FEF3C7;color:#B45309}
-.c-點心{background:#FCE7F3;color:#BE185D}
-.c-交通{background:#EDE9FE;color:#6D28D9}
-.c-住宿{background:#D1FAE5;color:#065F46}
+/* 當前行程高亮 */
+.trip-card.now {
+  border-color: var(--gold) !important;
+  background: var(--gold-lt) !important;
+  box-shadow: 0 0 0 3px rgba(245,158,11,.15), var(--shadow) !important;
+}
+.trip-card.now::after {
+  content: '▶ 現在'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: #fff; font-size: .58rem; font-weight: 800;
+  padding: 2px 10px; border-radius: 0 0 8px 8px;
+}
 
-.sb{font-size:.59rem;padding:2.5px 7px;border-radius:10px;font-weight:800}
-.sb-urgent{background:var(--red);color:#fff}
-.sb-booked{background:var(--teal);color:#fff}
-.sb-reserved{background:var(--gold);color:#fff}
-.sb-walkin{background:var(--rose);color:#fff}
-.sb-catchtable{background:var(--orange);color:#fff}
-.sb-naver{background:var(--green);color:#fff}
+/* 狀態色（左邊框 + 背景）*/
+.c-urgent   { border-color: var(--red-bd)    !important; background: var(--red-lt)    !important; } .c-urgent::before   { background: var(--red); }
+.c-booked   { border-color: var(--teal-bd)   !important; background: var(--teal-lt)   !important; } .c-booked::before   { background: var(--teal); }
+.c-reserved { border-color: var(--gold-bd)   !important; background: var(--gold-lt)   !important; } .c-reserved::before { background: var(--gold); }
+.c-walkin   { border-color: var(--rose-bd)   !important; background: var(--rose-lt)   !important; } .c-walkin::before   { background: var(--rose); }
+.c-catchtable{ border-color: var(--orange-bd)!important; background: var(--orange-lt) !important; } .c-catchtable::before{ background: var(--orange); }
+.c-naver    { border-color: var(--green-bd)  !important; background: var(--green-lt)  !important; } .c-naver::before    { background: var(--green); }
 
-.time-chip{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:500;color:var(--gold);background:var(--gold-lt);padding:2px 7px;border-radius:7px;border:1px solid var(--gold-bd)}
+/* ════════════════════════════════════════════════════════════
+   🏷️ 行程類別標籤顏色
+   ════════════════════════════════════════════════════════════
+   ✅ 如何新增一個類別（以「購物」為例）：
+   ─────────────────────────────────────────────────────────
+   步驟 1：在下方加一行  .c-新類別名{ background: 底色; color: 文字色; }
+           類別名必須和 JS 裡 CATS 陣列的字串完全一致
+   步驟 2：到 JS 的 CATS 陣列加入該類別名（約在第 2345 行）
+   ─────────────────────────────────────────────────────────
+   顏色挑選小技巧：用淡底色 + 深同色系文字，視覺最清晰
+     淡藍底 + 深藍字：background:#DBEAFE; color:#1D4ED8;
+     淡黃底 + 深棕字：background:#FEF3C7; color:#B45309;
+     淡綠底 + 深綠字：background:#D1FAE5; color:#065F46;
+   ════════════════════════════════════════════════════════════ */
+.cat-badge  { font-size: .63rem; padding: 2px 7px; border-radius: 10px; font-weight: 700; letter-spacing: .3px; }
+.c-集合出發 { background: #FEE2E2; color: #DC2626; }   /* 🔴 紅   */
+.c-景點     { background: #DBEAFE; color: #1D4ED8; }   /* 🔵 藍   */
+.c-購物     { background: #F3E8FF; color: #7E22CE; }   /* 🟣 紫   */
+.c-餐廳     { background: #FFEDD5; color: #C2410C; }   /* 🟠 橙   */
+.c-點心     { background: #FCE7F3; color: #BE185D; }   /* 🩷 粉   */
+.c-交通     { background: #CFFAFE; color: #0E7490; }   /* 🩵 青   */
+.c-住宿     { background: #D1FAE5; color: #065F46; }   /* 🟢 綠   */
+/* ↓ 要新增類別就在這裡加一行，格式同上 ↓ */
 
-/* 地圖導航按鈕 */
-.map-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;font-size:.68rem;font-weight:700;border:1.5px solid;text-decoration:none;transition:all .15s;cursor:pointer;white-space:nowrap}
-.map-btn-naver{background:#03C75A1A;color:#03C75A;border-color:#03C75A55}
-.map-btn-naver:hover{background:#03C75A;color:#fff}
-.map-btn-google{background:#4285F41A;color:#4285F4;border-color:#4285F455}
-.map-btn-google:hover{background:#4285F4;color:#fff}
+/* ════════════════════════════════════════════════════════════
+   🔴 狀態徽章顏色（卡片右上角小標籤）
+   ════════════════════════════════════════════════════════════
+   顏色來自 :root 變數，修改 :root 裡的值就會同步更新
+   如需新增狀態標籤，同時要更新 JS 的 STATUSES 陣列 和 CC_MAP / SBC_MAP
+   ════════════════════════════════════════════════════════════ */
+.sb            { font-size: .59rem; padding: 2.5px 7px; border-radius: 10px; font-weight: 800; }
+.sb-urgent     { background: var(--red);    color: #fff; }   /* 重要！勿遲到 */
+.sb-booked     { background: var(--teal);   color: #fff; }   /* 已預約 */
+.sb-reserved   { background: var(--gold);   color: #fff; }   /* 需提前預約 */
+.sb-walkin     { background: var(--rose);   color: #fff; }   /* 現場劃位 */
+.sb-catchtable { background: var(--orange); color: #fff; }   /* Catchtable 預訂 */
+.sb-naver      { background: var(--green);  color: #fff; }   /* NAVER 預訂 */
 
-/* Gear button */
-.gear-btn{width:34px;height:34px;background:#F5F6FA;border:1.5px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;font-size:.95rem;color:var(--text2)}
-.gear-btn:hover{transform:rotate(45deg)}
-.gear-btn.on{background:var(--violet-lt);border-color:var(--violet-bd);color:var(--violet)}
+/* 時間標籤 */
+.time-chip {
+  font-family: 'DM Mono', monospace; font-size: .68rem; font-weight: 500;
+  color: var(--gold); background: var(--gold-lt);
+  padding: 2px 7px; border-radius: 7px; border: 1px solid var(--gold-bd);
+}
 
-/* Admin bar */
-.admin-bar{background:var(--violet-lt);border:1.5px solid var(--violet-bd);border-radius:12px;padding:10px 14px;margin:0 12px 10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* ════ 地圖導航按鈕 ════ */
+.map-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; font-size: .68rem; font-weight: 700;
+  border: 1.5px solid; text-decoration: none; transition: all .15s;
+  cursor: pointer; white-space: nowrap;
+}
+.map-btn-naver  { background: #03C75A1A; color: #03C75A; border-color: #03C75A55; }
+.map-btn-naver:hover  { background: #03C75A; color: #fff; }
+.map-btn-google { background: #4285F41A; color: #4285F4; border-color: #4285F455; }
+.map-btn-google:hover { background: #4285F4; color: #fff; }
 
-/* Buttons */
-.btn{padding:8px 15px;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .18s;border:none;font-family:'Noto Sans TC',sans-serif;display:inline-flex;align-items:center;gap:5px}
-.btn-teal{background:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(10,191,163,.25)}
-.btn-teal:hover{background:#09A58E}
-.btn-red{background:var(--red);color:#fff}
-.btn-red:hover{background:#E85555}
-.btn-gold{background:var(--gold);color:#fff}
-.btn-gold:hover{background:#D97706}
-.btn-ghost{background:#F5F6FA;color:var(--text2);border:1.5px solid var(--border)}
-.btn-ghost:hover{background:var(--border);color:var(--text)}
-.btn-violet{background:var(--violet);color:#fff}
-.btn-sm{padding:5px 11px;font-size:.71rem;border-radius:8px}
-.btn-xs{padding:4px 9px;font-size:.63rem;border-radius:7px}
+/* ════ 齒輪按鈕 ════ */
+.gear-btn {
+  width: 34px; height: 34px; background: #F5F6FA; border: 1.5px solid var(--border);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .18s; font-size: .95rem; color: var(--text2);
+}
+.gear-btn:hover { transform: rotate(45deg); }
+.gear-btn.on    { background: var(--violet-lt); border-color: var(--violet-bd); color: var(--violet); }
 
-/* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(26,31,54,.4);backdrop-filter:blur(5px);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
-@media(min-width:640px){.modal-overlay{align-items:center}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-box{background:var(--surface);border-radius:22px 22px 0 0;padding:22px 18px 32px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:slideUp .25s cubic-bezier(.34,1.56,.64,1)}
-@media(min-width:640px){.modal-box{border-radius:18px;padding:26px 22px}}
-@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-handle{width:34px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px}
+/* ════ 管理員工具列 ════ */
+.admin-bar {
+  background: var(--violet-lt); border: 1.5px solid var(--violet-bd); border-radius: 12px;
+  padding: 10px 14px; margin: 0 12px 10px;
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
 
-/* Forms */
-.form-label{font-size:.7rem;font-weight:800;color:var(--text2);margin-bottom:4px;display:block;letter-spacing:.3px}
-.form-input{background:#F5F6FA;border:1.5px solid var(--border);border-radius:10px;color:var(--text);padding:9px 12px;font-size:.83rem;font-family:'Noto Sans TC',sans-serif;width:100%;transition:all .18s}
-.form-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(10,191,163,.12);background:#fff}
-.form-select{background:#F5F6FA;border:1.5px solid var(--border);border-radius:10px;color:var(--text);padding:9px 12px;font-size:.83rem;font-family:'Noto Sans TC',sans-serif;width:100%}
-.form-select:focus{outline:none;border-color:var(--teal)}
+/* ════ 通用按鈕 ════ */
+.btn {
+  padding: 8px 15px; border-radius: 10px; font-size: .78rem; font-weight: 700;
+  cursor: pointer; transition: all .18s; border: none;
+  font-family: 'Noto Sans TC', sans-serif;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.btn-teal   { background: var(--teal);   color: #fff; box-shadow: 0 4px 12px rgba(10,191,163,.25); }
+.btn-teal:hover   { background: #09A58E; }
+.btn-red    { background: var(--red);    color: #fff; }
+.btn-red:hover    { background: #E85555; }
+.btn-gold   { background: var(--gold);   color: #fff; }
+.btn-gold:hover   { background: #D97706; }
+.btn-ghost  { background: #F5F6FA; color: var(--text2); border: 1.5px solid var(--border); }
+.btn-ghost:hover  { background: var(--border); color: var(--text); }
+.btn-violet { background: var(--violet); color: #fff; }
+.btn-sm { padding: 5px 11px; font-size: .71rem; border-radius: 8px; }
+.btn-xs { padding: 4px 9px;  font-size: .63rem; border-radius: 7px; }
 
-/* Expense card */
-.exp-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:15px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+/* ════ Modal ════ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(26,31,54,.4);
+  backdrop-filter: blur(5px); z-index: 200;
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: fadeIn .2s ease;
+}
+@media (min-width: 640px) { .modal-overlay { align-items: center; } }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-/* VBP Drawer */
-.drawer-overlay{position:fixed;inset:0;background:rgba(26,31,54,.3);backdrop-filter:blur(4px);z-index:150;animation:fadeIn .2s ease}
-.drawer{position:fixed;right:0;top:0;bottom:0;width:min(100vw,390px);background:var(--surface);box-shadow:var(--shadow-lg);z-index:151;display:flex;flex-direction:column;animation:slideRight .25s cubic-bezier(.34,1.2,.64,1)}
-@keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
-.drawer-hdr{padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
-.drawer-body{flex:1;overflow-y:auto;padding:10px 14px 100px}
-.vbp-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 13px;margin-bottom:7px;box-shadow:var(--shadow-sm);transition:all .18s;animation:cardIn .22s ease both}
-.vbp-card:hover{box-shadow:var(--shadow);border-color:#C8D0E4}
-.vbp-area-hdr{font-size:.72rem;font-weight:800;letter-spacing:2px;color:var(--text3);padding:13px 2px 7px;display:flex;align-items:center;gap:8px}
-.vbp-area-hdr::after{content:'';flex:1;height:1.5px;background:var(--border)}
-.tier{font-size:.57rem;padding:2px 6px;border-radius:7px;font-weight:800}
-.tier-free{background:#D1FAE5;color:#065F46}
-.tier-blue{background:#DBEAFE;color:#1D4ED8}
-.tier-purple{background:#EDE9FE;color:#5B21B6}
+.modal-box {
+  background: var(--surface); border-radius: 22px 22px 0 0;
+  padding: 22px 18px 32px; width: 100%; max-width: 520px;
+  max-height: 92vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp .25s cubic-bezier(.34,1.56,.64,1);
+}
+@media (min-width: 640px) { .modal-box { border-radius: 18px; padding: 26px 22px; } }
+@keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal-handle { width: 34px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 18px; }
 
-/* Filter tabs */
-.ftab{padding:5px 11px;border-radius:16px;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .15s;border:1.5px solid var(--border);color:var(--text2);background:var(--surface);white-space:nowrap}
-.ftab:hover{border-color:var(--teal);color:var(--teal)}
-.ftab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+/* ════ 表單樣式 ════ */
+.form-label {
+  font-size: .7rem; font-weight: 800; color: var(--text2);
+  margin-bottom: 4px; display: block; letter-spacing: .3px;
+}
+.form-input {
+  background: #F5F6FA; border: 1.5px solid var(--border); border-radius: 10px;
+  color: var(--text); padding: 9px 12px; font-size: .83rem;
+  font-family: 'Noto Sans TC', sans-serif; width: 100%; transition: all .18s;
+}
+.form-input:focus {
+  outline: none; border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(10,191,163,.12); background: #fff;
+}
+.form-select {
+  background: #F5F6FA; border: 1.5px solid var(--border); border-radius: 10px;
+  color: var(--text); padding: 9px 12px; font-size: .83rem;
+  font-family: 'Noto Sans TC', sans-serif; width: 100%;
+}
+.form-select:focus { outline: none; border-color: var(--teal); }
 
-/* Bottom nav */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--border);backdrop-filter:blur(15px);z-index:100;display:flex;padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px rgba(26,31,54,.07)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;cursor:pointer;transition:all .18s;color:var(--text3);font-size:.56rem;font-weight:800;letter-spacing:.5px;background:none;border:none}
-.nav-btn:hover,.nav-btn.active{color:var(--teal)}
-.nav-icon-wrap{padding:4px 12px;border-radius:10px;transition:all .18s}
-.nav-btn.active .nav-icon-wrap{background:var(--teal-lt)}
-.nav-icon{font-size:1.12rem;display:block}
+/* ════ 費用卡片 ════ */
+.exp-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 15px; margin-bottom: 9px; box-shadow: var(--shadow-sm);
+}
 
-/* Toast */
-.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--text);color:#fff;padding:10px 18px;border-radius:12px;font-size:.8rem;font-weight:700;z-index:9999;opacity:0;transition:all .25s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ════ VBP 抽屜 ════ */
+.drawer-overlay {
+  position: fixed; inset: 0; background: rgba(26,31,54,.3);
+  backdrop-filter: blur(4px); z-index: 150; animation: fadeIn .2s ease;
+}
+.drawer {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: min(100vw, 390px); background: var(--surface);
+  box-shadow: var(--shadow-lg); z-index: 151;
+  display: flex; flex-direction: column;
+  animation: slideRight .25s cubic-bezier(.34,1.2,.64,1);
+}
+@keyframes slideRight { from{transform:translateX(100%)} to{transform:translateX(0)} }
+.drawer-hdr { padding: 18px 18px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 10px 14px 100px; }
 
-/* Currency converter */
-.fx-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
-.fx-display{font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;color:var(--teal);letter-spacing:1px}
-.fx-quick-btn{padding:7px 14px;border-radius:10px;font-size:.75rem;font-weight:700;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .15s}
-.fx-quick-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-lt)}
-.fx-quick-btn.active-fx{background:var(--teal);color:#fff;border-color:var(--teal)}
+/* ════ VBP 卡片 ════ */
+.vbp-card {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 12px 13px; margin-bottom: 7px; box-shadow: var(--shadow-sm);
+  transition: all .18s; animation: cardIn .22s ease both;
+}
+.vbp-card:hover { box-shadow: var(--shadow); border-color: #C8D0E4; }
+.vbp-area-hdr {
+  font-size: .72rem; font-weight: 800; letter-spacing: 2px; color: var(--text3);
+  padding: 13px 2px 7px; display: flex; align-items: center; gap: 8px;
+}
+.vbp-area-hdr::after { content: ''; flex: 1; height: 1.5px; background: var(--border); }
+.tier { font-size: .57rem; padding: 2px 6px; border-radius: 7px; font-weight: 800; }
+.tier-free   { background: #D1FAE5; color: #065F46; }
+.tier-blue   { background: #DBEAFE; color: #1D4ED8; }
+.tier-purple { background: #EDE9FE; color: #5B21B6; }
 
-/* Offline info cards */
-.info-section{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
-.info-row:last-child{border-bottom:none}
-.phrase-ko{font-size:.8rem;font-weight:700;color:var(--text);line-height:1.3}
-.phrase-zh{font-size:.7rem;color:var(--text2)}
-.phrase-ro{font-size:.67rem;color:var(--text3);font-style:italic}
+/* ════ 篩選 Tabs ════ */
+.ftab {
+  padding: 5px 11px; border-radius: 16px; font-size: .7rem; font-weight: 700;
+  cursor: pointer; transition: all .15s;
+  border: 1.5px solid var(--border); color: var(--text2); background: var(--surface); white-space: nowrap;
+}
+.ftab:hover { border-color: var(--teal); color: var(--teal); }
+.ftab.active { background: var(--teal); color: #fff; border-color: var(--teal); }
 
-@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* ════ 底部導覽列 ════ */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,.96); border-top: 1px solid var(--border);
+  backdrop-filter: blur(15px); z-index: 100;
+  display: flex; padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 20px rgba(26,31,54,.07);
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 5px 3px; cursor: pointer; transition: all .18s;
+  color: var(--text3); font-size: .56rem; font-weight: 800; letter-spacing: .5px;
+  background: none; border: none; font-family: 'Noto Sans TC', sans-serif;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--teal); }
+.nav-icon-wrap { padding: 4px 12px; border-radius: 10px; transition: all .18s; }
+.nav-btn.active .nav-icon-wrap { background: var(--teal-lt); }
+.nav-icon { font-size: 1.12rem; display: block; }
+
+/* ════ Toast 提示 ════ */
+.toast {
+  position: fixed; bottom: 88px; left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  background: var(--text); color: #fff; padding: 10px 18px;
+  border-radius: 12px; font-size: .8rem; font-weight: 700;
+  z-index: 9999; opacity: 0;
+  transition: all .25s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; box-shadow: var(--shadow);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ════ 匯率換算 ════ */
+.fx-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 18px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+}
+.fx-display { font-family: 'DM Mono', monospace; font-size: 2rem; font-weight: 500; color: var(--teal); letter-spacing: 1px; }
+.fx-quick-btn {
+  padding: 7px 14px; border-radius: 10px; font-size: .75rem; font-weight: 700;
+  border: 1.5px solid var(--border); background: var(--surface); color: var(--text2);
+  cursor: pointer; transition: all .15s;
+}
+.fx-quick-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-lt); }
+.fx-quick-btn.active-fx { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* ════ 離線資訊 ════ */
+.info-section {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+}
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.info-row:last-child { border-bottom: none; }
+.phrase-ko  { font-size: .8rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+.phrase-zh  { font-size: .7rem; color: var(--text2); }
+.phrase-ro  { font-size: .67rem; color: var(--text3); font-style: italic; }
+
+/* ════ 動畫 ════ */
+@keyframes cardIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ════════════════════════════════════════════════════════════
+   🔘 狀態 Chip 多選按鈕樣式（Modal 編輯行程時出現）
+   ════════════════════════════════════════════════════════════
+   如需新增狀態標籤的 chip 顏色：
+   在下方加一行：
+     .status-chip[data-s="新標籤名"].selected { background: var(--對應色); }
+   顏色變數在 :root 裡定義（--red / --gold / --rose / --violet …）
+   ════════════════════════════════════════════════════════════ */
+.status-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.status-chip {
+  padding: 5px 11px; border-radius: 20px; font-size: .7rem; font-weight: 700;
+  cursor: pointer; border: 1.5px solid var(--border);
+  color: var(--text2); background: var(--surface);
+  transition: all .15s; user-select: none;
+}
+.status-chip.selected                            { color: #fff; border-color: transparent; }
+.status-chip[data-s="重要！勿遲到"].selected    { background: var(--red);    }
+.status-chip[data-s="已預約"].selected           { background: var(--teal);   }
+.status-chip[data-s="需提前預約"].selected       { background: var(--gold);   }
+.status-chip[data-s="現場劃位"].selected         { background: var(--rose);   }
+.status-chip[data-s="Catchtable 預訂"].selected  { background: var(--orange); }
+.status-chip[data-s="NAVER 預訂"].selected       { background: var(--green);  }
+/* ↓ 新增狀態 chip 顏色就加在這裡 ↓ */
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">✅ 已儲存</div>
 
 <!-- ════════════════════════════════════════════════
-     HEADER
+     HEADER（標題、倒數、日期 Tabs）
      ════════════════════════════════════════════════ -->
 <header class="app-header">
-  <div class="px-4 pt-4 pb-3">
-    <!-- 標題列 -->
+  <div class="px-4">
     <div class="flex items-start justify-between gap-2 mb-2">
       <div>
-        <h1 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text)" id="hdrTitle"></h1>
-        <div class="flex gap-2 mt-1 flex-wrap" id="hdrBadges"></div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text)" id="hdrTitle">✈️ 韓國釜山旅遊</h1>
+        <div class="flex gap-2 mt-1 flex-wrap" id="hdrBadges">
+    <span style="background:var(--teal-lt);border:1px solid var(--teal-bd);border-radius:20px;padding:2px 10px;font-size:.67rem;color:var(--teal);font-weight:700">
+      5/23–5/30 · 8天7夜
+    </span></div>
       </div>
       <!-- 右上角：齒輪 + 倒數 -->
-      <div class="flex flex-col items-end gap-1.5">
-        <button class="gear-btn" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
+      <div class="flex flex-col items-end gap-1">
+        <button class="gear-btn on" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
         <div style="text-align:right">
-          <div class="cd-digits" id="cdDigits">--:--:--</div>
+          <div class="cd-digits" id="cdDigits">23天 09:15:05</div>
           <button onclick="showCdSettings()" style="font-size:.65rem;color:var(--text3);background:none;border:none;cursor:pointer;display:block;margin-top:1px">VBP 倒數 ▾</button>
         </div>
       </div>
     </div>
-    <!-- 倒數進度條 -->
-    <div class="cd-bar"><div class="cd-fill" id="cdFill" style="width:100%"></div></div>
-    <!-- 日期 Tabs -->
-    <div class="day-tabs mt-3" id="dayTabs"></div>
+    <div class="cd-bar"><div class="cd-fill red" id="cdFill" style="width: 16.488%;"></div></div>
+    <div class="day-tabs mt-3" id="dayTabs">
+    <button class="day-tab " onclick="selectDay('day1')">5/23 (六)</button>
+    <button class="day-tab " onclick="selectDay('day2')">5/24 (日)</button>
+    <button class="day-tab " onclick="selectDay('day3')">5/25 (一)</button>
+    <button class="day-tab " onclick="selectDay('day4')">5/26 (二)</button>
+    <button class="day-tab " onclick="selectDay('day5')">5/27 (三)</button>
+    <button class="day-tab " onclick="selectDay('day6')">5/28 (四)</button>
+    <button class="day-tab " onclick="selectDay('day7')">5/29 (五)</button>
+    <button class="day-tab active" onclick="selectDay('day8')">5/30 (六)</button></div>
   </div>
 </header>
 
-<!-- 管理員工具列（預設隱藏） -->
-<div id="adminBar" style="display:none">
+<!-- 管理員工具列（預設隱藏，點右上 ⚙️ 齒輪才會出現） -->
+<div id="adminBar" style="">
   <div class="admin-bar">
     <span style="font-size:.7rem;font-weight:800;color:var(--violet)">⚙️ 管理員模式</span>
     <button class="btn btn-ghost btn-sm" onclick="showExport()">⬇️ 下載 HTML</button>
@@ -244,9 +467,69 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
 </div>
 
 <!-- ════════════════════════════════════════════════
-     主要內容區
+     主要內容區（由 JS 動態渲染）
      ════════════════════════════════════════════════ -->
-<main id="main" class="px-3 pt-2 pb-28"></main>
+<!-- ⚠️ 此區塊由 JavaScript 自動填入，請勿在此手動寫內容 -->
+<main id="main" class="px-3 pt-2 pb-28">
+    <div class="day-hdr">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">5/30 (六)</div>
+          <div style="font-size:.73rem;opacity:.85;margin-top:3px">📍 西面→台灣</div>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35)" onclick="addNewItem('day8')">＋ 新增行程</button>
+      </div>
+    </div><div class="period-hdr">🌅 上午</div>
+    <div class="trip-card  " id="card-d8-1" style="animation-delay:0s">
+      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
+        
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-1','day8','上午',-1)" title="往上移">↑</button>
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-1','day8','上午',1)" title="往下移">↓</button>
+        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-1','day8')">✏️</button>
+        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-1','day8')">🗑️</button>
+      </div>
+      <div style="padding-right:100px"><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:6px"><span class="time-chip">⏰ 08:30</span></div><div style="margin-bottom:5px">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
+      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">7:30 起床／8:30 出發</span>
+      <span class="cat-badge c-集合出發">集合出發</span>
+    </div>
+  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">🔺早餐(自行處理)</div></div>
+      
+    </div>
+    <div class="trip-card  has-bottom" id="card-d8-2" style="animation-delay:0.03s">
+      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
+        
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-2','day8','上午',-1)" title="往上移">↑</button>
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-2','day8','上午',1)" title="往下移">↓</button>
+        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-2','day8')">✏️</button>
+        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-2','day8')">🗑️</button>
+      </div>
+      <div style="padding-right:100px"><div style="margin-bottom:5px">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
+      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">搭車前往-金海國際機場 第 I 航廈</span>
+      <span class="cat-badge c-交通">交通</span>
+    </div>
+  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">🔺地鐵2號線：西面站→沙上站／🔺釜山金海輕軌：沙上站→機場站(車程約45分鐘)</div></div>
+      <div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap"><a href="https://naver.me/GNRjwFwb" target="_blank" class="map-btn map-btn-naver">
+        <span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a></div>
+    </div>
+    <div class="trip-card c-urgent has-bottom" id="card-d8-3" style="animation-delay:0.06s">
+      <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
+        
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-3','day8','上午',-1)" title="往上移">↑</button>
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('d8-3','day8','上午',1)" title="往下移">↓</button>
+        <button class="btn btn-ghost btn-xs" onclick="editItem('d8-3','day8')">✏️</button>
+        <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA" onclick="deleteItem('d8-3','day8')">🗑️</button>
+      </div>
+      <div style="padding-right:100px"><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:6px"><span class="time-chip">⏰ 10:00</span><span class="sb sb-urgent">重要！勿遲到</span></div><div style="margin-bottom:5px">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
+      <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">金海國際機場 第 I 航廈</span>
+      <span class="cat-badge c-交通">交通</span>
+    </div>
+  </div><div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">12:15 華航 CI189 → 13:40 抵達台灣</div></div>
+      <div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap"><a href="https://naver.me/GNRjwFwb" target="_blank" class="map-btn map-btn-naver">
+        <span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a></div>
+    </div></main>
 
 <!-- ════════════════════════════════════════════════
      底部導覽列
@@ -266,50 +549,77 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
   <button class="nav-btn" id="nav-exp" onclick="switchView('expenses')">
     <div class="nav-icon-wrap"><span class="nav-icon">💰</span></div>費用
   </button>
-  <button class="nav-btn" id="nav-fx" onclick="switchView('fx')">
+  <button class="nav-btn" id="nav-fx" onclick="switchView('fx')" title="點擊：匯率換算 ｜ 長按：離線資訊">
     <div class="nav-icon-wrap"><span class="nav-icon">💱</span></div>匯率
   </button>
 </nav>
 
-<div id="modalContainer"></div>
+<div id="modalContainer">
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-box" id="modalBox">
+    <div class="modal-handle"></div>
+    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:8px">⬇️ 下載完整 HTML</h2>
+    <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">下載後覆蓋上傳到 GitHub，成員用舊網址即可看到最新行程，不需要任何操作。</p>
+    <button class="btn btn-teal" style="width:100%;font-size:.88rem;padding:12px" onclick="dlHtml()">⬇️ 下載 HTML 檔案</button>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeModal()">取消</button></div>
+    </div></div>
 <div id="drawerContainer"></div>
+
 
 <!-- ╔══════════════════════════════════════════════════════════════╗
      ║   ✏️  旅遊 App 修改手冊  ── 只需改這個區塊！                ║
      ╚══════════════════════════════════════════════════════════════╝
 
-  📌 使用流程（三步驟）
+  📌 操作流程（三步驟）
   ──────────────────────────────────────────────────────────────
-  ① 用瀏覽器打開 HTML → 點右上角 ⚙️ 進入「管理員模式」
-  ② 直接在 App 內點「✏️」編輯行程卡片（最方便）
-     或是在下方程式碼直接修改資料
-  ③ ⚙️ → 「⬇️ 下載 HTML」→ 覆蓋上傳到 GitHub
-     → 成員用原本的網址就能看到最新版，無需任何操作 ✅
+  ① 瀏覽器開啟 HTML → 點右上角 ⚙️ 齒輪進入「管理員模式」
+  ② 直接在 App 內點 ✏️ 編輯行程卡片（最方便！）
+     → 或在下方 JS 資料區直接改程式碼
+  ③ ⚙️ →「⬇️ 下載 HTML」→ 覆蓋上傳到 GitHub
+     → 成員用原本網址即可看到最新版，無需任何操作 ✅
 
   ──────────────────────────────────────────────────────────────
-  📂 六個資料區塊（依序排列，每個都有詳細說明）
+  📂 六個資料區塊（全部在 <script> 標籤內，依序如下）
   ──────────────────────────────────────────────────────────────
-  【1】TRIP_META    → 旅遊名稱、日期、人數、倒數計時
-  【2】TRIP_DAYS    → 每日行程（最常修改這裡）
-  【3】DEFAULT_EXPENSES → 費用明細（機票、住宿、雜費）
-  【4】VBP_DATA     → 釜山通行證景點圖鑑
-  【5】OFFLINE_INFO → 緊急電話、交通、韓語會話
-  【6】FX_RATE      → 離線匯率（出發前更新一次）
+  【1】TRIP_META        旅遊名稱、日期範圍、人數、倒數時間
+  【2】TRIP_DAYS        每日行程（最常改這裡）
+  【3】DEFAULT_EXPENSES 費用明細（機票 / 住宿 / 雜費）
+  【4】VBP_DATA         釜山通行證景點圖鑑
+  【5】OFFLINE_INFO     緊急電話 / 交通資訊 / 常用韓語
+  【6】FX_RATE          離線匯率（出發前更新一次即可）
 
   ──────────────────────────────────────────────────────────────
-  🎨 換配色：修改 CSS 最上方 :root 裡的變數
+  🎨 換整體配色：改 CSS 最上方 :root 裡的變數值
   ──────────────────────────────────────────────────────────────
-  --bg      頁面背景    --surface  卡片底色    --border  邊框
-  --text    主要文字    --text2    次要文字    --text3   提示文字
-  --teal    主題色（同時修改 --teal-lt 淡底色、--teal-bd 邊框色）
+  --bg       頁面背景    --surface  卡片底色    --border  邊框
+  --text     主要文字    --text2    次要文字    --text3   提示文字
+  --teal     主題色（同時改 --teal-lt 淡底色、--teal-bd 邊框色）
+
+  ──────────────────────────────────────────────────────────────
+  🏷️ 新增行程類別（如「購物」）
+  ──────────────────────────────────────────────────────────────
+  步驟 1：CSS 約第 153 行，.cat-badge 區塊加一行：
+            .c-新類別 { background: 底色; color: 文字色; }
+  步驟 2：JS CATS 陣列（約第 2363 行）加入新類別名字串
+
+  ──────────────────────────────────────────────────────────────
+  🔴 新增狀態標籤（如「需付押金」）
+  ──────────────────────────────────────────────────────────────
+  步驟 1：JS STATUSES 陣列加入新標籤名
+  步驟 2：CC_MAP  加 '新標籤': 'c-對應class'（決定卡片邊框色）
+  步驟 3：SBC_MAP 加 '新標籤': 'sb-對應class'（決定徽章色）
+  步驟 4：CSS .sb-對應class { background: 顏色; color:#fff; }
+  步驟 5：CSS .c-對應class  { border-color:…; background:…; }
+              .c-對應class::before { background: 顏色; }
+  步驟 6：CSS .status-chip[data-s="新標籤"].selected { background: 顏色; }
 
   ──────────────────────────────────────────────────────────────
   ⚠️  JSON 語法提醒
   ──────────────────────────────────────────────────────────────
   • 字串值用雙引號：  "值"
-  • 數字不用引號：    123
-  • 布林值不用引號：  true / false
-  • 項目之間用逗號，最後一項「不加」逗號
+  • 數字不加引號：    123
+  • 布林值不加引號：  true / false
+  • 陣列項目間用逗號，最後一項「不加」逗號
   ════════════════════════════════════════════════════════════════ -->
 
 <script>
@@ -331,8 +641,8 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
    │             │ 也可在 App 右上角「VBP 倒數 ▾」調整     │
    └─────────────┴──────────────────────────────────────────┘ */
 const TRIP_META = {
-  title:     "釜山旅遊",
-  emoji:     "🇰🇷",
+  title:     "韓國釜山旅遊",
+  emoji:     "✈️",
   dateRange: "5/23–5/30",
   duration:  "8天7夜",
   groupSize: "4人",
@@ -358,158 +668,1920 @@ const TRIP_META = {
    │ time     │ 時間 "HH:MM"，留空 "" 代表不顯示            │
    │ period   │ 時段："上午" / "下午" / "晚上"              │
    │ category │ 類別（影響卡片顏色標籤）：                  │
-   │          │ "景點" / "餐廳" / "點心" / "交通"           │
-   │          │ "住宿" / "集合出發"                         │
+   │          │ "景點" / "購物" / "餐廳" / "點心"          │
+   │          │ "交通" / "住宿" / "集合出發"                │
    │ name     │ 行程名稱（卡片大字）                        │
    │ nameKo   │ 韓文名稱（卡片小字）可留空 ""               │
    │ hours    │ 營業時間，可留空 "" 或填 "24小時"            │
    │ note     │ 灰底備註，可留空 ""                         │
    │ pass     │ true = 顯示「🎫 釜山PASS」粉紅標籤          │
    │          │ false = 不顯示                              │
-   │ status   │ 狀態標籤，可留空 ""，選項：                 │
-   │          │ "重要！勿遲到" / "已預約" / "需提前預約"    │
-   │          │ "現場劃位" / "Catchtable 預訂" / "NAVER 預訂"│
+   │ status   │ 狀態標籤，陣列格式（可多選，空陣列 [] = 無標籤）  │
+   │          │ 例：["重要！勿遲到"]  或  ["現場劃位","已預約"]   │
+   │          │ 可用值："重要！勿遲到" / "已預約" / "需提前預約"  │
+   │          │        "現場劃位" / "Catchtable 預訂" / "NAVER 預訂"│
    │ nav      │ 導航按鈕（省略此欄 = 不顯示按鈕）：         │
-   │          │ { type:"naver",  url:"https://..." }        │
-   │          │ { type:"google", url:"https://..." }        │
-   │          │ { type:"none" }  ← 強制不顯示              │
-   │          │ ※ url 留空時自動用 name 搜尋                │
+   │          │ { type:"naver",  url:"https://..." }       │
+   │          │ { type:"google", url:"https://..." }       │
+   │          │ { type:"none" }  ← 強制不顯示             │
+   │          │ ※ url 留空時自動用 name 搜尋               │
    └──────────┴─────────────────────────────────────────────┘
 
-   💡 狀態對應的卡片顏色：
+   💡 狀態對應的卡片顏色（多個狀態時，以第一個有顏色的為主）：
       重要！勿遲到 → 紅色     已預約      → 青色
       需提前預約   → 黃色     現場劃位    → 粉色
       Catchtable   → 橘色     NAVER 預訂  → 綠色
    ════════════════════════════════════════════════════════════ */
 const TRIP_DAYS = [
   {
-    id:"day1", date:"2026-05-23", dateLabel:"5/23 (六)", area:"台灣→海雲台",
-    items:[
-      {id:"d1-1",time:"04:00",period:"上午",category:"集合出發",name:"桃園機場 第一航廈 集合",nameKo:"타오위안 공항 제1터미널",hours:"",note:"06:15 華航 CI190 → 09:30 抵達釜山",fee:"",pass:false,status:"重要！勿遲到"},
-      {id:"d1-2",time:"",period:"上午",category:"交通",name:"入境手續＋取行李",nameKo:"입국 수속",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d1-3",time:"",period:"上午",category:"交通",name:"Money Box 換錢",nameKo:"Money Box 환전소",hours:"06:00–21:00",note:"GATE 3 ／ 攜帶台幣→換韓元",fee:"",pass:false,status:""},
-      {id:"d1-4",time:"",period:"上午",category:"交通",name:"搭車前往海雲台，飯店放行李",nameKo:"해운대 이동",hours:"",note:"金海輕軌 機場站→四上站 ＋ 地鐵2號線 沙上站→海雲台站（車程約1小時）",fee:"",pass:false,status:""},
-      {id:"d1-5",time:"",period:"下午",category:"餐廳",name:"31CM 海鮮刀削麵",nameKo:"31cm 해물칼국수",hours:"10:50–14:50 ／ 16:00–20:50",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d1-6",time:"",period:"下午",category:"餐廳",name:"海雲臺小麥冷麵",nameKo:"해운대 밀면",hours:"10:40–20:30",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d1-7",time:"",period:"下午",category:"景點",name:"海雲台商圈",nameKo:"해운대 상권",hours:"",note:"■ 名品糖餅 ／ 海鮮蔥煎餅",fee:"",pass:false,status:""},
-      {id:"d1-8",time:"",period:"下午",category:"景點",name:"海雲台海水浴場",nameKo:"해운대 해수욕장",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d1-9",time:"",period:"下午",category:"景點",name:"冬柏島公園（人魚像／燈塔）",nameKo:"동백섬 공원",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d1-10",time:"",period:"下午",category:"餐廳",name:"密陽血腸豬肉湯飯",nameKo:"밀양순대돼지국밥",hours:"24小時",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d1-11",time:"",period:"下午",category:"點心",name:"古來思魚糕-海雲臺店",nameKo:"고래사어묵 해운대점",hours:"09:00–22:00",note:"",fee:"",pass:false,status:""},
-      {id:"d1-12",time:"",period:"晚上",category:"景點",name:"Busan X the Sky",nameKo:"부산 엑스 더 스카이",hours:"10:00–21:00",note:"",fee:"",pass:true,status:""},
-      {id:"d1-13",time:"",period:"晚上",category:"景點",name:"星巴克 釜山 X the SKY 店",nameKo:"스타벅스 부산 엑스 더 스카이점",hours:"10:00–21:00",note:"",fee:"",pass:false,status:""},
-      {id:"d1-14",time:"",period:"晚上",category:"景點",name:"新世界百貨公司",nameKo:"신세계백화점 센텀시티점",hours:"10:30–20:30",note:"",fee:"",pass:false,status:""},
-      {id:"d1-15",time:"",period:"晚上",category:"景點",name:"Spaland Centum City 汗蒸幕",nameKo:"스파랜드 센텀시티",hours:"08:00–23:00",note:"",fee:"",pass:true,status:""},
-      {id:"d1-16",time:"22:00",period:"晚上",category:"景點",name:"廣安里 無人機表演",nameKo:"광안리 드론쇼",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d1-17",time:"",period:"晚上",category:"住宿",name:"海雲台-W公寓飯店",nameKo:"해운대 W아파트 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day1",
+    "date": "2025-05-23",
+    "dateLabel": "5/23 (六)",
+    "area": "台灣→海雲台",
+    "items": [
+      {
+        "id": "d1-1",
+        "time": "04:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "✈️桃園機場 第一航廈",
+        "nameKo": "",
+        "hours": "",
+        "note": "06:15 華航(CI190) → 09:30 抵達釜山",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到"
+        ],
+        "nav": {
+          "type": "google",
+          "url": "https://reurl.cc/O6R3Wr"
+        }
+      },
+      {
+        "id": "d1-2",
+        "time": "",
+        "period": "上午",
+        "category": "",
+        "name": "✈️金海國際機場 第 I 航廈(入境手續／取行李)",
+        "nameKo": "김해국제공항",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GNRjwFwb"
+        }
+      },
+      {
+        "id": "d1-3",
+        "time": "",
+        "period": "上午",
+        "category": "",
+        "name": "Money Box換錢(GATE 3)",
+        "nameKo": "머니박스 김해공항지점",
+        "hours": "06:00–21:00",
+        "note": "攜帶台幣→換韓元",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xzxwVFcz"
+        }
+      },
+      {
+        "id": "d1-4",
+        "time": "",
+        "period": "上午",
+        "category": "交通",
+        "name": "搭車前往-海雲台(飯店寄放行李)",
+        "nameKo": "더블유레지던스호텔 해운대",
+        "hours": "",
+        "note": "🔺釜山金海輕軌：機場站→四上站／🔺地鐵2號線：沙上站→海雲台站(車程約1小時)",
+        "fee": "2,300 韓元",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5Q37aXzb"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d1-5",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️31公分海鮮刀切麵",
+        "nameKo": "해운대31cm해물칼국수 직영점",
+        "hours": "10:50-21:30／(休息時間 14:40-16:00)／(最後點餐 20:40）",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5kL79AjA"
+        }
+      },
+      {
+        "id": "d1-6",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️海雲台小麥冷麵",
+        "nameKo": "해운대밀면",
+        "hours": "10:40–20:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/G1wSjA6N"
+        }
+      },
+      {
+        "id": "d1-7",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "釜山海雲台市場",
+        "nameKo": "해운대 전통시장",
+        "hours": "09:00-22:00",
+        "note": "🍽️推薦美食：名品糖餅／海鮮蔥煎餅／辣炒年糕／魚板／海苔飯捲",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xFLuqIyP"
+        }
+      },
+      {
+        "id": "d1-8",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "海雲台海水浴場",
+        "nameKo": "해운대해수욕장",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/F0z2RxAs"
+        }
+      },
+      {
+        "id": "d1-9",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "冬柏島公園(人魚像／燈塔)",
+        "nameKo": "동백공원",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xcnaMlAS"
+        }
+      },
+      {
+        "id": "d1-10",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️密陽血腸豬肉湯飯-海雲台店",
+        "nameKo": "밀양순대돼지국밥 부산본점",
+        "hours": "24小時",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5T4ABsWP"
+        }
+      },
+      {
+        "id": "d1-11",
+        "time": "",
+        "period": "下午",
+        "category": "點心",
+        "name": "🍢古來思魚糕-海雲台店",
+        "nameKo": "고래사어묵해운대점",
+        "hours": "09:00–22:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GYC9kRdR"
+        }
+      },
+      {
+        "id": "d1-12",
+        "time": "",
+        "period": "晚上",
+        "category": "景點",
+        "name": "Busan X the Sky",
+        "nameKo": "부산엑스더스카이",
+        "hours": "10:00–21:00",
+        "note": "🔺24H釜山通行證(Klook QR碼)",
+        "fee": "1,198元",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5IS92bMA"
+        }
+      },
+      {
+        "id": "d1-13",
+        "time": "",
+        "period": "晚上",
+        "category": "點心",
+        "name": "🍢星巴克-釜山 X the SKY 店",
+        "nameKo": "스타벅스 해운대 엑스더스카이점",
+        "hours": "10:00–21:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GDa2D9Af"
+        }
+      },
+      {
+        "id": "d1-14",
+        "time": "",
+        "period": "晚上",
+        "category": "購物",
+        "name": "新世界百貨公司-Centum City店",
+        "nameKo": "신세계백화점 센텀시티점",
+        "hours": "10:30–20:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5chuGOAf"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d1-15",
+        "time": "",
+        "period": "晚上",
+        "category": "景點",
+        "name": "SPA LAND Centum City",
+        "nameKo": "센텀 스파랜드",
+        "hours": "09:00-22:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5Q372Aqt"
+        }
+      },
+      {
+        "id": "d1-16",
+        "time": "22:00",
+        "period": "晚上",
+        "category": "景點",
+        "name": "廣安里海灘-無人機表演",
+        "nameKo": "광안리 드론쇼",
+        "hours": "",
+        "note": "🔺週六限定。夏季(3月-9月)：20:00、22:00。(⚠️風大或雨天等天氣不佳時可能會取消)",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xzxmzK1j"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d1-17",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠海雲台-W公寓飯店",
+        "nameKo": "더블유레지던스호텔 해운대",
+        "hours": "",
+        "note": "🔺5/23-5/25 W公寓飯店-海雲台(2天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5Q37aXzb"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day2", date:"2026-05-24", dateLabel:"5/24 (日)", area:"海雲台",
-    items:[
-      {id:"d2-1",time:"08:00",period:"上午",category:"集合出發",name:"7:30 起床 ／ 8:00 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d2-2",time:"",period:"上午",category:"景點",name:"海東龍宮寺",nameKo:"해동 용궁사",hours:"04:30–18:50",note:"",fee:"",pass:false,status:""},
-      {id:"d2-3",time:"",period:"上午",category:"景點",name:"Skyline Luge 釜山",nameKo:"스카이라인 루지 부산",hours:"10:00–18:00",note:"",fee:"",pass:true,status:""},
-      {id:"d2-4",time:"",period:"上午",category:"景點",name:"釜山樂天世界",nameKo:"롯데월드 어드벤처 부산",hours:"10:00–19:00",note:"",fee:"",pass:true,status:""},
-      {id:"d2-5",time:"",period:"下午",category:"餐廳",name:"Pungwonjang 鄉村飯桌家",nameKo:"풍원장",hours:"11:00–20:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d2-6",time:"",period:"下午",category:"景點",name:"釜山樂天 OUTLET",nameKo:"롯데 아울렛 동부산점",hours:"10:30–21:00",note:"",fee:"",pass:false,status:""},
-      {id:"d2-7",time:"",period:"晚上",category:"餐廳",name:"尾浦家 生醃",nameKo:"미포집 생간장게장",hours:"11:00–15:30 ／ 16:30–20:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d2-8",time:"",period:"晚上",category:"景點",name:"釜山海雲台市場",nameKo:"해운대시장",hours:"09:00–22:00",note:"■ 海鮮煎 ／ 辣炒年糕 ／ 魚板 ／ 海苔飯捲",fee:"",pass:false,status:""},
-      {id:"d2-9",time:"",period:"晚上",category:"住宿",name:"海雲台-W公寓飯店",nameKo:"해운대 W아파트 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day2",
+    "date": "2026-05-24",
+    "dateLabel": "5/24 (日)",
+    "area": "海雲台",
+    "items": [
+      {
+        "id": "d2-1",
+        "time": "08:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "7:00 起床／8:00 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "🔺早餐(自行處理)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d2-2",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "海東龍宮寺",
+        "nameKo": "해동용궁사",
+        "hours": "04:30–19:20(最後進場 18:50)",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/58NdWaSm"
+        }
+      },
+      {
+        "id": "d2-3",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "Skyline Luge斜坡滑車",
+        "nameKo": "스카이라인루지 부산",
+        "hours": "10:00–18:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/IDFUcLWo"
+        }
+      },
+      {
+        "id": "d2-4",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "釜山樂天世界",
+        "nameKo": "롯데월드 어드벤처 부산",
+        "hours": "10:00–21:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x9BN8XXI"
+        }
+      },
+      {
+        "id": "d2-5",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️Pungwonjang鄉村飯桌家",
+        "nameKo": "풍원장시골밥상집",
+        "hours": "11:00–20:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GV2txENp"
+        }
+      },
+      {
+        "id": "d2-6",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "Lotte Premium Outlets 東釜山店",
+        "nameKo": "롯데프리미엄아울렛 동부산점",
+        "hours": "10:30–21:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GwpMkOIT"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d2-7",
+        "time": "",
+        "period": "晚上",
+        "category": "餐廳",
+        "name": "🍽️尾浦家-海雲台總店",
+        "nameKo": "미포집 해운대본점",
+        "hours": "11:00–15:30 ／ 16:30–20:00",
+        "note": "11:00-21:00／(休息時間 15:30-16:30)／(最後點餐 20:00）",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GTn3f13H"
+        }
+      },
+      {
+        "id": "d2-8",
+        "time": "",
+        "period": "晚上",
+        "category": "景點",
+        "name": "釜山海雲台市場",
+        "nameKo": "해운대 전통시장",
+        "hours": "09:00-22:00",
+        "note": "🍽️推薦美食：名品糖餅／海鮮蔥煎餅／辣炒年糕／魚板／海苔飯捲",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xFLuqIyP"
+        }
+      },
+      {
+        "id": "d2-9",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠海雲台-W公寓飯店",
+        "nameKo": "더블유레지던스호텔 해운대",
+        "hours": "",
+        "note": "🔺5/23-5/25 W公寓飯店-海雲台(2天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5Q37aXzb"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day3", date:"2026-05-25", dateLabel:"5/25 (一)", area:"海雲台→南浦",
-    items:[
-      {id:"d3-1",time:"09:00",period:"上午",category:"集合出發",name:"8:30 起床 ／ 9:00 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-2",time:"",period:"上午",category:"餐廳",name:"workingholiday 早午餐",nameKo:"워킹홀리데이 카페",hours:"08:00–19:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d3-3",time:"",period:"上午",category:"景點",name:"天空膠囊列車（尾浦站→青沙浦站）",nameKo:"해운대 블루라인파크 해변열차",hours:"09:30–19:30",note:"■ 自然島鹽麵包",fee:"",pass:false,status:"需提前預約"},
-      {id:"d3-4",time:"",period:"上午",category:"景點",name:"韓國版灌籃高手平交道",nameKo:"슬램덩크 철길",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-5",time:"",period:"上午",category:"景點",name:"戀人雙燈塔",nameKo:"미포 쌍둥이 등대",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-6",time:"",period:"上午",category:"點心",name:"Alice Donut 甜甜圈",nameKo:"앨리스 도넛",hours:"09:00–21:30",note:"",fee:"",pass:false,status:""},
-      {id:"d3-7",time:"",period:"上午",category:"景點",name:"海月展望台",nameKo:"달맞이 언덕",hours:"07:00–21:00",note:"",fee:"",pass:false,status:""},
-      {id:"d3-8",time:"",period:"上午",category:"景點",name:"海雲台迎月路 ／ 海月亭",nameKo:"해운대 달맞이길",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-9",time:"",period:"下午",category:"餐廳",name:"水邊最高豬肉湯飯",nameKo:"물가상 돼지국밥",hours:"24小時",note:"",fee:"",pass:false,status:"Catchtable 預訂"},
-      {id:"d3-10",time:"",period:"下午",category:"交通",name:"拿行李到南浦，放行李",nameKo:"남포동 이동",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-11",time:"",period:"下午",category:"景點",name:"釜山塔 ／ 龍頭山公園",nameKo:"부산타워 용두산공원",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-12",time:"",period:"下午",category:"景點",name:"BIFF廣場 ／ 南浦洞地下街",nameKo:"BIFF 광장 남포동 지하상가",hours:"",note:"■ 元祖黑糖餅",fee:"",pass:false,status:""},
-      {id:"d3-13",time:"",period:"下午",category:"景點",name:"光復路時尚文化商店街",nameKo:"광복로 패션문화거리",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d3-14",time:"",period:"下午",category:"景點",name:"樂天超市-光復店",nameKo:"롯데마트 광복점",hours:"10:00–23:00",note:"",fee:"",pass:false,status:""},
-      {id:"d3-15",time:"",period:"晚上",category:"餐廳",name:"味藏王鹽烤肉-富平店",nameKo:"미장왕 소금구이 부평점",hours:"11:30–15:00 ／ 17:00–22:00",note:"",fee:"",pass:false,status:"NAVER 預訂"},
-      {id:"d3-16",time:"",period:"晚上",category:"住宿",name:"南浦-釜山中央公園飯店",nameKo:"부산 중앙공원 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day3",
+    "date": "2026-05-25",
+    "dateLabel": "5/25 (一)",
+    "area": "海雲台→南浦",
+    "items": [
+      {
+        "id": "d3-1",
+        "time": "09:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "8:00 起床／9:00 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-2",
+        "time": "",
+        "period": "上午",
+        "category": "餐廳",
+        "name": "🍽️workingholiday 早午餐",
+        "nameKo": "워킹홀리데이 해운대",
+        "hours": "08:00–19:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FBalWbQp"
+        }
+      },
+      {
+        "id": "item_1777400466476",
+        "time": "",
+        "period": "上午",
+        "category": "點心",
+        "name": "🍢自然島鹽麵包",
+        "nameKo": "자연도소금빵&자연도해",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xrSQSF2f"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-3",
+        "time": "11:00",
+        "period": "上午",
+        "category": "交通",
+        "name": "天空膠囊列車(尾浦站→青沙浦站)",
+        "nameKo": "해운대블루라인파크 미포정거장",
+        "hours": "09:30–19:30",
+        "note": "🔺第五場 11:00-11:30 (Trip條碼)",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到",
+          "已預約"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FafyrnAe"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-4",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "韓國版灌籃高手平交道",
+        "nameKo": "슬램덩크 철길",
+        "hours": "",
+        "note": "🔺靠近天空膠囊列車-青沙浦站",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FPnrR9xj"
+        }
+      },
+      {
+        "id": "d3-5",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "戀人雙燈塔",
+        "nameKo": "청사포어항 동방파제등대",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xP89HRBY"
+        }
+      },
+      {
+        "id": "d3-6",
+        "time": "",
+        "period": "上午",
+        "category": "點心",
+        "name": "🍢Alice Donut 甜甜圈",
+        "nameKo": "앨리스 도넛&사라다",
+        "hours": "11:00–20:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/F2ZuHC7l"
+        }
+      },
+      {
+        "id": "d3-7",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "海月展望台",
+        "nameKo": "해월전망대",
+        "hours": "07:00–21:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GkR39aBq"
+        }
+      },
+      {
+        "id": "d3-9",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️水邊最高豬肉湯飯",
+        "nameKo": "수변최고돼지국밥 해운대미포점",
+        "hours": "24小時",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "Catchtable 預訂"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5Hka8nJv"
+        },
+        "bookingUrl": "https://www.catchtable.net/zh-TW/shop/sbbest__porksoup_marincity"
+      },
+      {
+        "id": "d3-10",
+        "time": "",
+        "period": "下午",
+        "category": "交通",
+        "name": "搭車前往南浦(飯店寄放行李)",
+        "nameKo": "센트럴파크 호텔 부산",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FA2FBQQa"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-11",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "釜山塔／龍頭山公園",
+        "nameKo": "부산타워",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GbDFYSR5"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-12",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "BIFF廣場",
+        "nameKo": "비프광장",
+        "hours": "",
+        "note": "🍽️推薦美食：元祖黑糖餅",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FDnCfOLW"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777448774683",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "南浦洞地下街",
+        "nameKo": "남포지하쇼핑센터3번출구",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x6JUBSQn"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-8",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "海雲台迎月路／海月亭",
+        "nameKo": "해월정",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FQVXBtZ4"
+        }
+      },
+      {
+        "id": "d3-13",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "光復路時尚文化商店街",
+        "nameKo": "광복로패션거리",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/Gsj2q3ln"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-14",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "樂天超市-光復店",
+        "nameKo": "롯데마트 광복점",
+        "hours": "10:00–23:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FlZns9hH"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d3-15",
+        "time": "",
+        "period": "晚上",
+        "category": "餐廳",
+        "name": "🍽️味藏王鹽烤肉-富平店",
+        "nameKo": "미장왕 소금구이 부평점",
+        "hours": "11:30-23:00／(休息時間 15:00-17:00)／(最後點餐 22:00）",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "NAVER 預訂"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/502MzKou"
+        },
+        "bookingUrl": "https://naver.me/FPngjr2v"
+      },
+      {
+        "id": "d3-16",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠南浦-釜山中央公園飯店",
+        "nameKo": "부산 중앙공원 호텔",
+        "hours": "",
+        "note": "5/25-5/27 釜山中央公園飯店(2天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FA2FBQQa"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day4", date:"2026-05-26", dateLabel:"5/26 (二)", area:"南浦",
-    items:[
-      {id:"d4-1",time:"09:00",period:"上午",category:"集合出發",name:"8:30 起床 ／ 9:00 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d4-2",time:"",period:"上午",category:"景點",name:"甘川洞文化村",nameKo:"감천문화마을",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d4-3",time:"",period:"上午",category:"餐廳",name:"Blue House 咖啡廳",nameKo:"블루하우스 카페",hours:"",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d4-4",time:"",period:"上午",category:"景點",name:"甘川浪漫韓服",nameKo:"감천 낭만한복",hours:"",note:"",fee:"",pass:true,status:""},
-      {id:"d4-5",time:"",period:"上午",category:"景點",name:"Flipbook Studio 手翻書",nameKo:"플립북 스튜디오",hours:"10:00–17:30",note:"",fee:"",pass:true,status:""},
-      {id:"d4-6",time:"",period:"下午",category:"餐廳",name:"富平罐頭市場",nameKo:"부평 깡통시장",hours:"08:00–20:00",note:"■ 紅豆奶油餡艾草糕",fee:"",pass:false,status:""},
-      {id:"d4-7",time:"",period:"下午",category:"景點",name:"扎嘎其市場",nameKo:"자갈치시장",hours:"05:00–22:00",note:"",fee:"",pass:false,status:""},
-      {id:"d4-8",time:"",period:"下午",category:"景點",name:"松島海上纜車",nameKo:"송도 해상케이블카",hours:"08:00–20:00",note:"",fee:"",pass:true,status:""},
-      {id:"d4-9",time:"",period:"下午",category:"景點",name:"松島龍宮雲橋",nameKo:"송도용궁구름다리",hours:"09:00–17:30",note:"",fee:"",pass:true,status:""},
-      {id:"d4-10",time:"17:50",period:"下午",category:"景點",name:"釜山鑽石灣遊艇",nameKo:"부산 다이아몬드 베이 요트",hours:"11:00–21:00",note:"※ 登舶前40分到達 ／ 額外支付每人 5,000₩",fee:"",pass:true,status:"重要！勿遲到"},
-      {id:"d4-11",time:"",period:"晚上",category:"餐廳",name:"툰쇼 남포점 豚笑",nameKo:"툰쇼 남포점",hours:"11:00–20:00",note:"",fee:"",pass:false,status:"Catchtable 預訂"},
-      {id:"d4-12",time:"",period:"晚上",category:"景點",name:"民樂水邊夜市",nameKo:"민락수변공원 야시장",hours:"19:00–02:00",note:"",fee:"",pass:false,status:""},
-      {id:"d4-13",time:"",period:"晚上",category:"住宿",name:"南浦-釜山中央公園飯店",nameKo:"부산 중앙공원 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day4",
+    "date": "2026-05-26",
+    "dateLabel": "5/26 (二)",
+    "area": "南浦",
+    "items": [
+      {
+        "id": "d4-1",
+        "time": "09:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "8:00 起床／9:00 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-2",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "甘川洞文化村",
+        "nameKo": "감천문화마을",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/Gxk14DQ9"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-3",
+        "time": "",
+        "period": "上午",
+        "category": "餐廳",
+        "name": "🍽️Blue House 咖啡廳",
+        "nameKo": "계단위푸른집",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GDafWvyU"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-4",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "甘川浪漫韓服",
+        "nameKo": "감천낭만한복",
+        "hours": "09:00–17:30",
+        "note": "🔺24H釜山通行證(Klook QR碼) 🔺韓服租借",
+        "fee": "1,198元",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x2jQ6YV3"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777441077417",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "Ibgogage",
+        "nameKo": "입고가게",
+        "hours": "10:00–18:00",
+        "note": "🔺韓服租借",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/IItc6HR9"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-5",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "Flipbook Studio",
+        "nameKo": "움직이는사진상점",
+        "hours": "10:00–17:30",
+        "note": "🔺手翻書體驗",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xyTGIESn"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-6",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️富平罐頭市場",
+        "nameKo": "부평깡통시장",
+        "hours": "08:00–20:00",
+        "note": "🍽️推薦美食：紅豆奶油餡艾草糕",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GCvq48kt"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-7",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️扎嘎其市場",
+        "nameKo": "부산자갈치시장",
+        "hours": "05:00–22:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xBwJzsdQ"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-8",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "松島海上纜車",
+        "nameKo": "송도해상케이블카",
+        "hours": "09:00–21:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/Fmf6KBhZ"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-9",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "松島龍宮雲橋",
+        "nameKo": "송도용궁구름다리",
+        "hours": "09:00–18:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5T4AUbEV"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-10",
+        "time": "17:50",
+        "period": "下午",
+        "category": "景點",
+        "name": "釜山鑽石灣遊艇",
+        "nameKo": "부산 다이아몬드 베이 요트",
+        "hours": "11:00–21:00／(休息時間 12:00-13:00)",
+        "note": "🔺預約時間:18:30。 ※ 登船前40分到達 ／ 額外支付每人 5,000₩",
+        "fee": "",
+        "pass": true,
+        "status": [
+          "重要！勿遲到",
+          "已預約"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x7ndUL9U"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-11",
+        "time": "",
+        "period": "晚上",
+        "category": "餐廳",
+        "name": "🍽️톤쇼우 남포 豚笑",
+        "nameKo": "톤쇼우 남포",
+        "hours": "11:00–21:00／(最後點餐 20:00)",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "Catchtable 預訂"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FxFtxZrl"
+        },
+        "bookingUrl": "https://www.catchtable.net/zh-TW/shop/tonshounp"
+      },
+      {
+        "id": "d4-12",
+        "time": "",
+        "period": "晚上",
+        "category": "景點",
+        "name": "民樂水邊夜市",
+        "nameKo": "마켓나이트 야시장 밀락더마켓",
+        "hours": "19:00–02:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FswuPYAF"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d4-13",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠南浦-釜山中央公園飯店",
+        "nameKo": "센트럴파크 호텔 부산",
+        "hours": "",
+        "note": "5/25-5/27 釜山中央公園飯店(2天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FA2FBQQa"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day5", date:"2026-05-27", dateLabel:"5/27 (三)", area:"南浦→西面",
-    items:[
-      {id:"d5-1",time:"09:00",period:"上午",category:"集合出發",name:"8:30 起床 ／ 9:00 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d5-2",time:"",period:"上午",category:"餐廳",name:"EGG DROP 南浦洞店",nameKo:"에그드랍 남포동점",hours:"08:00–19:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d5-3",time:"",period:"上午",category:"景點",name:"Arte Museum 釜山",nameKo:"아르떼뮤지엄 부산",hours:"10:00–20:00",note:"",fee:"",pass:true,status:""},
-      {id:"d5-4",time:"",period:"上午",category:"餐廳",name:"影島海女村",nameKo:"영도 해녀촌",hours:"09:00–18:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d5-5",time:"",period:"下午",category:"景點",name:"太宗台",nameKo:"태종대",hours:"09:20–18:30",note:"",fee:"",pass:false,status:""},
-      {id:"d5-6",time:"",period:"下午",category:"景點",name:"太宗台 Danubi 列車",nameKo:"태종대 다누비 열차",hours:"09:20–18:30",note:"",fee:"",pass:true,status:""},
-      {id:"d5-7",time:"",period:"下午",category:"點心",name:"Footbath Cafe View",nameKo:"풋배스 카페 뷰",hours:"12:00–18:00",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d5-8",time:"",period:"下午",category:"景點",name:"白淺灘文化村",nameKo:"흰여울문화마을",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d5-9",time:"",period:"下午",category:"景點",name:"絕影海岸散步路",nameKo:"절영해안산책로",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d5-10",time:"",period:"下午",category:"景點",name:"影島大橋（夜景）",nameKo:"영도대교",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d5-11",time:"",period:"晚上",category:"餐廳",name:"明星（名聲）一隻雞",nameKo:"명성닭한마리",hours:"11:00–22:00",note:"",fee:"",pass:false,status:"NAVER 預訂"},
-      {id:"d5-12",time:"",period:"晚上",category:"住宿",name:"西面-吉姆斯特飯店",nameKo:"서면 짐스타 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day5",
+    "date": "2026-05-27",
+    "dateLabel": "5/27 (三)",
+    "area": "南浦→西面",
+    "items": [
+      {
+        "id": "d5-1",
+        "time": "09:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "8:00 起床／9:00 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-2",
+        "time": "",
+        "period": "上午",
+        "category": "餐廳",
+        "name": "🍽️EGG DROP-南浦洞店",
+        "nameKo": "에그드랍 남포동점",
+        "hours": "08:00–19:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FN7XZFRx"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-3",
+        "time": "",
+        "period": "上午",
+        "category": "景點",
+        "name": "Arte Museum 釜山",
+        "nameKo": "아르떼뮤지엄 부산",
+        "hours": "10:00–20:00",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FIfsvnna"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-4",
+        "time": "",
+        "period": "上午",
+        "category": "餐廳",
+        "name": "🍽️影島海女村",
+        "nameKo": "영도해녀촌",
+        "hours": "09:00–19:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GCvq1edv"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-5",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "太宗台",
+        "nameKo": "태종대",
+        "hours": "09:20–18:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GKUJ7xYL"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-6",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "太宗台 Danubi 列車",
+        "nameKo": "태종대유원지 다누비열차",
+        "hours": "09:20–18:30",
+        "note": "",
+        "fee": "",
+        "pass": true,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FDnSON4s"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-7",
+        "time": "",
+        "period": "下午",
+        "category": "點心",
+        "name": "🍢Footbath Cafe View",
+        "nameKo": "족욕카페 뷰",
+        "hours": "10:00–19:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/F0z2wZum"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777442344513",
+        "time": "",
+        "period": "下午",
+        "category": "點心",
+        "name": "🍢Footbath Cafe View 分店",
+        "nameKo": "족욕카페 뷰 2호점",
+        "hours": "10:00-19:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FqWts6P8"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-8",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "白淺灘文化村",
+        "nameKo": "흰여울문화마을",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xLWAPvjS"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-11",
+        "time": "",
+        "period": "晚上",
+        "category": "餐廳",
+        "name": "🍽️明星(名聲)一隻雞",
+        "nameKo": "명성닭한마리",
+        "hours": "11:00–22:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "NAVER 預訂"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/G0DXkbNR"
+        },
+        "bookingUrl": "https://naver.me/G0DXkbNR"
+      },
+      {
+        "id": "d5-12",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠西面-吉姆斯特飯店",
+        "nameKo": "젬스테이",
+        "hours": "",
+        "note": "🔺5/27-5/30 吉姆斯特飯店(3天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5k7fkSlC"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d5-10",
+        "time": "",
+        "period": "下午",
+        "category": "景點",
+        "name": "影島大橋",
+        "nameKo": "영도대교",
+        "hours": "",
+        "note": "🔺開橋秀：週六限定 14:00-14:15。(⚠️天氣不佳時可能會取消）",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FV7YElOF"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day6", date:"2026-05-28", dateLabel:"5/28 (四)", area:"西面（慶州一日遊）",
-    items:[
-      {id:"d6-1",time:"09:30",period:"上午",category:"集合出發",name:"9:00 起床 ／ 9:30 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d6-2",time:"10:10",period:"上午",category:"交通",name:"西面站 12 號出口 集合",nameKo:"서면역 12번 출구",hours:"",note:"",fee:"",pass:false,status:"重要！勿遲到"},
-      {id:"d6-3",time:"",period:"上午",category:"景點",name:"佛國寺",nameKo:"불국사",hours:"",note:"停留約 1 小時 10 分",fee:"",pass:false,status:""},
-      {id:"d6-4",time:"",period:"下午",category:"餐廳",name:"午餐自理",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d6-5",time:"",period:"下午",category:"景點",name:"南韓良洞民俗村",nameKo:"양동마을",hours:"",note:"停留約 2 小時 15 分",fee:"",pass:false,status:""},
-      {id:"d6-6",time:"",period:"下午",category:"景點",name:"大陵苑 ／ 皇里圍路",nameKo:"대릉원 황리단길",hours:"",note:"停留約 1 小時 35 分 ／ 慶州世界遺產一日遊（Klook QR碼）",fee:"",pass:false,status:""},
-      {id:"d6-7",time:"",period:"下午",category:"景點",name:"月汀橋",nameKo:"월정교",hours:"",note:"停留約 20 分",fee:"",pass:false,status:""},
-      {id:"d6-8",time:"",period:"下午",category:"景點",name:"東宮 ／ 月池",nameKo:"동궁과 월지",hours:"",note:"停留約 1 小時",fee:"",pass:false,status:""},
-      {id:"d6-9",time:"21:40",period:"晚上",category:"交通",name:"回程-西面站",nameKo:"서면역 귀환",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d6-10",time:"",period:"晚上",category:"點心",name:"PURADAK 炸雞",nameKo:"푸라닭 치킨",hours:"16:00–01:50",note:"",fee:"",pass:false,status:""},
-      {id:"d6-11",time:"",period:"晚上",category:"住宿",name:"西面-吉姆斯特飯店",nameKo:"서면 짐스타 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day6",
+    "date": "2026-05-28",
+    "dateLabel": "5/28 (四)",
+    "area": "西面（慶州一日遊）",
+    "items": [
+      {
+        "id": "d6-1",
+        "time": "09:30",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "8:30 起床／9:30 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "🔺早餐(自行處理)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-2",
+        "time": "10:10",
+        "period": "上午",
+        "category": "交通",
+        "name": "集合-西面站 12號出口",
+        "nameKo": "서면역12번출구",
+        "hours": "",
+        "note": "🔺慶州世界遺產一日遊(Klook QR碼)",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到",
+          "已預約"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/52RVm8JZ"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-3",
+        "time": "12:10",
+        "period": "下午",
+        "category": "景點",
+        "name": "佛國寺",
+        "nameKo": "불국사",
+        "hours": "09:00-18:00",
+        "note": "🔺停留約1小時10分",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xzxmFxTH"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-4",
+        "time": "",
+        "period": "下午",
+        "category": "餐廳",
+        "name": "🍽️午餐自理",
+        "nameKo": "",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-5",
+        "time": "14:00",
+        "period": "下午",
+        "category": "景點",
+        "name": "南韓良洞民俗村",
+        "nameKo": "경주 양동마을",
+        "hours": "",
+        "note": "🔺停留約2小時15分",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x67y05Nu"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-6",
+        "time": "16:45",
+        "period": "下午",
+        "category": "景點",
+        "name": "大陵苑／天馬塚／皇里圍路",
+        "nameKo": "경주대릉원",
+        "hours": "",
+        "note": "🔺停留約1小時35分",
+        "fee": "1,859元",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/x3jFNE36"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-7",
+        "time": "18:30",
+        "period": "晚上",
+        "category": "景點",
+        "name": "月汀橋",
+        "nameKo": "월정교",
+        "hours": "",
+        "note": "🔺停留約20分",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FG7xnCs8"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-8",
+        "time": "19:00",
+        "period": "晚上",
+        "category": "景點",
+        "name": "東宮／月池",
+        "nameKo": "동궁과 월지",
+        "hours": "",
+        "note": "🔺停留約1小時",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5FmSoI8P"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-9",
+        "time": "21:40",
+        "period": "晚上",
+        "category": "交通",
+        "name": "回程-西面站 12號出口",
+        "nameKo": "서면역 귀환",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/52RVm8JZ"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-10",
+        "time": "",
+        "period": "晚上",
+        "category": "點心",
+        "name": "🍢PURADAK 炸雞",
+        "nameKo": "푸라닭 부산서면전포점",
+        "hours": "16:00–01:50",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5xjud352"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d6-11",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠西面-吉姆斯特飯店",
+        "nameKo": "젬스테이",
+        "hours": "",
+        "note": "🔺5/27-5/30 吉姆斯特飯店(3天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5k7fkSlC"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day7", date:"2026-05-29", dateLabel:"5/29 (五)", area:"西面",
-    items:[
-      {id:"d7-1",time:"09:00",period:"上午",category:"集合出發",name:"8:30 起床 ／ 9:00 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d7-2",time:"10:00",period:"上午",category:"景點",name:"佰諾佰琪 皮膚科（醫美）",nameKo:"비노비치 피부과",hours:"",note:"",fee:"",pass:false,status:"重要！勿遲到"},
-      {id:"d7-3",time:"",period:"上午",category:"餐廳",name:"螞蟻家 西面2號店",nameKo:"개미집 서면2호점",hours:"10:00–22:30",note:"",fee:"",pass:false,status:"現場劃位"},
-      {id:"d7-4",time:"",period:"下午",category:"景點",name:"樂天百貨-西面店",nameKo:"롯데백화점 서면점",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d7-5",time:"",period:"下午",category:"景點",name:"西面地下街 ／ Judies太和百貨",nameKo:"서면 지하상가 주디스태화",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d7-6",time:"",period:"下午",category:"景點",name:"Olive Young-西面Town店",nameKo:"올리브영 서면타운점",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d7-7",time:"",period:"晚上",category:"餐廳",name:"83辨豕烤肉",nameKo:"83번지 돼지구이",hours:"16:00–23:40",note:"",fee:"",pass:false,status:"Catchtable 預訂"},
-      {id:"d7-8",time:"",period:"晚上",category:"點心",name:"60炸雞",nameKo:"60계 치킨",hours:"15:00–22:35",note:"",fee:"",pass:false,status:""},
-      {id:"d7-9",time:"",period:"晚上",category:"住宿",name:"西面-吉姆斯特飯店",nameKo:"서면 짐스타 호텔",hours:"",note:"",fee:"",pass:false,status:""}
+    "id": "day7",
+    "date": "2026-05-29",
+    "dateLabel": "5/29 (五)",
+    "area": "西面",
+    "items": [
+      {
+        "id": "d7-1",
+        "time": "09:00",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "8:00 起床／9:00 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "🔺早餐(自行處理)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-2",
+        "time": "10:00",
+        "period": "上午",
+        "category": "",
+        "name": "佰諾佰琪皮膚科",
+        "nameKo": "바노바기의원 부산",
+        "hours": "10:00-20:00／(休息時間 14:00-15:00)／(報名截止 18:30}",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到",
+          "已預約"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xY47wOLP"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-3",
+        "time": "",
+        "period": "上午",
+        "category": "餐廳",
+        "name": "螞蟻家-西面2號本店",
+        "nameKo": "개미집 서면2호본점",
+        "hours": "10:00–23:00／(最後點餐 22:30)",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "現場劃位"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GxkJTQBW"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777446713714",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "Peoful-釜山店",
+        "nameKo": "피플 부산점",
+        "hours": "11:00-23:00",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5apDrKBq"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777446788156",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "MUSINSA STANDARD SEOMYUN",
+        "nameKo": "무신사 스탠다드 서면점",
+        "hours": "11:00-22:00",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5oE5YTxg"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777446857458",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "TROUBADOUR-西面店",
+        "nameKo": "이블래 서면점",
+        "hours": "10:00-23:00",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5owoeX8Z"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777446969888",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "SPAO-西面中央店",
+        "nameKo": "스파오 서면중앙점",
+        "hours": "10:30-22:00",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GCvqO93r"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777447088979",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "8 Seconds-釜山三井Tower 店",
+        "nameKo": "에잇세컨즈 부산삼정타워점",
+        "hours": "11:00-22:00",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GALkhndl"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777446315224",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "西面地下購物中心",
+        "nameKo": "서면지하도상가 서면몰",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/F74V6J2z"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-5",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "Judies太和百貨",
+        "nameKo": "쥬디스태화백화점",
+        "hours": "",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5iTRZwSe"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-6",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "Olive Young-西面Town店",
+        "nameKo": "올리브영 서면 타운",
+        "hours": "10:00-23:00",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FXwG17F7"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-4",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "樂天百貨-釜山總店",
+        "nameKo": "롯데백화점 부산본점",
+        "hours": "10:30-20:30",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xZVbDc9R"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-7",
+        "time": "",
+        "period": "晚上",
+        "category": "餐廳",
+        "name": "83辨豕烤肉",
+        "nameKo": "83해치",
+        "hours": "16:00–00:30／(最後點餐 23:40)",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "Catchtable 預訂"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/G58gLMg2"
+        },
+        "bookingUrl": "https://www.catchtable.net/zh-TW/shop/83haechi"
+      },
+      {
+        "id": "d7-8",
+        "time": "",
+        "period": "晚上",
+        "category": "點心",
+        "name": "🍢60-Gye Chicken",
+        "nameKo": "60계 치킨 부산서면점",
+        "hours": "15:00-22:35",
+        "note": "",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5tJd4oyt"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d7-9",
+        "time": "",
+        "period": "晚上",
+        "category": "住宿",
+        "name": "🏠西面-吉姆斯特飯店",
+        "nameKo": "젬스테이",
+        "hours": "",
+        "note": "🔺5/27-5/30 吉姆斯特飯店(3天)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/5k7fkSlC"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "item_1777447172145",
+        "time": "",
+        "period": "下午",
+        "category": "購物",
+        "name": "TOPTEN10 BALANCE",
+        "nameKo": "탑텐밸런스 롯데백화점 부산본점",
+        "hours": "10:30-20:30",
+        "note": "🔺服飾店",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/FswcLgM1"
+        },
+        "bookingUrl": ""
+      }
     ]
   },
   {
-    id:"day8", date:"2026-05-30", dateLabel:"5/30 (六)", area:"西面→台灣",
-    items:[
-      {id:"d8-1",time:"08:30",period:"上午",category:"集合出發",name:"8:00 起床 ／ 8:30 出發",nameKo:"",hours:"",note:"",fee:"",pass:false,status:"重要！勿遲到"},
-      {id:"d8-2",time:"",period:"上午",category:"交通",name:"搭車前往金海國際機場",nameKo:"김해공항 이동",hours:"",note:"",fee:"",pass:false,status:""},
-      {id:"d8-3",time:"10:00",period:"上午",category:"交通",name:"金海國際機場 第 I 航廈",nameKo:"김해국제공항 제1터미널",hours:"",note:"12:15 華航 CI189 → 13:40 抵達台灣",fee:"",pass:false,status:""}
+    "id": "day8",
+    "date": "2026-05-30",
+    "dateLabel": "5/30 (六)",
+    "area": "西面→台灣",
+    "items": [
+      {
+        "id": "d8-1",
+        "time": "08:30",
+        "period": "上午",
+        "category": "集合出發",
+        "name": "7:30 起床／8:30 出發",
+        "nameKo": "",
+        "hours": "",
+        "note": "🔺早餐(自行處理)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "none",
+          "url": ""
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d8-2",
+        "time": "",
+        "period": "上午",
+        "category": "交通",
+        "name": "搭車前往-金海國際機場 第 I 航廈",
+        "nameKo": "김해공항 이동",
+        "hours": "",
+        "note": "🔺地鐵2號線：西面站→沙上站／🔺釜山金海輕軌：沙上站→機場站(車程約45分鐘)",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GNRjwFwb"
+        },
+        "bookingUrl": ""
+      },
+      {
+        "id": "d8-3",
+        "time": "10:00",
+        "period": "上午",
+        "category": "交通",
+        "name": "金海國際機場 第 I 航廈",
+        "nameKo": "김해국제공항 제1터미널",
+        "hours": "",
+        "note": "12:15 華航 CI189 → 13:40 抵達台灣",
+        "fee": "",
+        "pass": false,
+        "status": [
+          "重要！勿遲到"
+        ],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/GNRjwFwb"
+        },
+        "bookingUrl": ""
+      }
     ]
   }
 ];
@@ -528,11 +2600,51 @@ const TRIP_DAYS = [
    │            │ false = 鎖定，僅供顯示                     │
    └────────────┴────────────────────────────────────────────┘ */
 const DEFAULT_EXPENSES = [
-  {id:"exp1",icon:"✈️",item:"機票",perPerson:10490,total:null,note:"(去)華航 CI190 / (回)華航 CI189",editable:true},
-  {id:"exp2",icon:"🏨",item:"住宿-W公寓飯店（海雲台）",perPerson:2058,total:8232,note:"5/23-5/25 海雲台 2天",editable:true},
-  {id:"exp3",icon:"🏨",item:"住宿-釜山中央公園飯店（南浦）",perPerson:1051,total:4204,note:"5/25-5/27 2天",editable:true},
-  {id:"exp4",icon:"🏨",item:"住宿-吉姆斯特飯店（西面）",perPerson:1889,total:7556,note:"5/27-5/30 3天",editable:true},
-  {id:"exp5",icon:"🎫",item:"其他雜項",perPerson:4414,total:17656,note:"WOWPASS卡(159) + 釜山PASS×2(2396) + 慶州一日遊(1859) + e-Sim(393)",editable:true}
+  {
+    "id": "exp1",
+    "icon": "✈️",
+    "item": "機票",
+    "perPerson": 10490,
+    "total": null,
+    "note": "(去)華航 CI190 / (回)華航 CI189",
+    "editable": true
+  },
+  {
+    "id": "exp2",
+    "icon": "🏨",
+    "item": "住宿-W公寓飯店（海雲台）",
+    "perPerson": 2058,
+    "total": 8232,
+    "note": "5/23-5/25 海雲台 2天",
+    "editable": true
+  },
+  {
+    "id": "exp3",
+    "icon": "🏨",
+    "item": "住宿-釜山中央公園飯店（南浦）",
+    "perPerson": 1051,
+    "total": 4204,
+    "note": "5/25-5/27 2天",
+    "editable": true
+  },
+  {
+    "id": "exp4",
+    "icon": "🏨",
+    "item": "住宿-吉姆斯特飯店（西面）",
+    "perPerson": 1889,
+    "total": 7556,
+    "note": "5/27-5/30 3天",
+    "editable": true
+  },
+  {
+    "id": "exp5",
+    "icon": "🎫",
+    "item": "其他雜項",
+    "perPerson": 4414,
+    "total": 17656,
+    "note": "WOWPASS卡(159) + 釜山PASS×2(2396) + 慶州一日遊(1859) + e-Sim(393)",
+    "editable": true
+  }
 ];
 
 /* ════════════════════════════════════════════════════════════
@@ -648,7 +2760,6 @@ const OFFLINE_INFO = {
   ]
 };
 
-
 /* ════════════════════════════════════════════════════════════
    【6】FX_RATE — 離線匯率（出發前更新一次即可）
    ════════════════════════════════════════════════════════════
@@ -663,62 +2774,188 @@ const FX_RATE = {
   updated: "2026-04-28"
 };
 
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    ⛔ 以下是程式邏輯區 — 一般情況請勿修改
-   ══════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════════
+   ✅ 例外（允許修改的地方已加 🔧 標記）：
+      STATUSES 陣列  → 新增/改名狀態標籤
+      CATS 陣列      → 新增/改名行程類別
+      CC_MAP         → 新增狀態對應的卡片邊框 class
+      SBC_MAP        → 新增狀態對應的徽章 class
+   ══════════════════════════════════════════════════════════════════ */
 
-// ── 狀態 ──
-let tripDays   = null;
-let expenses   = null;
-let currentView = 'trip';
-let currentDay  = null;
-let adminMode   = false;
-let cdInterval  = null;
-let cdTarget    = null;
-let vbpChecked  = {};   // key: item.name, value: true/false
+// ── 應用程式狀態 ──
+let tripDays    = null;       // 行程資料（從 localStorage 或 TRIP_DAYS 讀取）
+let expenses    = null;       // 費用資料
+let currentView = 'trip';     // 目前顯示的頁面：'trip'/'expenses'/'fx'/'offline'
+let currentDay  = null;       // 目前選中的日期 id
+let adminMode   = false;      // 管理員模式開關
+let cdInterval  = null;       // 倒數計時器 ID
+let cdTarget    = null;       // 倒數目標時間
+let vbpChecked  = {};         // VBP 景點勾選狀態 key:name, value:bool
 
-const STATUSES = ['','重要！勿遲到','已預約','需提前預約','現場劃位','Catchtable 預訂','NAVER 預訂'];
-const CATS     = ['','景點','餐廳','點心','交通','住宿','集合出發'];
-const PERIODS  = ['上午','下午','晚上'];
+/* ─────────────────────────────────────────────────────────────
+   🔧 狀態標籤選項 — 可在這裡新增 / 刪改標籤文字
+   ─────────────────────────────────────────────────────────────
+   status 欄位現在是【陣列】，例：
+     "status": ["重要！勿遲到", "Catchtable 預訂"]
+   一個行程可同時有多個狀態標籤（點選 chip 可切換）
+   ───────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════
+   🔧 【可修改】狀態標籤清單
+   ════════════════════════════════════════════════════════════
+   這裡的每個字串 = 一個可選的狀態 chip
+   新增標籤：在陣列最後加 '新標籤名'，同時要在：
+     CC_MAP  → 加對應的卡片邊框顏色 class
+     SBC_MAP → 加對應的徽章顏色 class
+     CSS     → 加對應的 .sb-新class{ background:...; color:#fff; }
+   ════════════════════════════════════════════════════════════ */
+const STATUSES = [
+  '重要！勿遲到',    // 紅色卡片邊框
+  '已預約',          // 青色卡片邊框
+  '需提前預約',      // 黃色卡片邊框
+  '現場劃位',        // 粉色卡片邊框
+  'Catchtable 預訂', // 橘色卡片邊框（自動顯示開啟 App 按鈕）
+  'NAVER 預訂'       // 綠色卡片邊框（自動顯示開啟 App 按鈕）
+  // ↓ 想加新標籤在這裡加，記得前一行結尾要加逗號
+];
 
-// ── Header ──
+/* ════════════════════════════════════════════════════════════
+   🔧 【可修改】行程類別清單
+   ════════════════════════════════════════════════════════════
+   新增類別步驟：
+   1. 在下方陣列加入新類別名（字串）
+   2. 到 CSS .cat-badge 區塊加 .c-新類別名{ background:底色; color:字色; }
+   ════════════════════════════════════════════════════════════ */
+const CATS = [
+  '',          // （空白 = 不設類別）
+  '景點',
+  '購物',      // ← 購物類別（CSS 已設定黃棕色）
+  '餐廳',
+  '點心',
+  '交通',
+  '住宿',
+  '集合出發'
+  // ↓ 想加新類別在這裡加，記得前一行結尾要加逗號，並同步更新 CSS
+];
+
+/* ════════════════════════════════════════════════════════════
+   🔧 【可修改】時段清單
+   ════════════════════════════════════════════════════════════
+   一般不需要改，除非想把時段名稱改成其他文字
+   ════════════════════════════════════════════════════════════ */
+const PERIODS = ['上午', '下午', '晚上'];
+
+/* ════════════════════════════════════════════════════════════
+   ⚙️ 狀態 → 卡片邊框/背景 CSS class 對照表
+   ════════════════════════════════════════════════════════════
+   如果在 STATUSES 加了新標籤，這裡也要加一行：
+     '新標籤名': 'c-對應class'
+   然後在 CSS 加：  .c-對應class { border-color:...; background:...; }
+                    .c-對應class::before { background: 顏色; }
+   ════════════════════════════════════════════════════════════ */
+const CC_MAP = {                              // 卡片邊框/背景
+  '重要！勿遲到':    'c-urgent',
+  '已預約':          'c-booked',
+  '需提前預約':      'c-reserved',
+  '現場劃位':        'c-walkin',
+  'Catchtable 預訂': 'c-catchtable',
+  'NAVER 預訂':      'c-naver'
+};
+const SBC_MAP = {                             // 右上角小徽章
+  '重要！勿遲到':    'sb-urgent',
+  '已預約':          'sb-booked',
+  '需提前預約':      'sb-reserved',
+  '現場劃位':        'sb-walkin',
+  'Catchtable 預訂': 'sb-catchtable',
+  'NAVER 預訂':      'sb-naver'
+};
+
+/* 取得陣列狀態中第一個有卡片顏色的 CSS class（決定左邊框顏色） */
+function getCardClass(statusArr) {
+  if (!Array.isArray(statusArr)) return CC_MAP[statusArr] || '';
+  for (const s of statusArr) { if (CC_MAP[s]) return CC_MAP[s]; }
+  return '';
+}
+
+/* 渲染狀態多選 Chip（共用於新增 & 編輯 Modal）
+   containerId = 放 chips 的容器 id
+   selected    = 目前已選的狀態陣列 */
+function renderStatusChips(containerId, selected) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  wrap.innerHTML = STATUSES.map(s => {
+    const isSelected = selected.includes(s);
+    return `<span class="status-chip${isSelected ? ' selected' : ''}" data-s="${s}"
+      onclick="toggleChip(this,'${containerId}')">${s}</span>`;
+  }).join('');
+  updateBookingFieldFromChips();
+}
+
+/* 切換單一 chip 的選中狀態 */
+function toggleChip(el, containerId) {
+  el.classList.toggle('selected');
+  updateBookingFieldFromChips();
+}
+
+/* 從 chip 容器讀取目前已選的狀態陣列 */
+function getSelectedStatuses(containerId) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return [];
+  return [...wrap.querySelectorAll('.status-chip.selected')].map(el => el.dataset.s);
+}
+
+/* 依選中的 chips 顯示/隱藏預訂網址欄位 */
+function updateBookingFieldFromChips() {
+  const selected = getSelectedStatuses('statusChips');
+  const wrap = document.getElementById('eBookingWrap');
+  if (wrap) wrap.style.display = (selected.includes('Catchtable 預訂') || selected.includes('NAVER 預訂')) ? 'block' : 'none';
+}
+
+// ── Header 渲染 ──
 function renderHeader() {
   document.getElementById('hdrTitle').textContent = `${TRIP_META.emoji} ${TRIP_META.title}`;
   document.getElementById('hdrBadges').innerHTML = `
-    <span style="background:var(--teal-lt);border:1px solid var(--teal-bd);border-radius:20px;padding:2px 10px;font-size:.67rem;color:var(--teal);font-weight:700">${TRIP_META.dateRange} · ${TRIP_META.duration}</span>`;
+    <span style="background:var(--teal-lt);border:1px solid var(--teal-bd);border-radius:20px;padding:2px 10px;font-size:.67rem;color:var(--teal);font-weight:700">
+      ${TRIP_META.dateRange} · ${TRIP_META.duration}
+    </span>`;
 }
 
 // ── 初始化 ──
 function init() {
-  // 行程
+  // 從 localStorage 讀取行程，若無則用原始資料深拷貝
   const sd = localStorage.getItem('bs_days');
   tripDays = sd ? JSON.parse(sd) : JSON.parse(JSON.stringify(TRIP_DAYS));
 
-  // 費用
   const se = localStorage.getItem('bs_exp');
   expenses = se ? JSON.parse(se) : JSON.parse(JSON.stringify(DEFAULT_EXPENSES));
 
-  // ── 資料遷移（修正舊快取中的欄位值）──
+  // 資料遷移（修正舊快取中的過期欄位值）
   let migrated = false;
   tripDays.forEach(d => d.items.forEach(it => {
-    if (it.period === '早上') { it.period = '上午'; migrated = true; }
+    if (it.period === '早上')       { it.period = '上午';       migrated = true; }
     if (it.status === '重要!勿遲到') { it.status = '重要！勿遲到'; migrated = true; }
+    // 【遷移】status 由舊的字串格式升級為陣列格式
+    if (typeof it.status === 'string') {
+      it.status = it.status ? [it.status] : [];
+      migrated = true;
+    }
   }));
   if (migrated) saveAll();
 
-  // 倒數時間
+  // 倒數計時
   const sc = localStorage.getItem('bs_cd');
   cdTarget = sc ? new Date(sc) : new Date(TRIP_META.cdTarget);
   startCd();
 
-  // VBP 勾選狀態 — 先從 localStorage 讀，再同步 pass:true 的行程景點
+  // VBP 勾選狀態
   const sv = localStorage.getItem('bs_vbp');
   vbpChecked = sv ? JSON.parse(sv) : {};
   tripDays.forEach(d => d.items.forEach(it => {
     if (it.pass && it.name && !(it.name in vbpChecked)) vbpChecked[it.name] = true;
   }));
 
-  // 今日定位
+  // 自動跳到今天
   const todayStr = new Date().toISOString().split('T')[0];
   const match = tripDays.find(d => d.date === todayStr);
   currentDay = match ? match.id : tripDays[0].id;
@@ -728,24 +2965,25 @@ function init() {
   setTimeout(scrollToCurrent, 400);
 }
 
+// ── 儲存所有資料到 localStorage ──
 function saveAll() {
   localStorage.setItem('bs_days', JSON.stringify(tripDays));
   localStorage.setItem('bs_exp',  JSON.stringify(expenses));
   localStorage.setItem('bs_vbp',  JSON.stringify(vbpChecked));
 }
 
-// ── 渲染 ──
+// ── 渲染總入口 ──
 function renderAll() {
   renderTabs();
-  if (currentView === 'trip')     renderTrip();
+  if      (currentView === 'trip')     renderTrip();
   else if (currentView === 'expenses') renderExpenses();
-  else if (currentView === 'fx')  renderFx();
-  else if (currentView === 'offline') renderOffline();
+  else if (currentView === 'fx')       renderFx();
+  else if (currentView === 'offline')  renderOffline();
 }
 
 function renderTabs() {
   document.getElementById('dayTabs').innerHTML = tripDays.map(d => `
-    <button class="day-tab ${d.id===currentDay&&currentView==='trip'?'active':''}"
+    <button class="day-tab ${d.id === currentDay && currentView === 'trip' ? 'active' : ''}"
       onclick="selectDay('${d.id}')">${d.dateLabel}</button>`).join('');
 }
 
@@ -754,13 +2992,16 @@ function selectDay(id) {
   setNav('nav-trip'); renderAll();
 }
 
-// ── 行程渲染 ──
+// ── 行程頁渲染 ──
 function renderTrip() {
   const day = tripDays.find(d => d.id === currentDay);
   if (!day) return;
+
+  // 按時段分組
   const groups = {};
-  day.items.forEach(it => { (groups[it.period] = groups[it.period]||[]).push(it); });
-  const icons = {上午:'🌅',下午:'☀️',晚上:'🌙'};
+  day.items.forEach(it => { (groups[it.period] = groups[it.period] || []).push(it); });
+  const icons = { 上午: '🌅', 下午: '☀️', 晚上: '🌙' };
+
   let html = `
     <div class="day-hdr">
       <div class="flex items-center justify-between flex-wrap gap-2">
@@ -772,93 +3013,122 @@ function renderTrip() {
           onclick="addNewItem('${day.id}')">＋ 新增行程</button>
       </div>
     </div>`;
-  ['上午','下午','晚上'].forEach(p => {
+
+  ['上午', '下午', '晚上'].forEach(p => {
     if (!groups[p]?.length) return;
     html += `<div class="period-hdr">${icons[p]} ${p}</div>`;
-    groups[p].forEach((it,i) => { html += renderCard(it, day.id, i); });
+    groups[p].forEach((it, i) => { html += renderCard(it, day.id, i); });
   });
+
   document.getElementById('main').innerHTML = html;
 }
 
-// ── 狀態對照表（共用） ──
-const CC_MAP  = {'重要！勿遲到':'c-urgent','已預約':'c-booked','需提前預約':'c-reserved','現場劃位':'c-walkin','Catchtable 預訂':'c-catchtable','NAVER 預訂':'c-naver'};
-const SBC_MAP = {'重要！勿遲到':'sb-urgent','已預約':'sb-booked','需提前預約':'sb-reserved','現場劃位':'sb-walkin','Catchtable 預訂':'sb-catchtable','NAVER 預訂':'sb-naver'};
-
+// ── 單一行程卡片渲染 ──
+// 設計原則：無底部按鈕時不加底部 padding，讓卡片盡量小
 function renderCard(it, dayId, idx) {
-  // ① 時間 + 狀態（同一行，靠左）
-  const timePart   = it.time   ? `<span class="time-chip">⏰ ${it.time}</span>` : '';
-  const statusPart = it.status ? `<span class="sb ${SBC_MAP[it.status]||''}">${it.status}</span>` : '';
+  // status 統一為陣列（相容舊字串格式）
+  const statuses = Array.isArray(it.status) ? it.status : (it.status ? [it.status] : []);
+
+  // ① 時間 + 狀態標籤列（僅在有內容時顯示）
+  const timePart   = it.time ? `<span class="time-chip">⏰ ${it.time}</span>` : '';
+  const statusPart = statuses.map(s => `<span class="sb ${SBC_MAP[s] || ''}">${s}</span>`).join('');
   const row1 = (timePart || statusPart)
     ? `<div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:6px">${timePart}${statusPart}</div>`
     : '';
 
-  // ② 景點名稱，後方同行：類別 / 釜山PASS
+  // ② 行程名稱 + 類別 + Pass 標籤
   const catBadge  = it.category ? `<span class="cat-badge c-${it.category}">${it.category}</span>` : '';
   const passBadge = it.pass     ? `<span class="cat-badge" style="background:#FDF2F8;color:#BE185D;border:1px solid #FBCFE8">🎫 釜山PASS</span>` : '';
-  const row2 = `<div style="margin-bottom:5px">
+  const row2 = `<div style="margin-bottom:${it.hours||it.note?'5px':'0'}">
     <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-bottom:2px">
       <span style="font-weight:800;font-size:.92rem;line-height:1.35;color:var(--text)">${it.name}</span>
       ${catBadge}${passBadge}
     </div>
   </div>`;
 
-  // ③ 營業時間
+  // ③ 營業時間（有才顯示）
   const row3 = it.hours
-    ? `<div style="font-size:.72rem;color:var(--text3);margin-bottom:5px">🕐 ${it.hours}</div>`
+    ? `<div style="font-size:.72rem;color:var(--text3);margin-bottom:${it.note?'5px':'0'}">🕐 ${it.hours}</div>`
     : '';
 
-  // ④ 備註
+  // ④ 備註（有才顯示）
   const row4 = it.note
-    ? `<div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:7px;line-height:1.6">${it.note}</div>`
+    ? `<div style="font-size:.72rem;color:var(--text2);background:rgba(0,0,0,.04);border-radius:7px;padding:5px 8px;margin-bottom:0;line-height:1.6">${it.note}</div>`
     : '';
 
-  // ⑤ 導航按鈕（統一使用 HTTPS，手機系統自動判斷跳 App）
+  // ⑤ 地圖導航按鈕（有 nav 才顯示）
   let row5 = '';
   const nav = it.nav || {};
   const navType = nav.type || 'naver';
-  // 若有自訂 url 優先用，否則用 name 自動產生
   const nameEncoded = encodeURIComponent(it.name);
   if (navType !== 'none') {
     if (navType === 'google') {
       const url = nav.url || `https://www.google.com/maps/search/?api=1&query=${nameEncoded}`;
-      row5 = `<a href="${url}" target="_blank" class="map-btn map-btn-google"><svg width="13" height="13" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg> Google Maps</a>`;
+      row5 = `<a href="${url}" target="_blank" class="map-btn map-btn-google">
+        <svg width="13" height="13" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg>
+        Google Maps</a>`;
     } else {
       const url = nav.url || `https://map.naver.com/v5/search/${nameEncoded}`;
-      row5 = `<a href="${url}" target="_blank" class="map-btn map-btn-naver"><span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a>`;
+      row5 = `<a href="${url}" target="_blank" class="map-btn map-btn-naver">
+        <span style="font-weight:900;font-size:.75rem;line-height:1">N</span> Naver Maps</a>`;
     }
   }
 
-  // ⑥ 預訂跳轉按鈕（Catchtable / NAVER）
+  // ⑥ 預訂跳轉按鈕
+  // ───────────────────────────────────────────────────────
+  // 🔧 可修改網址的地方：
+  //    Catchtable App 網址：'catchtable://'
+  //    Catchtable 網頁備用：'https://catchtable.co.kr'
+  //    NAVER App 網址：    'navermap://'
+  //    NAVER 網頁備用：    'https://m.place.naver.com/...'
+  // ───────────────────────────────────────────────────────
   let row6 = '';
-  if (it.status === 'Catchtable 預訂') {
-    row6 = `<a href="catchtable://" onclick="setTimeout(()=>window.open('https://catchtable.co.kr','_blank'),800)"
+  if (statuses.includes('Catchtable 預訂')) {
+    // bookingUrl 有填則直接開啟指定頁，否則開 Catchtable 首頁
+    // 🔧 預設備用網址：'https://catchtable.co.kr'（可在 ✏️ 編輯行程內改為指定訂位頁）
+    const ctUrl = it.bookingUrl || 'https://catchtable.co.kr';
+    row6 = `<a href="catchtable://"
+      onclick="setTimeout(()=>window.open('${ctUrl}','_blank'),800)"
       class="map-btn" style="background:#FF6B001A;color:#FF6B00;border-color:#FF6B0055;font-size:.65rem;padding:5px 10px">
-      📋 開啟 Catchtable
-    </a>`;
-  } else if (it.status === 'NAVER 預訂') {
-    row6 = `<a href="navermap://" onclick="setTimeout(()=>window.open('https://m.place.naver.com/restaurant/list?query='+encodeURIComponent(${JSON.stringify(it.name)}),'_blank'),800)"
+      📋 開啟 Catchtable</a>`;
+  }
+  if (statuses.includes('NAVER 預訂')) {
+    // bookingUrl 有填則直接開啟指定頁，否則用名稱搜尋
+    // 🔧 預設備用網址：NAVER 搜尋頁（可在 ✏️ 編輯行程內改為指定餐廳預訂頁）
+    const naverUrl = it.bookingUrl || `https://m.place.naver.com/restaurant/list?query=${encodeURIComponent(it.name)}`;
+    row6 += `<a href="navermap://"
+      onclick="setTimeout(()=>window.open('${naverUrl}','_blank'),800)"
       class="map-btn map-btn-naver" style="font-size:.65rem;padding:5px 10px">
-      🗓️ 開啟 NAVER 預訂
-    </a>`;
+      🗓️ 開啟 NAVER 預訂</a>`;
   }
 
+  // 判斷是否有底部按鈕（決定卡片底部 padding）
   const bottomRow = [row5, row6].filter(Boolean).join('');
+  const hasBottom = !!bottomRow;
+
+  // 移動按鈕（上移 / 下移，同時段內有效）
+  const moveBtn = `
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('${it.id}','${dayId}','${it.period}',-1)" title="往上移">↑</button>
+    <button class="btn btn-ghost btn-xs" onclick="moveItem('${it.id}','${dayId}','${it.period}',1)"  title="往下移">↓</button>`;
 
   return `
-    <div class="trip-card ${CC_MAP[it.status]||''}" id="card-${it.id}" style="animation-delay:${idx*.03}s">
+    <div class="trip-card ${getCardClass(statuses)} ${hasBottom ? 'has-bottom' : ''}"
+      id="card-${it.id}" style="animation-delay:${idx * .03}s">
       <div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:1">
+        ${moveBtn}
         <button class="btn btn-ghost btn-xs" onclick="editItem('${it.id}','${dayId}')">✏️</button>
         <button class="btn btn-xs" style="background:#FEE2E2;color:#DC2626;border:1px solid #FECACA"
           onclick="deleteItem('${it.id}','${dayId}')">🗑️</button>
       </div>
-      <div style="padding-right:64px">${row1}${row2}${row3}${row4}</div>
-      ${bottomRow ? `<div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap">${bottomRow}</div>` : ''}
+      <div style="padding-right:100px">${row1}${row2}${row3}${row4}</div>
+      ${hasBottom ? `<div style="position:absolute;bottom:10px;left:13px;display:flex;gap:6px;flex-wrap:wrap">${bottomRow}</div>` : ''}
     </div>`;
 }
 
-// ── 費用渲染 ──
+
+// ── 費用頁渲染 ──
 function renderExpenses() {
-  const total = expenses.reduce((s,e) => s + e.perPerson, 0);
+  const total = expenses.reduce((s, e) => s + e.perPerson, 0);
   let html = `
     <div class="day-hdr mb-4">
       <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">💰 預估費用明細</div>
@@ -869,7 +3139,7 @@ function renderExpenses() {
     html += `
       <div class="exp-card" style="padding:10px 12px">
         <div class="flex items-center gap-2">
-          <span style="font-size:1.1rem;flex-shrink:0;line-height:1">${e.icon||'💳'}</span>
+          <span style="font-size:1.1rem;flex-shrink:0;line-height:1">${e.icon || '💳'}</span>
           <div style="flex:1;min-width:0">
             <div style="font-weight:700;font-size:.82rem;color:var(--text);line-height:1.3">${e.item}</div>
             ${e.note ? `<div style="font-size:.65rem;color:var(--text3);margin-top:1px;line-height:1.4">${e.note}</div>` : ''}
@@ -897,7 +3167,6 @@ function renderExpenses() {
     <div class="exp-card" style="margin-top:6px">
       <div style="font-weight:800;font-size:.85rem;color:var(--text2);margin-bottom:10px">🧮 公帳平分計算器</div>
       <div style="display:grid;gap:9px">
-        <!-- 幣別切換 + 輸入 -->
         <div style="display:flex;gap:6px">
           <div style="flex:1">
             <label class="form-label">總金額</label>
@@ -913,18 +3182,16 @@ function renderExpenses() {
             </select>
           </div>
         </div>
-        <!-- 人數 -->
         <div style="display:flex;gap:6px;align-items:flex-end">
           <div style="flex:1">
             <label class="form-label">人數</label>
             <input class="form-input" id="splitCount" type="number" inputmode="numeric"
-              value="${parseInt(TRIP_META.groupSize)||4}" min="1" max="20" oninput="calcSplit()"
+              value="${parseInt(TRIP_META.groupSize) || 4}" min="1" max="20" oninput="calcSplit()"
               style="font-family:'DM Mono',monospace;font-weight:500">
           </div>
           <button class="btn btn-ghost btn-sm" style="margin-bottom:1px;white-space:nowrap"
             onclick="document.getElementById('splitCount').value=${parseInt(TRIP_META.groupSize)||4};calcSplit()">重設</button>
         </div>
-        <!-- 結果 -->
         <div id="splitResult" style="display:none;background:var(--teal-lt);border:1.5px solid var(--teal-bd);border-radius:10px;padding:11px 13px">
           <div style="font-size:.65rem;font-weight:800;color:var(--teal);letter-spacing:.5px;margin-bottom:3px">每人應付</div>
           <div id="splitPerPerson" style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--teal)">—</div>
@@ -937,7 +3204,7 @@ function renderExpenses() {
   document.getElementById('main').innerHTML = html;
 }
 
-// 費用新增
+// ── 費用 CRUD ──
 function addExpense() {
   showModal(`
     <div class="modal-handle"></div>
@@ -968,7 +3235,7 @@ function saveAddExpense() {
     id: 'exp_' + Date.now(),
     icon: document.getElementById('ei').value.trim() || '💳',
     item: n,
-    perPerson: parseInt(document.getElementById('ep').value)||0,
+    perPerson: parseInt(document.getElementById('ep').value) || 0,
     total: t ? parseInt(t) : null,
     note: document.getElementById('eo').value.trim(),
     editable: true
@@ -977,7 +3244,6 @@ function saveAddExpense() {
   showToast('✅ 已新增費用項目');
 }
 
-// 費用編輯
 function editExpense(id) {
   const e = expenses.find(x => x.id === id);
   if (!e) return;
@@ -986,15 +3252,15 @@ function editExpense(id) {
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">✏️ 編輯費用項目</h2>
     <div style="display:grid;gap:11px">
       <div><label class="form-label">圖示（Emoji）</label>
-        <input class="form-input" id="ei" value="${e.icon||'💳'}" style="font-size:1.2rem;width:70px"></div>
+        <input class="form-input" id="ei" value="${e.icon || '💳'}" style="font-size:1.2rem;width:70px"></div>
       <div><label class="form-label">費用名稱</label>
         <input class="form-input" id="en" value="${e.item}"></div>
       <div><label class="form-label">每人費用（NT$）</label>
         <input class="form-input" id="ep" type="number" value="${e.perPerson}" min="0"></div>
       <div><label class="form-label">總費用（NT$，留空則不顯示）</label>
-        <input class="form-input" id="et" type="number" value="${e.total||''}" placeholder="留空"></div>
+        <input class="form-input" id="et" type="number" value="${e.total || ''}" placeholder="留空"></div>
       <div><label class="form-label">備註說明</label>
-        <textarea class="form-input" id="eo" rows="2">${e.note||''}</textarea></div>
+        <textarea class="form-input" id="eo" rows="2">${e.note || ''}</textarea></div>
       <div class="flex gap-2 pt-1">
         <button class="btn btn-teal" style="flex:1" onclick="saveEditExpense('${id}')">💾 儲存</button>
         <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
@@ -1005,11 +3271,11 @@ function editExpense(id) {
 function saveEditExpense(id) {
   const e = expenses.find(x => x.id === id);
   const t = document.getElementById('et').value;
-  e.icon = document.getElementById('ei').value.trim() || '💳';
-  e.item = document.getElementById('en').value.trim();
-  e.perPerson = parseInt(document.getElementById('ep').value)||0;
-  e.total = t ? parseInt(t) : null;
-  e.note = document.getElementById('eo').value.trim();
+  e.icon      = document.getElementById('ei').value.trim() || '💳';
+  e.item      = document.getElementById('en').value.trim();
+  e.perPerson = parseInt(document.getElementById('ep').value) || 0;
+  e.total     = t ? parseInt(t) : null;
+  e.note      = document.getElementById('eo').value.trim();
   saveAll(); closeModal(); renderExpenses();
   showToast('✅ 已儲存');
 }
@@ -1022,15 +3288,15 @@ function deleteExpense(id) {
 }
 
 function calcSplit() {
-  const total   = parseFloat(document.getElementById('splitTotal')?.value);
-  const count   = parseInt(document.getElementById('splitCount')?.value) || 1;
-  const cur     = document.getElementById('splitCur')?.value || 'twd';
-  const res     = document.getElementById('splitResult');
-  const perEl   = document.getElementById('splitPerPerson');
-  const convEl  = document.getElementById('splitConvert');
-  const noteEl  = document.getElementById('splitNote');
+  const total  = parseFloat(document.getElementById('splitTotal')?.value);
+  const count  = parseInt(document.getElementById('splitCount')?.value) || 1;
+  const cur    = document.getElementById('splitCur')?.value || 'twd';
+  const res    = document.getElementById('splitResult');
+  const perEl  = document.getElementById('splitPerPerson');
+  const convEl = document.getElementById('splitConvert');
+  const noteEl = document.getElementById('splitNote');
   if (!res) return;
-  if (isNaN(total) || total <= 0) { res.style.display='none'; return; }
+  if (isNaN(total) || total <= 0) { res.style.display = 'none'; return; }
 
   const per = Math.ceil(total / count);
   const rem = total % count;
@@ -1040,21 +3306,21 @@ function calcSplit() {
     perEl.textContent  = 'NT$' + per.toLocaleString();
     convEl.textContent = '';
   } else {
-    const fxR = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+    const fxR    = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
     const perTwd = Math.ceil(per / fxR);
     perEl.textContent  = '₩' + per.toLocaleString();
     convEl.textContent = `≈ NT$${perTwd.toLocaleString()}（匯率 ${fxR}）`;
   }
-  noteEl.textContent = `總計 ${cur==='twd'?'NT$':'₩'}${total.toLocaleString()} ÷ ${count} 人${rem>0?' (無條件進位)':''}`;
+  noteEl.textContent = `總計 ${cur === 'twd' ? 'NT$' : '₩'}${total.toLocaleString()} ÷ ${count} 人${rem > 0 ? ' (無條件進位)' : ''}`;
 }
 
 // ── 匯率換算 ──
-let fxDir = 'twd2krw'; // 或 'krw2twd'
+let fxDir = 'twd2krw';
 
 function renderFx() {
-  const rate = FX_RATE.twd_to_krw;
-  const quick_twd = [100,500,1000,3000,5000,10000];
-  const quick_krw = [1000,5000,10000,30000,50000,100000];
+  const rate      = FX_RATE.twd_to_krw;
+  const quick_twd = [100, 500, 1000, 3000, 5000, 10000];
+  const quick_krw = [1000, 5000, 10000, 30000, 50000, 100000];
 
   document.getElementById('main').innerHTML = `
     <div class="day-hdr mb-4">
@@ -1062,54 +3328,50 @@ function renderFx() {
       <div style="font-size:.73rem;opacity:.85;margin-top:3px">離線使用・更新日期：${FX_RATE.updated}</div>
     </div>
 
-    <!-- 方向切換 -->
     <div class="fx-card mb-3">
-      <!-- 手動匯率輸入 -->
+      <!-- 手動匯率調整列 -->
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
         <span style="font-size:.72rem;font-weight:800;color:var(--text2);white-space:nowrap">1 TWD =</span>
         <input class="form-input" id="fxRate" type="number" inputmode="decimal" value="${rate}"
           oninput="calcFx();calcTax();"
           style="font-size:1rem;font-family:'DM Mono',monospace;font-weight:500;max-width:110px;text-align:center">
         <span style="font-size:.72rem;font-weight:800;color:var(--text2);white-space:nowrap">KRW</span>
-        <button class="btn btn-ghost btn-xs" onclick="document.getElementById('fxRate').value=${rate};calcFx();calcTax();" style="margin-left:auto;white-space:nowrap">重設</button>
+        <button class="btn btn-ghost btn-xs"
+          onclick="document.getElementById('fxRate').value=${rate};calcFx();calcTax();"
+          style="margin-left:auto;white-space:nowrap">重設</button>
       </div>
 
       <div class="flex gap-2 mb-4">
-        <button class="ftab flex-1 ${fxDir==='twd2krw'?'active':''}" onclick="setFxDir('twd2krw')">🇹🇼 TWD → 🇰🇷 KRW</button>
-        <button class="ftab flex-1 ${fxDir==='krw2twd'?'active':''}" onclick="setFxDir('krw2twd')">🇰🇷 KRW → 🇹🇼 TWD</button>
+        <button class="ftab flex-1 ${fxDir === 'twd2krw' ? 'active' : ''}" onclick="setFxDir('twd2krw')">🇹🇼 TWD → 🇰🇷 KRW</button>
+        <button class="ftab flex-1 ${fxDir === 'krw2twd' ? 'active' : ''}" onclick="setFxDir('krw2twd')">🇰🇷 KRW → 🇹🇼 TWD</button>
       </div>
 
-      <!-- 輸入 -->
       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-bottom:14px">
         <div>
-          <label class="form-label">${fxDir==='twd2krw'?'台幣 (TWD)':'韓元 (KRW)'}</label>
+          <label class="form-label">${fxDir === 'twd2krw' ? '台幣 (TWD)' : '韓元 (KRW)'}</label>
           <input class="form-input" id="fxInput" type="number" inputmode="numeric" placeholder="輸入金額"
             oninput="calcFx()" style="font-size:1.1rem;font-family:'DM Mono',monospace;font-weight:500">
         </div>
         <div style="text-align:center;color:var(--text3);font-size:1.2rem;padding-top:16px">→</div>
         <div>
-          <label class="form-label">${fxDir==='twd2krw'?'韓元 (KRW)':'台幣 (TWD)'}</label>
+          <label class="form-label">${fxDir === 'twd2krw' ? '韓元 (KRW)' : '台幣 (TWD)'}</label>
           <div class="fx-display" id="fxOutput">—</div>
         </div>
       </div>
 
-      <!-- 匯率說明 -->
       <div style="text-align:center;font-size:.65rem;color:var(--text3);padding:8px 0;border-top:1px solid var(--border)">
         * 離線匯率，僅供參考，實際以換錢當天為準
       </div>
     </div>
 
-    <!-- 快速換算表 -->
     <div class="fx-card">
-      <div style="font-weight:800;font-size:.8rem;color:var(--text2);margin-bottom:12px">
-        ⚡ 快速換算（點擊帶入）
-      </div>
+      <div style="font-weight:800;font-size:.8rem;color:var(--text2);margin-bottom:12px">⚡ 快速換算（點擊帶入）</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        ${(fxDir==='twd2krw'?quick_twd:quick_krw).map(v=>{
-          const result = fxDir==='twd2krw'
-            ? Math.round(v*rate).toLocaleString()+' ₩'
-            : (v/rate).toFixed(1)+' NT$';
-          const label = fxDir==='twd2krw' ? `NT$${v.toLocaleString()}` : `₩${v.toLocaleString()}`;
+        ${(fxDir === 'twd2krw' ? quick_twd : quick_krw).map(v => {
+          const result = fxDir === 'twd2krw'
+            ? Math.round(v * rate).toLocaleString() + ' ₩'
+            : (v / rate).toFixed(1) + ' NT$';
+          const label = fxDir === 'twd2krw' ? `NT$${v.toLocaleString()}` : `₩${v.toLocaleString()}`;
           return `<button class="fx-quick-btn" onclick="quickFx(${v})">
             <div style="font-weight:800">${label}</div>
             <div style="font-size:.7rem;color:var(--text3);margin-top:2px">${result}</div>
@@ -1118,7 +3380,6 @@ function renderFx() {
       </div>
     </div>
 
-    <!-- 退稅計算器 -->
     <div class="fx-card">
       <div style="font-weight:800;font-size:.8rem;color:var(--text2);margin-bottom:12px">💰 韓元退稅試算</div>
       <div style="margin-bottom:12px">
@@ -1128,7 +3389,7 @@ function renderFx() {
           style="font-size:1.1rem;font-family:'DM Mono',monospace;font-weight:500">
       </div>
       <div id="taxResult" style="border-radius:10px;overflow:hidden;display:none">
-        <div id="taxMain" style="padding:12px 14px;background:var(--teal-lt);border:1.5px solid var(--teal-bd);border-radius:10px 10px 0 0">
+        <div style="padding:12px 14px;background:var(--teal-lt);border:1.5px solid var(--teal-bd);border-radius:10px 10px 0 0">
           <div style="font-size:.68rem;color:var(--teal);font-weight:800;letter-spacing:.5px;margin-bottom:4px">預估退稅金額</div>
           <div id="taxKrw" style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;color:var(--teal)">—</div>
           <div id="taxTwd" style="font-size:.75rem;color:var(--text2);margin-top:3px">折合台幣：—</div>
@@ -1145,53 +3406,41 @@ function renderFx() {
     </div>`;
 }
 
-function setFxDir(dir) {
-  fxDir = dir;
-  renderFx();
-}
+function setFxDir(dir) { fxDir = dir; renderFx(); }
 
 function calcFx() {
-  const v = parseFloat(document.getElementById('fxInput')?.value);
-  const r = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+  const v  = parseFloat(document.getElementById('fxInput')?.value);
+  const r  = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
   const el = document.getElementById('fxOutput');
   if (!el) return;
   if (isNaN(v) || v <= 0) { el.textContent = '—'; return; }
-  if (fxDir === 'twd2krw') {
-    el.textContent = '₩' + Math.round(v * r).toLocaleString();
-  } else {
-    el.textContent = 'NT$' + (v / r).toFixed(1);
-  }
+  el.textContent = fxDir === 'twd2krw'
+    ? '₩' + Math.round(v * r).toLocaleString()
+    : 'NT$' + (v / r).toFixed(1);
 }
 
 function calcTax() {
-  const v = parseFloat(document.getElementById('taxInput')?.value);
-  const r = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
-  const result  = document.getElementById('taxResult');
-  const below   = document.getElementById('taxBelow');
-  const krwEl   = document.getElementById('taxKrw');
-  const twdEl   = document.getElementById('taxTwd');
-  const noteEl  = document.getElementById('taxNote');
-
+  const v      = parseFloat(document.getElementById('taxInput')?.value);
+  const r      = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+  const result = document.getElementById('taxResult');
+  const below  = document.getElementById('taxBelow');
+  const krwEl  = document.getElementById('taxKrw');
+  const twdEl  = document.getElementById('taxTwd');
+  const noteEl = document.getElementById('taxNote');
+  if (!result) return;
   result.style.display = 'none';
   below.style.display  = 'none';
-
   if (isNaN(v) || v <= 0) return;
+  if (v < 30000) { below.style.display = 'block'; return; }
 
-  if (v < 30000) {
-    below.style.display = 'block';
-    return;
-  }
-
-  let refund = 0;
-  let rateNote = '';
-  if (v < 50000)       { refund = Math.round(v * 0.054); rateNote = '級距 3–5萬₩，退稅約 5.4%'; }
+  let refund = 0, rateNote = '';
+  if      (v < 50000)  { refund = Math.round(v * 0.054); rateNote = '級距 3–5萬₩，退稅約 5.4%'; }
   else if (v < 100000) { refund = Math.round(v * 0.057); rateNote = '級距 5–10萬₩，退稅約 5.7%'; }
   else if (v < 200000) { refund = Math.round(v * 0.062); rateNote = '級距 10–20萬₩，退稅約 6.2%'; }
   else if (v < 500000) { refund = Math.round(v * 0.065); rateNote = '級距 20–50萬₩，退稅約 6.5%'; }
   else                 { refund = Math.round(v * 0.068); rateNote = '級距 50萬₩以上，退稅約 6.8%'; }
 
   const twd = Math.round(refund / r);
-
   krwEl.textContent  = '₩' + refund.toLocaleString();
   twdEl.textContent  = `折合台幣：約 NT$${twd.toLocaleString()}（匯率 ${r}）`;
   noteEl.innerHTML   = `📋 ${rateNote}<br>🏧 可至機場 Tax Refund 退稅機領取現金或刷退信用卡`;
@@ -1236,48 +3485,44 @@ function renderOffline() {
       <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700">📡 離線資訊</div>
       <div style="font-size:.73rem;opacity:.85;margin-top:3px">無網路也能查閱</div>
     </div>
-
     <div class="info-section">
       <div style="font-weight:800;font-size:.82rem;color:var(--red);margin-bottom:4px">🚨 緊急電話</div>
       ${emergency}
     </div>
-
     <div class="info-section">
       <div style="font-weight:800;font-size:.82rem;color:var(--blue);margin-bottom:4px">🚌 交通資訊</div>
       ${transport}
     </div>
-
     <div class="info-section">
       <div style="font-weight:800;font-size:.82rem;color:var(--teal);margin-bottom:4px">🗣️ 常用韓語</div>
       <div style="font-size:.65rem;color:var(--text3);margin-bottom:8px">點擊即可複製韓文</div>
       ${phrases}
     </div>`;
 
-  // 點擊複製韓文
   document.querySelectorAll('.phrase-ko').forEach(el => {
     el.style.cursor = 'pointer';
     el.addEventListener('click', () => {
-      navigator.clipboard?.writeText(el.textContent).then(() => showToast('📋 已複製：'+el.textContent));
+      navigator.clipboard?.writeText(el.textContent).then(() => showToast('📋 已複製：' + el.textContent));
     });
   });
 }
 
-// ── VBP 景點抽屜 ──
+// ── VBP 景點圖鑑抽屜 ──
 function openVbpDrawer(filterArea) {
   const areas = VBP_DATA;
   const filterBtns = `<div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none">
-    <button class="ftab ${!filterArea?'active':''}" onclick="openVbpDrawer('')">全部</button>
-    ${areas.map(a=>`<button class="ftab ${filterArea===a.area?'active':''}" onclick="openVbpDrawer('${a.area}')">${a.area}</button>`).join('')}
+    <button class="ftab ${!filterArea ? 'active' : ''}" onclick="openVbpDrawer('')">全部</button>
+    ${areas.map(a => `<button class="ftab ${filterArea === a.area ? 'active' : ''}" onclick="openVbpDrawer('${a.area}')">${a.area}</button>`).join('')}
   </div>`;
 
   let content = '';
-  areas.filter(a=>!filterArea||a.area===filterArea).forEach(a=>{
+  areas.filter(a => !filterArea || a.area === filterArea).forEach(a => {
     content += `<div class="vbp-area-hdr">${a.area}</div>`;
-    a.items.forEach((it,i)=>{
+    a.items.forEach((it, i) => {
       const checked = vbpChecked[it.name] ? 'checked' : '';
       const feeStr  = it.fee > 0 ? `₩${it.fee.toLocaleString()}` : '免費';
       content += `
-        <div class="vbp-card" style="animation-delay:${i*.04}s" id="vbpcard-${encodeURIComponent(it.name)}">
+        <div class="vbp-card" style="animation-delay:${i * .04}s" id="vbpcard-${encodeURIComponent(it.name)}">
           <div class="flex items-start gap-2">
             <div style="padding-top:2px;flex-shrink:0">
               <input type="checkbox" ${checked}
@@ -1287,26 +3532,26 @@ function openVbpDrawer(filterArea) {
             <div style="flex:1;min-width:0">
               <div style="font-weight:700;font-size:.84rem;color:var(--text);margin-bottom:3px">${it.name}</div>
               <div style="font-size:.68rem;color:var(--text3);margin-bottom:5px">${it.nameKo}</div>
-              <div class="flex items-center gap-1.5 flex-wrap">
-                ${it.tiers.map(t=>`<span class="tier tier-${t.toLowerCase()}">${t}</span>`).join('')}
+              <div class="flex items-center gap-1 flex-wrap">
+                ${it.tiers.map(t => `<span class="tier tier-${t.toLowerCase()}">${t}</span>`).join('')}
                 <span style="font-size:.6rem;color:var(--text3);background:#F5F6FA;padding:2px 6px;border-radius:6px">${it.type}</span>
                 <span style="font-size:.6rem;font-weight:800;color:var(--green);background:var(--green-lt);padding:2px 6px;border-radius:6px">💰 ${feeStr}</span>
               </div>
             </div>
-            <div class="flex flex-col gap-1.5">
-              <a href="https://map.naver.com/v5/search/${encodeURIComponent(it.nameKo||it.name)}" target="_blank" class="map-btn" style="font-size:.6rem;padding:4px 8px">🗺️ Naver</a>
+            <div class="flex flex-col gap-1">
+              <a href="https://map.naver.com/v5/search/${encodeURIComponent(it.nameKo || it.name)}" target="_blank"
+                class="map-btn" style="font-size:.6rem;padding:4px 8px">🗺️ Naver</a>
               <button class="btn btn-xs btn-teal"
-                onclick="addVbpToTrip(${JSON.stringify(it.name)},${JSON.stringify(it.nameKo||'')})">＋ 加入</button>
+                onclick="addVbpToTrip(${JSON.stringify(it.name)},${JSON.stringify(it.nameKo || '')})">＋ 加入</button>
             </div>
           </div>
         </div>`;
     });
   });
 
-  // 計算已節省金額
   let savedKrw = 0;
-  VBP_DATA.forEach(a => a.items.forEach(it => { if(vbpChecked[it.name]) savedKrw += (it.fee||0); }));
-  const fxR = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+  VBP_DATA.forEach(a => a.items.forEach(it => { if (vbpChecked[it.name]) savedKrw += (it.fee || 0); }));
+  const fxR     = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
   const savedTwd = Math.round(savedKrw / fxR);
 
   document.getElementById('drawerContainer').innerHTML = `
@@ -1317,8 +3562,7 @@ function openVbpDrawer(filterArea) {
           <h2 style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text)">🗺️ VBP 景點圖鑑</h2>
           <button onclick="closeDrawer()" style="font-size:1.1rem;color:var(--text3);background:none;border:none;cursor:pointer">✕</button>
         </div>
-        <!-- 節省金額統計 -->
-        <div id="vbpSavings" style="background:var(--green-lt);border:1.5px solid var(--green-bd);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+        <div style="background:var(--green-lt);border:1.5px solid var(--green-bd);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
           <div>
             <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:.5px">✅ 已勾選節省金額</div>
             <div id="vbpSavingsKrw" style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--green)">₩${savedKrw.toLocaleString()}</div>
@@ -1337,70 +3581,82 @@ function openVbpDrawer(filterArea) {
 function toggleVbp(name, fee, checked) {
   vbpChecked[name] = checked;
   saveAll();
-  // 更新節省金額顯示
   let savedKrw = 0;
-  VBP_DATA.forEach(a => a.items.forEach(it => { if(vbpChecked[it.name]) savedKrw += (it.fee||0); }));
-  const fxR = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
+  VBP_DATA.forEach(a => a.items.forEach(it => { if (vbpChecked[it.name]) savedKrw += (it.fee || 0); }));
+  const fxR     = parseFloat(document.getElementById('fxRate')?.value) || FX_RATE.twd_to_krw;
   const savedTwd = Math.round(savedKrw / fxR);
   const kEl = document.getElementById('vbpSavingsKrw');
   const tEl = document.getElementById('vbpSavingsTwd');
-  if(kEl) kEl.textContent = '₩' + savedKrw.toLocaleString();
-  if(tEl) tEl.textContent = 'NT$' + savedTwd.toLocaleString();
+  if (kEl) kEl.textContent = '₩' + savedKrw.toLocaleString();
+  if (tEl) tEl.textContent = 'NT$' + savedTwd.toLocaleString();
 }
 
-function closeDrawer() { document.getElementById('drawerContainer').innerHTML=''; }
+function closeDrawer() { document.getElementById('drawerContainer').innerHTML = ''; }
 
+// ── 從 VBP 加入行程（可選日期 + 插入位置）──
 function addVbpToTrip(name, nameKo) {
   closeDrawer();
+  const dayOpts = tripDays.map(d => `<option value="${d.id}">${d.dateLabel} · ${d.area}</option>`).join('');
   showModal(`
     <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:4px">➕ 加入行程</h2>
     <p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">${name}</p>
     <div style="display:grid;gap:11px">
       <div><label class="form-label">選擇日期</label>
-        <select class="form-select" id="nDay">
-          ${tripDays.map(d=>`<option value="${d.id}">${d.dateLabel} · ${d.area}</option>`).join('')}
-        </select></div>
+        <select class="form-select" id="nDay" onchange="updatePositionOpts()">${dayOpts}</select></div>
+      <div><label class="form-label">插入位置</label>
+        <select class="form-select" id="nPosition"></select></div>
       <div class="flex gap-3">
         <div style="flex:1"><label class="form-label">時間</label>
-          <input class="form-input" id="nTime" placeholder="10:00"></div>
+          <input class="form-input" id="nTime" placeholder="10:00（可留空）"></div>
         <div style="flex:1"><label class="form-label">時段</label>
-          <select class="form-select" id="nPeriod">${PERIODS.map(p=>`<option>${p}</option>`).join('')}</select></div>
+          <select class="form-select" id="nPeriod">${PERIODS.map(p => `<option>${p}</option>`).join('')}</select></div>
       </div>
       <div><label class="form-label">類別</label>
-        <select class="form-select" id="nCat">${CATS.map(c=>`<option ${c==='景點'?'selected':''}>${c}</option>`).join('')}</select></div>
+        <select class="form-select" id="nCat">${CATS.map(c => `<option ${c === '景點' ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
       <div><label class="form-label">備註</label>
         <textarea class="form-input" id="nNote" rows="2" placeholder="釜山PASS / 需預約..."></textarea></div>
-      <div><label class="form-label">狀態標籤</label>
-        <select class="form-select" id="nStatus">${STATUSES.map(s=>`<option>${s}</option>`).join('')}</select></div>
+      <div><label class="form-label">狀態標籤（可多選，點擊切換）</label>
+        <div class="status-chips" id="statusChips"></div></div>
       <div class="flex gap-2 pt-1">
         <button class="btn btn-teal" style="flex:1"
           onclick="saveVbpAdd(${JSON.stringify(name)},${JSON.stringify(nameKo)})">＋ 加入</button>
         <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
       </div>
     </div>`);
+  updatePositionOpts();
+  renderStatusChips('statusChips', []);
 }
 
 function saveVbpAdd(name, nameKo) {
   const dayId = document.getElementById('nDay').value;
-  tripDays.find(d=>d.id===dayId).items.push({
-    id:'vbp_'+Date.now(), time:document.getElementById('nTime').value.trim(),
-    period:document.getElementById('nPeriod').value,
-    category:document.getElementById('nCat').value,
-    name, nameKo, hours:'', note:document.getElementById('nNote').value.trim(),
-    fee:'', pass:false, status:document.getElementById('nStatus').value,
-    nav:{ type:'naver', url:'' }
-  });
+  const pos   = parseInt(document.getElementById('nPosition').value);
+  const day   = tripDays.find(d => d.id === dayId);
+  const newItem = {
+    id: 'vbp_' + Date.now(),
+    time: document.getElementById('nTime').value.trim(),
+    period: document.getElementById('nPeriod').value,
+    category: document.getElementById('nCat').value,
+    name, nameKo, hours: '', note: document.getElementById('nNote').value.trim(),
+    fee: '', pass: false, status: getSelectedStatuses('statusChips'),
+    nav: { type: 'naver', url: '' }
+  };
+  // 插入到指定位置（-1 = 最後）
+  if (pos === -1 || pos >= day.items.length) {
+    day.items.push(newItem);
+  } else {
+    day.items.splice(pos, 0, newItem);
+  }
   saveAll(); closeModal();
-  currentDay=dayId; currentView='trip'; setNav('nav-trip'); renderAll();
+  currentDay = dayId; currentView = 'trip'; setNav('nav-trip'); renderAll();
   showToast('✅ 已加入行程！');
 }
 
 // ── 行程 CRUD ──
 function editItem(itemId, dayId) {
-  const day  = tripDays.find(d=>d.id===dayId);
-  const item = day.items.find(i=>i.id===itemId);
-  const nav  = item.nav || { type:'naver', url:'' };
+  const day  = tripDays.find(d => d.id === dayId);
+  const item = day.items.find(i => i.id === itemId);
+  const nav  = item.nav || { type: 'naver', url: '' };
   const navType = nav.type || 'naver';
   showModal(`
     <div class="modal-handle"></div>
@@ -1410,43 +3666,58 @@ function editItem(itemId, dayId) {
         <div style="flex:1"><label class="form-label">時間</label>
           <input class="form-input" id="eTime" value="${item.time}" placeholder="09:00"></div>
         <div style="flex:1"><label class="form-label">時段</label>
-          <select class="form-select" id="ePeriod">${PERIODS.map(p=>`<option ${item.period===p?'selected':''}>${p}</option>`).join('')}</select></div>
+          <select class="form-select" id="ePeriod">
+            ${PERIODS.map(p => `<option ${item.period === p ? 'selected' : ''}>${p}</option>`).join('')}
+          </select></div>
       </div>
       <div><label class="form-label">類別</label>
-        <select class="form-select" id="eCat">${CATS.map(c=>`<option ${item.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+        <select class="form-select" id="eCat">
+          ${CATS.map(c => `<option ${item.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+        </select></div>
       <div><label class="form-label">行程名稱</label>
         <input class="form-input" id="eName" value="${item.name}"></div>
-      <div><label class="form-label">韓文名稱（顯示在卡片，可留空）</label>
-        <input class="form-input" id="eNameKo" value="${item.nameKo||''}" placeholder="한국어 이름"></div>
-      <div><label class="form-label">營業時間</label>
-        <input class="form-input" id="eHours" value="${item.hours||''}" placeholder="例：10:00–21:00 或 24小時"></div>
-      <div><label class="form-label">備註</label>
-        <textarea class="form-input" id="eNote" rows="2">${item.note||''}</textarea></div>
+      <div><label class="form-label">韓文名稱（可留空）</label>
+        <input class="form-input" id="eNameKo" value="${item.nameKo || ''}" placeholder="한국어 이름"></div>
+      <div><label class="form-label">營業時間（可留空）</label>
+        <input class="form-input" id="eHours" value="${item.hours || ''}" placeholder="例：10:00–21:00 或 24小時"></div>
+      <div><label class="form-label">備註（可留空）</label>
+        <textarea class="form-input" id="eNote" rows="2">${item.note || ''}</textarea></div>
       <div style="display:flex;align-items:center;gap:10px;padding:4px 0">
-        <input type="checkbox" id="ePass" ${item.pass?'checked':''} style="width:18px;height:18px;accent-color:var(--violet)">
+        <input type="checkbox" id="ePass" ${item.pass ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--violet)">
         <label for="ePass" style="font-size:.78rem;font-weight:700;color:var(--text2);cursor:pointer">🎫 釜山 PASS 景點</label>
       </div>
-      <div><label class="form-label">狀態標籤</label>
-        <select class="form-select" id="eStatus">${STATUSES.map(s=>`<option ${item.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div><label class="form-label">狀態標籤（可多選，點擊切換）</label>
+        <div class="status-chips" id="statusChips"></div>
+      </div>
+      <div id="eBookingWrap" style="display:none">
+        <label class="form-label">📋 預訂頁網址（留空則用預設）</label>
+        <input class="form-input" id="eBookingUrl" value="${item.bookingUrl||''}"
+          placeholder="https://catchtable.co.kr/... 或 https://m.place.naver.com/...">
+        <div style="font-size:.63rem;color:var(--text3);margin-top:4px">填入後點按鈕會直接跳到此頁面</div>
+      </div>
       <div style="background:var(--bg);border-radius:10px;padding:12px;border:1.5px solid var(--border)">
         <label class="form-label" style="margin-bottom:8px">🗺️ 導航按鈕</label>
         <select class="form-select" id="eNavType" style="margin-bottom:8px">
-          <option value="naver"  ${navType==='naver'||navType==='dropdown'?'selected':''}>🟢 Naver Maps</option>
-          <option value="google" ${navType==='google'?'selected':''}>🔵 Google Maps</option>
-          <option value="none"   ${navType==='none'  ?'selected':''}>✕ 不顯示</option>
+          <option value="naver"  ${navType === 'naver'  ? 'selected' : ''}>🟢 Naver Maps</option>
+          <option value="google" ${navType === 'google' ? 'selected' : ''}>🔵 Google Maps</option>
+          <option value="none"   ${navType === 'none'   ? 'selected' : ''}>✕ 不顯示</option>
         </select>
-        <label class="form-label">導航網址（留空則不顯示按鈕）</label>
-        <input class="form-input" id="eNavUrl" value="${nav.url||''}" placeholder="https://map.naver.com/... 或 https://maps.google.com/...">
+        <label class="form-label">導航網址（留空則自動搜尋名稱）</label>
+        <input class="form-input" id="eNavUrl" value="${nav.url || ''}"
+          placeholder="https://map.naver.com/... 或 https://maps.google.com/...">
       </div>
       <div class="flex gap-2 pt-1">
         <button class="btn btn-teal" style="flex:1" onclick="saveEdit('${itemId}','${dayId}')">💾 儲存</button>
         <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
       </div>
     </div>`);
+  // 渲染多選狀態 Chips（showModal 後執行才能找到 DOM）
+  const currentStatuses = Array.isArray(item.status) ? item.status : (item.status ? [item.status] : []);
+  renderStatusChips('statusChips', currentStatuses);
 }
 
 function saveEdit(itemId, dayId) {
-  const item = tripDays.find(d=>d.id===dayId).items.find(i=>i.id===itemId);
+  const item  = tripDays.find(d => d.id === dayId).items.find(i => i.id === itemId);
   item.time     = document.getElementById('eTime').value.trim();
   item.period   = document.getElementById('ePeriod').value;
   item.category = document.getElementById('eCat').value;
@@ -1455,31 +3726,43 @@ function saveEdit(itemId, dayId) {
   item.hours    = document.getElementById('eHours').value.trim();
   item.note     = document.getElementById('eNote').value.trim();
   item.pass     = document.getElementById('ePass').checked;
-  item.status   = document.getElementById('eStatus').value;
+  item.status   = getSelectedStatuses('statusChips');
   item.nav      = {
     type: document.getElementById('eNavType').value,
     url:  document.getElementById('eNavUrl').value.trim()
   };
+  item.bookingUrl = document.getElementById('eBookingUrl')?.value.trim() || '';
   saveAll(); closeModal(); renderTrip();
   showToast('✅ 已儲存');
 }
 
+// ── 新增行程（可選日期 + 插入位置）──
 function addNewItem(dayId) {
   dayId = dayId || currentDay;
+  const dayOpts = tripDays.map(d =>
+    `<option value="${d.id}" ${d.id === dayId ? 'selected' : ''}>${d.dateLabel} · ${d.area}</option>`
+  ).join('');
+
   showModal(`
     <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">➕ 新增行程</h2>
     <div style="display:grid;gap:11px">
-      <div><label class="form-label">日期</label>
-        <select class="form-select" id="nDay">${tripDays.map(d=>`<option value="${d.id}" ${d.id===dayId?'selected':''}>${d.dateLabel} · ${d.area}</option>`).join('')}</select></div>
+      <div><label class="form-label">選擇日期</label>
+        <select class="form-select" id="nDay" onchange="updatePositionOpts()">${dayOpts}</select></div>
+      <div>
+        <label class="form-label">插入位置
+          <span style="font-weight:400;color:var(--text3)">（可自選要放在哪個行程後面）</span>
+        </label>
+        <select class="form-select" id="nPosition"></select>
+      </div>
       <div class="flex gap-3">
-        <div style="flex:1"><label class="form-label">時間</label>
-          <input class="form-input" id="nTime" placeholder="09:00（可留空）"></div>
+        <div style="flex:1"><label class="form-label">時間（可留空）</label>
+          <input class="form-input" id="nTime" placeholder="09:00"></div>
         <div style="flex:1"><label class="form-label">時段</label>
-          <select class="form-select" id="nPeriod">${PERIODS.map(p=>`<option>${p}</option>`).join('')}</select></div>
+          <select class="form-select" id="nPeriod">${PERIODS.map(p => `<option>${p}</option>`).join('')}</select></div>
       </div>
       <div><label class="form-label">類別</label>
-        <select class="form-select" id="nCat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <select class="form-select" id="nCat">${CATS.map(c => `<option>${c}</option>`).join('')}</select></div>
       <div><label class="form-label">行程名稱 *</label>
         <input class="form-input" id="nName" placeholder="景點 / 餐廳名稱"></div>
       <div><label class="form-label">韓文名稱（可留空）</label>
@@ -1492,44 +3775,93 @@ function addNewItem(dayId) {
         <input type="checkbox" id="nPass" style="width:18px;height:18px;accent-color:var(--violet)">
         <label for="nPass" style="font-size:.78rem;font-weight:700;color:var(--text2);cursor:pointer">🎫 釜山 PASS 景點</label>
       </div>
-      <div><label class="form-label">狀態標籤</label>
-        <select class="form-select" id="nStatus">${STATUSES.map(s=>`<option>${s}</option>`).join('')}</select></div>
+      <div><label class="form-label">狀態標籤（可多選，點擊切換）</label>
+        <div class="status-chips" id="statusChips"></div></div>
       <p style="font-size:.67rem;color:var(--text3);margin:0">新增後可點 ✏️ 設定導航連結</p>
       <div class="flex gap-2 pt-1">
         <button class="btn btn-teal" style="flex:1" onclick="saveNew()">➕ 新增</button>
         <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
       </div>
     </div>`);
+  updatePositionOpts();
+  renderStatusChips('statusChips', []);   // 新增時預設不選任何狀態
+}
+
+// 動態更新「插入位置」下拉選單，依目前選中的日期顯示各行程名稱
+function updatePositionOpts() {
+  const dayId = document.getElementById('nDay')?.value;
+  const sel   = document.getElementById('nPosition');
+  if (!dayId || !sel) return;
+  const day   = tripDays.find(d => d.id === dayId);
+  let opts = `<option value="0">⬆️ 放在最前面</option>`;
+  day.items.forEach((it, i) => {
+    opts += `<option value="${i + 1}">↓ 放在「${it.name.slice(0, 16)}」之後</option>`;
+  });
+  opts += `<option value="-1" selected>⬇️ 放在最後面</option>`;
+  sel.innerHTML = opts;
 }
 
 function saveNew() {
   const name = document.getElementById('nName').value.trim();
   if (!name) { showToast('⚠️ 請輸入名稱'); return; }
   const dayId = document.getElementById('nDay').value;
-  tripDays.find(d=>d.id===dayId).items.push({
-    id:'item_'+Date.now(),
-    time:document.getElementById('nTime').value.trim(),
-    period:document.getElementById('nPeriod').value,
-    category:document.getElementById('nCat').value,
-    name, nameKo:document.getElementById('nNameKo').value.trim(),
-    hours:document.getElementById('nHours').value.trim(),
-    note:document.getElementById('nNote').value.trim(),
-    fee:'', pass:document.getElementById('nPass').checked,
-    status:document.getElementById('nStatus').value
-  });
+  const pos   = parseInt(document.getElementById('nPosition').value);
+  const day   = tripDays.find(d => d.id === dayId);
+  const newItem = {
+    id: 'item_' + Date.now(),
+    time:     document.getElementById('nTime').value.trim(),
+    period:   document.getElementById('nPeriod').value,
+    category: document.getElementById('nCat').value,
+    name,
+    nameKo:   document.getElementById('nNameKo').value.trim(),
+    hours:    document.getElementById('nHours').value.trim(),
+    note:     document.getElementById('nNote').value.trim(),
+    fee: '', pass: document.getElementById('nPass').checked,
+    status: getSelectedStatuses('statusChips')
+  };
+  if (pos === -1 || pos >= day.items.length) {
+    day.items.push(newItem);
+  } else {
+    day.items.splice(pos, 0, newItem);
+  }
   saveAll(); closeModal();
-  currentDay=dayId; currentView='trip'; setNav('nav-trip'); renderAll();
+  currentDay = dayId; currentView = 'trip'; setNav('nav-trip'); renderAll();
   showToast('✅ 已新增行程');
 }
 
 function deleteItem(itemId, dayId) {
   if (!confirm('確定刪除這個行程？')) return;
-  tripDays.find(d=>d.id===dayId).items = tripDays.find(d=>d.id===dayId).items.filter(i=>i.id!==itemId);
+  const day = tripDays.find(d => d.id === dayId);
+  day.items = day.items.filter(i => i.id !== itemId);
   saveAll(); renderTrip();
   showToast('🗑️ 已刪除');
 }
 
-// ── 管理員 ──
+// ── 行程上下移動（同時段內） ──
+function moveItem(itemId, dayId, period, delta) {
+  const day   = tripDays.find(d => d.id === dayId);
+  const items = day.items;
+
+  // 取出同時段的項目（保留原始 index）
+  const group = items
+    .map((it, i) => ({ it, i }))
+    .filter(({ it }) => it.period === period);
+
+  const posInGroup = group.findIndex(({ it }) => it.id === itemId);
+  const newPosInGroup = posInGroup + delta;
+
+  // 超出範圍就不動
+  if (newPosInGroup < 0 || newPosInGroup >= group.length) return;
+
+  // 在全陣列中交換這兩個元素
+  const idxA = group[posInGroup].i;
+  const idxB = group[newPosInGroup].i;
+  [items[idxA], items[idxB]] = [items[idxB], items[idxA]];
+
+  saveAll(); renderTrip();
+}
+
+// ── 管理員模式 ──
 function toggleAdmin() {
   adminMode = !adminMode;
   document.getElementById('gearBtn').classList.toggle('on', adminMode);
@@ -1546,18 +3878,15 @@ function showExport() {
 }
 
 function dlHtml() {
-  // 把目前 tripDays / expenses 寫回 HTML 的 TRIP_DAYS / DEFAULT_EXPENSES，輸出完整 HTML
-  const htmlSrc = document.documentElement.outerHTML;
-  // 替換 TRIP_DAYS 資料區段
-  const daysJson  = JSON.stringify(tripDays, null, 2);
-  const expJson   = JSON.stringify(expenses, null, 2);
-  // 用正則把 const TRIP_DAYS = [...]; 整段替換
+  const htmlSrc  = document.documentElement.outerHTML;
+  const daysJson = JSON.stringify(tripDays, null, 2);
+  const expJson  = JSON.stringify(expenses, null, 2);
   let out = htmlSrc
     .replace(/const TRIP_DAYS\s*=\s*\[[\s\S]*?\](?=\s*;)/, 'const TRIP_DAYS = ' + daysJson)
     .replace(/const DEFAULT_EXPENSES\s*=\s*\[[\s\S]*?\](?=\s*;)/, 'const DEFAULT_EXPENSES = ' + expJson);
-  const blob = new Blob([out], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  const blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
   a.download = 'busan_trip_' + new Date().toISOString().split('T')[0] + '.html';
   a.click();
   showToast('⬇️ HTML 已下載，上傳 GitHub 即可！');
@@ -1565,8 +3894,8 @@ function dlHtml() {
 
 function resetData() {
   if (!confirm('確定重設為初始資料？所有在 App 內的修改將遺失。')) return;
-  tripDays  = JSON.parse(JSON.stringify(TRIP_DAYS));
-  expenses  = JSON.parse(JSON.stringify(DEFAULT_EXPENSES));
+  tripDays = JSON.parse(JSON.stringify(TRIP_DAYS));
+  expenses = JSON.parse(JSON.stringify(DEFAULT_EXPENSES));
   saveAll(); renderAll();
   showToast('♻️ 已重設為初始資料');
 }
@@ -1577,122 +3906,121 @@ function startCd() {
   cdInterval = setInterval(updateCd, 1000);
   updateCd();
 }
+
 function updateCd() {
   const diff = cdTarget - new Date();
-  const el = document.getElementById('cdDigits');
+  const el   = document.getElementById('cdDigits');
   const fill = document.getElementById('cdFill');
   if (!el) return;
-  if (diff <= 0) { el.textContent = '🎉 出發！'; el.style.color='var(--teal)'; if(fill)fill.style.width='0%'; return; }
-  const days = Math.floor(diff/86400000);
-  const h = Math.floor((diff%86400000)/3600000).toString().padStart(2,'0');
-  const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-  const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+  if (diff <= 0) {
+    el.textContent = '🎉 出發！'; el.style.color = 'var(--teal)';
+    if (fill) fill.style.width = '0%';
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const h    = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+  const m    = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+  const s    = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
   el.textContent = days > 0 ? `${days}天 ${h}:${m}:${s}` : `${h}:${m}:${s}`;
   if (fill) {
     const base = new Date('2026-01-01');
     const pct  = Math.max(0, Math.min(100, (diff / (cdTarget - base)) * 100));
-    fill.style.width = pct + '%';
+    fill.style.width     = pct + '%';
     fill.className = 'cd-fill' + (pct < 20 ? ' red' : pct < 50 ? ' yellow' : '');
   }
 }
+
 function showCdSettings() {
-  const dt = cdTarget.toISOString().slice(0,16);
+  const dt = cdTarget.toISOString().slice(0, 16);
   showModal(`
     <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">⏱️ VBP 倒數設定</h2>
     <div><label class="form-label">目標時間</label>
       <input type="datetime-local" class="form-input" id="cdInp" value="${dt}"></div>
-    <div class="flex gap-2 mt-4">
+    <div class="flex gap-2" style="margin-top:16px">
       <button class="btn btn-teal" style="flex:1" onclick="saveCd()">儲存</button>
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
     </div>`);
 }
+
 function saveCd() {
   cdTarget = new Date(document.getElementById('cdInp').value);
   localStorage.setItem('bs_cd', cdTarget.toISOString());
   startCd(); closeModal(); showToast('⏱️ 倒數時間已更新');
 }
 
-// ── 動態時間高亮 ──
+// ── 動態時間高亮（標記「現在」的行程）──
 function highlightCurrentItem() {
-  // 清除所有既有 .now
-  document.querySelectorAll('.trip-card.now').forEach(c=>c.classList.remove('now'));
-
+  document.querySelectorAll('.trip-card.now').forEach(c => c.classList.remove('now'));
   const todayStr = new Date().toISOString().split('T')[0];
-  const day = tripDays.find(d=>d.date===todayStr);
-  if (!day || currentDay!==day.id) return;
+  const day      = tripDays.find(d => d.date === todayStr);
+  if (!day || currentDay !== day.id) return;
 
-  const now = new Date();
-  const nowMin = now.getHours()*60+now.getMinutes();
-
-  // 只取有 time 的項目，依時間排序
-  const timed = day.items
-    .filter(it=>it.time)
-    .sort((a,b)=>{
-      const [ah,am]=a.time.split(':').map(Number);
-      const [bh,bm]=b.time.split(':').map(Number);
-      return (ah*60+am)-(bh*60+bm);
+  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+  const timed  = day.items
+    .filter(it => it.time)
+    .sort((a, b) => {
+      const [ah, am] = a.time.split(':').map(Number);
+      const [bh, bm] = b.time.split(':').map(Number);
+      return (ah * 60 + am) - (bh * 60 + bm);
     });
-
   if (!timed.length) return;
 
-  // 找出「time 已過且下一個 time 未到」的項目
   let current = null;
-  for (let i=0; i<timed.length; i++) {
-    const [hh,mm]=timed[i].time.split(':').map(Number);
-    const itemMin = hh*60+mm;
-    const nextMin = i+1 < timed.length
-      ? (()=>{ const [nh,nm]=timed[i+1].time.split(':').map(Number); return nh*60+nm; })()
+  for (let i = 0; i < timed.length; i++) {
+    const [hh, mm]  = timed[i].time.split(':').map(Number);
+    const itemMin   = hh * 60 + mm;
+    const nextMin   = i + 1 < timed.length
+      ? (() => { const [nh, nm] = timed[i + 1].time.split(':').map(Number); return nh * 60 + nm; })()
       : Infinity;
     if (nowMin >= itemMin && nowMin < nextMin) { current = timed[i]; break; }
   }
-  // 若早於第一個行程，高亮第一個
   if (!current && timed.length) {
-    const [fh,fm]=timed[0].time.split(':').map(Number);
-    if (nowMin < fh*60+fm) current = timed[0];
+    const [fh, fm] = timed[0].time.split(':').map(Number);
+    if (nowMin < fh * 60 + fm) current = timed[0];
   }
-
   if (current) {
-    const card=document.getElementById('card-'+current.id);
-    if(card){card.classList.add('now');card.scrollIntoView({behavior:'smooth',block:'center'});}
+    const card = document.getElementById('card-' + current.id);
+    if (card) { card.classList.add('now'); card.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   }
 }
 
 function scrollToCurrent() { highlightCurrentItem(); }
 
-// ── 導覽 ──
+// ── 導覽切換 ──
 function switchView(v) {
-  currentView=v;
-  const m={trip:'nav-trip',expenses:'nav-exp',fx:'nav-fx',offline:'nav-offline'};
-  setNav(m[v]||'nav-trip');
+  currentView = v;
+  const navMap = { trip: 'nav-trip', expenses: 'nav-exp', fx: 'nav-fx', offline: 'nav-offline' };
+  setNav(navMap[v] || 'nav-trip');
   renderAll();
 }
+
 function setNav(id) {
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
 }
 
 // ── Modal ──
 function showModal(html) {
-  document.getElementById('modalContainer').innerHTML=`
+  document.getElementById('modalContainer').innerHTML = `
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal-box" id="modalBox">${html}</div>
     </div>`;
-  // 只有「按下」和「放開」都在背景（overlay）上才關閉，滑動不觸發
   const overlay = document.getElementById('modalOverlay');
   let downOnOverlay = false;
-  overlay.addEventListener('mousedown', e => { downOnOverlay = e.target === overlay; });
-  overlay.addEventListener('mouseup',   e => { if (downOnOverlay && e.target === overlay) closeModal(); });
-  overlay.addEventListener('touchstart', e => { downOnOverlay = e.target === overlay; }, {passive:true});
+  overlay.addEventListener('mousedown',  e => { downOnOverlay = e.target === overlay; });
+  overlay.addEventListener('mouseup',    e => { if (downOnOverlay && e.target === overlay) closeModal(); });
+  overlay.addEventListener('touchstart', e => { downOnOverlay = e.target === overlay; }, { passive: true });
   overlay.addEventListener('touchend',   e => { if (downOnOverlay && e.target === overlay) closeModal(); });
 }
-function closeModal(){document.getElementById('modalContainer').innerHTML='';}
+
+function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
 
 // ── Toast ──
 function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 // ── 啟動 ──
@@ -1709,8 +4037,8 @@ document.addEventListener('DOMContentLoaded', () => {
   fxBtn.addEventListener('touchend',   endPress);
   fxBtn.addEventListener('mousedown',  startPress);
   fxBtn.addEventListener('mouseup',    endPress);
-  fxBtn.title = '點擊：匯率換算 ｜ 長按：離線資訊';
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
