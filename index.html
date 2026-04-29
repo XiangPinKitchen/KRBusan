@@ -98,8 +98,8 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 /* ════ 日期標題卡 ════ */
 .day-hdr {
   background: linear-gradient(135deg, #0ABFA3, #0891B2);
-  border-radius: 16px; padding: 16px 20px; margin-bottom: 14px;
-  color: #fff; box-shadow: 0 8px 24px rgba(10,191,163,.25);
+  border-radius: 12px; padding: 8px 14px; margin-bottom: 10px;
+  color: #fff; box-shadow: 0 4px 14px rgba(10,191,163,.2);
 }
 
 /* ════ 時段分隔線 ════ */
@@ -254,8 +254,8 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 
 .modal-box {
   background: var(--surface); border-radius: 22px 22px 0 0;
-  padding: 22px 18px 32px; width: 100%; max-width: 520px;
-  max-height: 92vh; overflow-y: auto;
+  padding: 16px 16px 100px; width: 100%; max-width: 520px;
+  max-height: 88vh; overflow-y: auto;
   box-shadow: var(--shadow-lg);
   animation: slideUp .25s cubic-bezier(.34,1.56,.64,1);
 }
@@ -297,7 +297,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 }
 .drawer {
   position: fixed; right: 0; top: 0; bottom: 0;
-  width: min(100vw, 390px); background: var(--surface);
+  width: min(100vw, 420px); background: var(--surface);
   box-shadow: var(--shadow-lg); z-index: 151;
   display: flex; flex-direction: column;
   animation: slideRight .25s cubic-bezier(.34,1.2,.64,1);
@@ -2876,12 +2876,26 @@ function init() {
   cdTarget = sc ? new Date(sc) : new Date(TRIP_META.cdTarget);
   startCd();
 
-  // VBP 勾選狀態
+  // VBP 勾選狀態：從 localStorage 讀取，若無則初始化
   const sv = localStorage.getItem('bs_vbp');
   vbpChecked = sv ? JSON.parse(sv) : {};
+
+  // 自動勾選：行程表內有 pass:true 的項目 → 用 item.name 比對 VBP_DATA
+  // 同時也比對行程表內所有 item.name 與 VBP_DATA 的 name 是否吻合
+  const vbpAllNames = new Set();
+  VBP_DATA.forEach(a => a.items.forEach(it => vbpAllNames.add(it.name)));
+
   tripDays.forEach(d => d.items.forEach(it => {
-    if (it.pass && it.name && !(it.name in vbpChecked)) vbpChecked[it.name] = true;
+    // pass:true 的直接勾選（原有邏輯）
+    if (it.pass && it.name && !(it.name in vbpChecked)) {
+      vbpChecked[it.name] = true;
+    }
+    // 行程名稱與 VBP 景點完全吻合也勾選
+    if (it.name && vbpAllNames.has(it.name) && !(it.name in vbpChecked)) {
+      vbpChecked[it.name] = true;
+    }
   }));
+  saveAll(); // 把自動勾選的狀態存入 localStorage
 
   // 自動跳到今天
   const todayStr = new Date().toISOString().split('T')[0];
@@ -2931,13 +2945,13 @@ function renderTrip() {
   const icons = { 上午: '🌅', 下午: '☀️', 晚上: '🌙' };
 
   let html = `
-    <div class="day-hdr" style="padding:10px 14px">
+    <div class="day-hdr">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2 flex-wrap">
-          <span style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">${day.dateLabel}</span>
-          <span style="font-size:.9rem;opacity:.85">📍 ${day.area}</span>
+          <span style="font-family:'Playfair Display',serif;font-size:.78rem;font-weight:700">${day.dateLabel}</span>
+          <span style="font-size:.75rem;opacity:.85">📍 ${day.area}</span>
         </div>
-        ${adminMode ? `<button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35);font-size:.7rem;padding:5px 10px;flex-shrink:0" onclick="addNewItem('${day.id}')">＋ 新增</button>` : ''}
+        ${adminMode ? `<button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.35);font-size:.65rem;padding:4px 9px;flex-shrink:0" onclick="addNewItem('${day.id}')">＋ 新增</button>` : ''}
       </div>
     </div>`;
 
@@ -3051,7 +3065,7 @@ function renderCard(it, dayId, idx) {
 function renderExpenses() {
   const total = expenses.reduce((s, e) => s + e.perPerson, 0);
   let html = `
-    <div class="day-hdr mb-4" style="padding:10px 14px">
+    <div class="day-hdr mb-4" style="padding:0">
       <div style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">💰 預估費用明細</div>
     </div>
     ${adminMode ? '<button class="btn btn-teal btn-sm mb-3 w-full" onclick="addExpense()">＋ 新增費用項目</button>' : ''}`;
@@ -3132,7 +3146,6 @@ function renderExpenses() {
 // ── 費用 CRUD ──
 function addExpense() {
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">➕ 新增費用項目</h2>
     <div style="display:grid;gap:11px">
       <div><label class="form-label">圖示（Emoji）</label>
@@ -3173,7 +3186,6 @@ function editExpense(id) {
   const e = expenses.find(x => x.id === id);
   if (!e) return;
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">✏️ 編輯費用項目</h2>
     <div style="display:grid;gap:11px">
       <div><label class="form-label">圖示（Emoji）</label>
@@ -3248,7 +3260,7 @@ function renderFx() {
   const quick_krw = [1000, 5000, 10000, 30000, 50000, 100000];
 
   document.getElementById('main').innerHTML = `
-    <div class="day-hdr mb-4" style="padding:10px 14px">
+    <div class="day-hdr mb-4" style="padding:0">
       <div class="flex items-center gap-2 flex-wrap">
         <span style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700">💱 匯率換算</span>
         <span style="font-size:.9rem;opacity:.85">離線使用・更新日期：${new Date().toLocaleDateString('zh-TW').replace(/\//g,'-')}</span>
@@ -3391,11 +3403,12 @@ function calcTax() {
 }
 
 function quickFx(v) {
-  renderFx();
-  setTimeout(() => {
-    const inp = document.getElementById('fxInput');
-    if (inp) { inp.value = v; calcFx(); }
-  }, 10);
+  // 直接填入數值並計算，不重新渲染頁面（避免匯率被 reset）
+  const inp = document.getElementById('fxInput');
+  if (inp) { inp.value = v; calcFx(); }
+  // 讓被點擊的按鈕短暫高亮
+  document.querySelectorAll('.fx-quick-btn').forEach(b => b.classList.remove('active-fx'));
+  event && event.currentTarget && event.currentTarget.classList.add('active-fx');
 }
 
 // ── 離線資訊 ──
@@ -3498,7 +3511,10 @@ function openVbpDrawer(filterArea) {
       <div class="drawer-hdr">
         <div class="flex items-center justify-between mb-3">
           <h2 style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text)">🗺️ VBP 景點圖鑑</h2>
-          <button onclick="closeDrawer()" style="font-size:1.1rem;color:var(--text3);background:none;border:none;cursor:pointer">✕</button>
+          <button onclick="closeDrawer()"
+            style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
+                   background:var(--bg);color:var(--text2);font-size:.85rem;cursor:pointer;
+                   display:flex;align-items:center;justify-content:center;font-weight:700">✕</button>
         </div>
         ${filterBtns}
       </div>
@@ -3525,7 +3541,7 @@ function _ensureFloatMenu() {
       display:none;position:fixed;z-index:9999;
       background:var(--surface);border:1.5px solid var(--border);
       border-radius:12px;box-shadow:0 8px 32px rgba(26,31,54,.18);
-      min-width:130px;overflow:hidden;
+      min-width:110px;overflow:hidden;
     `;
     document.body.appendChild(el);
     // 點選單外部自動關閉
@@ -3540,15 +3556,23 @@ function _ensureFloatMenu() {
 function _showFloatMenu(btn, html) {
   const m = _ensureFloatMenu();
   m.innerHTML = html;
+  // 先設為不可見但可渲染，才能取得正確高度
+  m.style.visibility = 'hidden';
   m.style.display = 'block';
-  // 計算位置：貼齊按鈕右下角，若超出視窗底部則往上展開
-  const r = btn.getBoundingClientRect();
-  const menuH = m.offsetHeight || 160;
-  const spaceBelow = window.innerHeight - r.bottom;
-  const top = spaceBelow > menuH ? r.bottom + 4 : r.top - menuH - 4;
-  m.style.top  = top + 'px';
-  m.style.left = (r.right - m.offsetWidth) + 'px';
-  _floatMenuOpen = true;
+  // requestAnimationFrame 確保瀏覽器完成 paint 後再計算位置
+  requestAnimationFrame(() => {
+    const r = btn.getBoundingClientRect();
+    const menuH = m.offsetHeight;
+    const menuW = m.offsetWidth;
+    const spaceBelow = window.innerHeight - r.bottom - 8;
+    const top  = spaceBelow >= menuH ? r.bottom + 4 : r.top - menuH - 4;
+    // 水平：優先靠右對齊按鈕，若超出左邊界則靠左
+    const left = Math.max(8, Math.min(r.right - menuW, window.innerWidth - menuW - 8));
+    m.style.top  = top + 'px';
+    m.style.left = left + 'px';
+    m.style.visibility = 'visible';
+    _floatMenuOpen = true;
+  });
 }
 
 function _hideFloatMenu() {
@@ -3563,7 +3587,7 @@ function openCardMenu(btn, itemId, dayId, period, event) {
   if (_floatMenuOpen) { _hideFloatMenu(); return; }
   const row = (label, style, fn) =>
     `<button onclick="${fn};_hideFloatMenu()"
-      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+      style="width:100%;padding:6px 11px;text-align:left;font-size:.72rem;font-weight:700;
              background:none;border:none;cursor:pointer;${style};border-bottom:1px solid var(--border)"
     >${label}</button>`;
   _showFloatMenu(btn, `
@@ -3571,7 +3595,7 @@ function openCardMenu(btn, itemId, dayId, period, event) {
     ${row('↓ 往下移','color:var(--text2)',`moveItem('${itemId}','${dayId}','${period}',1)`)}
     ${row('✏️ 編輯','color:var(--text)',`editItem('${itemId}','${dayId}')`)}
     <button onclick="deleteItem('${itemId}','${dayId}');_hideFloatMenu()"
-      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+      style="width:100%;padding:6px 11px;text-align:left;font-size:.72rem;font-weight:700;
              background:none;border:none;cursor:pointer;color:var(--red)">🗑️ 刪除</button>
   `);
 }
@@ -3582,10 +3606,10 @@ function openExpMenu(btn, expId, event) {
   if (_floatMenuOpen) { _hideFloatMenu(); return; }
   _showFloatMenu(btn, `
     <button onclick="editExpense('${expId}');_hideFloatMenu()"
-      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+      style="width:100%;padding:6px 11px;text-align:left;font-size:.72rem;font-weight:700;
              background:none;border:none;cursor:pointer;color:var(--text);border-bottom:1px solid var(--border)">✏️ 編輯</button>
     <button onclick="deleteExpense('${expId}');_hideFloatMenu()"
-      style="width:100%;padding:9px 14px;text-align:left;font-size:.78rem;font-weight:700;
+      style="width:100%;padding:6px 11px;text-align:left;font-size:.72rem;font-weight:700;
              background:none;border:none;cursor:pointer;color:var(--red)">🗑️ 刪除</button>
   `);
 }
@@ -3598,7 +3622,6 @@ function addVbpToTrip(name, nameKo) {
   closeDrawer();
   const dayOpts = tripDays.map(d => `<option value="${d.id}">${d.dateLabel} · ${d.area}</option>`).join('');
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:4px">➕ 加入行程</h2>
     <p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">${name}</p>
     <div style="display:grid;gap:11px">
@@ -3659,7 +3682,6 @@ function editItem(itemId, dayId) {
   const nav  = item.nav || { type: 'naver', url: '' };
   const navType = nav.type || 'naver';
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">✏️ 編輯行程</h2>
     <div style="display:grid;gap:11px">
       <div class="flex gap-3">
@@ -3744,7 +3766,6 @@ function addNewItem(dayId) {
   ).join('');
 
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:16px">➕ 新增行程</h2>
     <div style="display:grid;gap:11px">
       <div><label class="form-label">選擇日期</label>
@@ -3872,7 +3893,6 @@ function toggleAdmin() {
 
 function showExport() {
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:8px">⬇️ 下載完整 HTML</h2>
     <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">下載後覆蓋上傳到 GitHub，成員用舊網址即可看到最新行程，不需要任何操作。</p>
     <button class="btn btn-teal" style="width:100%;font-size:.88rem;padding:12px" onclick="dlHtml()">⬇️ 下載 HTML 檔案</button>
@@ -3934,7 +3954,6 @@ function updateCd() {
 
 function showCdSettings() {
   showModal(`
-    <div class="modal-handle"></div>
     <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:8px">⏱️ 釜山 PASS 倒數設定</h2>
     <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">啟動後從現在開始計算 PASS 剩餘有效時間</p>
     <div style="display:grid;gap:10px">
@@ -4021,7 +4040,16 @@ function setNav(id) {
 function showModal(html) {
   document.getElementById('modalContainer').innerHTML = `
     <div class="modal-overlay" id="modalOverlay">
-      <div class="modal-box" id="modalBox">${html}</div>
+      <div class="modal-box" id="modalBox">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div style="width:34px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 0 auto;flex:1;max-width:34px;"></div>
+          <button onclick="closeModal()" aria-label="關閉"
+            style="width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
+                   background:var(--bg);color:var(--text2);font-size:.85rem;cursor:pointer;
+                   display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px">✕</button>
+        </div>
+        ${html}
+      </div>
     </div>`;
   const overlay = document.getElementById('modalOverlay');
   let downOnOverlay = false;
