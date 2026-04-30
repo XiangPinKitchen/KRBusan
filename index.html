@@ -3844,12 +3844,66 @@ function moveItem(itemId, dayId, period, delta) {
 }
 
 // ── 管理員模式 ──
+// 🔐 密碼設定：修改下方 ADMIN_PASSWORD 的值即可
+const ADMIN_PASSWORD = '233009';
+
 function toggleAdmin() {
-  adminMode = !adminMode;
-  document.getElementById('gearBtn').classList.toggle('on', adminMode);
-  document.getElementById('adminBar').style.display = adminMode ? '' : 'none';
-  // 重新渲染目前頁面，讓 ⋯ 按鈕即時顯示/隱藏
-  renderAll();
+  if (adminMode) {
+    // 已登入 → 直接登出
+    adminMode = false;
+    document.getElementById('gearBtn').classList.remove('on');
+    document.getElementById('adminBar').style.display = 'none';
+    renderAll();
+    showToast('🔒 已退出管理員模式');
+  } else {
+    // 未登入 → 跳出密碼輸入框
+    showModal(`
+      <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:6px">🔐 管理員登入</h2>
+      <p style="font-size:.72rem;color:var(--text3);margin-bottom:14px">請輸入密碼以進入管理員模式</p>
+      <div style="display:grid;gap:10px">
+        <div>
+          <label class="form-label">密碼</label>
+          <input class="form-input" id="adminPwInput" type="password" placeholder="輸入密碼…"
+            onkeydown="if(event.key==='Enter')submitAdminLogin()"
+            autofocus style="letter-spacing:3px">
+        </div>
+        <div id="adminPwError" style="display:none;font-size:.72rem;color:var(--red);font-weight:700;text-align:center">
+          ❌ 密碼錯誤，請再試一次
+        </div>
+        <button class="btn btn-teal w-full" onclick="submitAdminLogin()" style="font-size:.88rem;padding:12px">
+          🔓 登入
+        </button>
+        <button class="btn btn-ghost w-full" onclick="closeModal()">取消</button>
+      </div>`);
+    // 自動 focus 密碼欄位
+    setTimeout(() => { const el = document.getElementById('adminPwInput'); if (el) el.focus(); }, 100);
+  }
+}
+
+function submitAdminLogin() {
+  const input = document.getElementById('adminPwInput');
+  if (!input) return;
+  if (input.value === ADMIN_PASSWORD) {
+    adminMode = true;
+    closeModal();
+    document.getElementById('gearBtn').classList.add('on');
+    document.getElementById('adminBar').style.display = '';
+    renderAll();
+    showToast('✅ 已進入管理員模式');
+  } else {
+    // 密碼錯誤：顯示錯誤訊息，清空輸入
+    const errEl = document.getElementById('adminPwError');
+    if (errEl) errEl.style.display = '';
+    input.value = '';
+    input.focus();
+    // 抖動動畫
+    input.style.borderColor = 'var(--red)';
+    input.style.boxShadow = '0 0 0 3px rgba(255,107,107,.15)';
+    setTimeout(() => {
+      input.style.borderColor = '';
+      input.style.boxShadow = '';
+    }, 1200);
+  }
 }
 
 function showExport() {
