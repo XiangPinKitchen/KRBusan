@@ -443,14 +443,13 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
       </div>
       <!-- 右上角：齒輪 + 時鐘 + VBP按鈕 -->
       <div class="flex flex-col items-end gap-1">
-        <button class="gear-btn" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
+        <button class="gear-btn on" id="gearBtn" onclick="toggleAdmin()" title="管理員模式">⚙️</button>
         <div style="text-align:right">
-          <div class="cd-digits" id="cdDigits"></div>
+          <div class="cd-digits" id="cdDigits" style="color: var(--text);">2026/05/08  00:10:00</div>
           <!-- 時鐘模式：左邊「現在時間」文字 + 右邊 VBP 按鈕 -->
           <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px;margin-top:3px">
             <span id="cdNowLabel" style="font-size:.6rem;color:var(--text3);font-weight:600">現在時間</span>
-            <button onclick="showCdSettings()" id="cdLabel"
-              style="font-size:.6rem;font-weight:800;letter-spacing:.3px;
+            <button onclick="showCdSettings()" id="cdLabel" style="font-size:.6rem;font-weight:800;letter-spacing:.3px;
                      background:var(--teal-lt);color:var(--teal);
                      border:1.5px solid var(--teal-bd);border-radius:8px;
                      padding:2px 8px;cursor:pointer;white-space:nowrap">⏱️ VBP</button>
@@ -460,14 +459,14 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
     </div>
     <div class="cd-bar"><div class="cd-fill" id="cdFill" style="width:0%"></div></div>
     <div class="day-tabs mt-3" id="dayTabs">
-    <button class="day-tab " onclick="selectDay('day1')">5/23 (六)</button>
+    <button class="day-tab active" onclick="selectDay('day1')">5/23 (六)</button>
     <button class="day-tab " onclick="selectDay('day2')">5/24 (日)</button>
     <button class="day-tab " onclick="selectDay('day3')">5/25 (一)</button>
     <button class="day-tab " onclick="selectDay('day4')">5/26 (二)</button>
     <button class="day-tab " onclick="selectDay('day5')">5/27 (三)</button>
     <button class="day-tab " onclick="selectDay('day6')">5/28 (四)</button>
     <button class="day-tab " onclick="selectDay('day7')">5/29 (五)</button>
-    <button class="day-tab active" onclick="selectDay('day8')">5/30 (六)</button></div>
+    <button class="day-tab " onclick="selectDay('day8')">5/30 (六)</button></div>
   </div>
 </header>
 
@@ -475,7 +474,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 <div id="adminBar" style="display:none">
   <div class="admin-bar">
     <span style="font-size:.7rem;font-weight:800;color:var(--violet)">⚙️ 管理員模式</span>
-    <button class="btn btn-ghost btn-sm" onclick="showExport()">⬇️ 下載 HTML</button>
+    <button class="btn btn-ghost btn-sm" onclick="dlHtml()">⬇️ 下載 HTML</button>
     <button class="btn btn-sm" style="background:var(--violet-lt);color:var(--violet);border:1.5px solid var(--violet-bd)" onclick="resetData()">♻️ 重設</button>
   </div>
 </div>
@@ -484,8 +483,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
      主要內容區（由 JS 動態渲染）
      ════════════════════════════════════════════════ -->
 <!-- ⚠️ 此區塊由 JavaScript 自動填入，請勿在此手動寫內容 -->
-<main id="main" class="px-3 pt-1 pb-28">
-</main>
+<main id="main" class="px-3 pt-1 pb-28"></main>
 
 <!-- ════════════════════════════════════════════════
      底部導覽列
@@ -1361,6 +1359,24 @@ const TRIP_DAYS = [
         "bookingUrl": ""
       },
       {
+        "id": "d4-7",
+        "time": "",
+        "period": "下午",
+        "category": "點心",
+        "name": "🍽️扎嘎其市場",
+        "nameKo": "부산자갈치시장",
+        "hours": "05:00–22:00",
+        "note": "🍽️推薦美食：新東亞市場 85.87攤",
+        "fee": "",
+        "pass": false,
+        "status": [],
+        "nav": {
+          "type": "naver",
+          "url": "https://naver.me/xBwJzsdQ"
+        },
+        "bookingUrl": ""
+      },
+      {
         "id": "item_1777448774683",
         "time": "",
         "period": "下午",
@@ -1602,24 +1618,6 @@ const TRIP_DAYS = [
         "nav": {
           "type": "naver",
           "url": "https://naver.me/GCvq48kt"
-        },
-        "bookingUrl": ""
-      },
-      {
-        "id": "d4-7",
-        "time": "",
-        "period": "下午",
-        "category": "餐廳",
-        "name": "🍽️扎嘎其市場",
-        "nameKo": "부산자갈치시장",
-        "hours": "05:00–22:00",
-        "note": "",
-        "fee": "",
-        "pass": false,
-        "status": [],
-        "nav": {
-          "type": "naver",
-          "url": "https://naver.me/xBwJzsdQ"
         },
         "bookingUrl": ""
       },
@@ -3611,6 +3609,7 @@ function openCardMenu(btn, itemId, dayId, period, event) {
     ${row('↑ 往上移','color:var(--text2)',`moveItem('${itemId}','${dayId}','${period}',-1)`)}
     ${row('↓ 往下移','color:var(--text2)',`moveItem('${itemId}','${dayId}','${period}',1)`)}
     ${row('✏️ 編輯','color:var(--text)',`editItem('${itemId}','${dayId}')`)}
+    ${row('📅 移到其他日期','color:var(--blue)',`moveItemToDay('${itemId}','${dayId}')`)}
     <button onclick="deleteItem('${itemId}','${dayId}');_hideFloatMenu()"
       style="width:100%;padding:6px 11px;text-align:left;font-size:.72rem;font-weight:700;
              background:none;border:none;cursor:pointer;color:var(--red)">🗑️ 刪除</button>
@@ -3843,6 +3842,97 @@ function moveItem(itemId, dayId, period, delta) {
   saveAll(); renderTrip();
 }
 
+// ── 行程跨日移動 ──
+function moveItemToDay(itemId, fromDayId) {
+  const fromDay = tripDays.find(d => d.id === fromDayId);
+  const item    = fromDay.items.find(i => i.id === itemId);
+
+  const dayOpts = tripDays
+    .filter(d => d.id !== fromDayId)
+    .map(d => `<option value="${d.id}">${d.dateLabel} · ${d.area}</option>`)
+    .join('');
+
+  const periodOpts = PERIODS.map(p =>
+    `<option value="${p}" ${p === item.period ? 'selected' : ''}>${p}</option>`
+  ).join('');
+
+  showModal(`
+    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:4px">📅 移到其他日期</h2>
+    <p style="font-size:.72rem;color:var(--text3);margin-bottom:14px">
+      將「<strong style="color:var(--text)">${item.name.slice(0, 20)}</strong>」移到另一天
+    </p>
+    <div style="display:grid;gap:11px">
+      <div>
+        <label class="form-label">目前位置</label>
+        <div style="font-size:.78rem;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text2)">
+          ${fromDay.dateLabel} · ${fromDay.area}　／　${item.period}
+        </div>
+      </div>
+      <div>
+        <label class="form-label">移到哪一天？</label>
+        <select class="form-select" id="mtdDay" onchange="updateMtdPositionOpts()">${dayOpts}</select>
+      </div>
+      <div>
+        <label class="form-label">時段</label>
+        <select class="form-select" id="mtdPeriod">${periodOpts}</select>
+      </div>
+      <div>
+        <label class="form-label">插入位置
+          <span style="font-weight:400;color:var(--text3)">（放在哪個行程後面）</span>
+        </label>
+        <select class="form-select" id="mtdPosition"></select>
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button class="btn btn-teal" style="flex:1" onclick="saveMoveItemToDay('${itemId}','${fromDayId}')">📅 確認移動</button>
+        <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">取消</button>
+      </div>
+    </div>`);
+  updateMtdPositionOpts();
+}
+
+function updateMtdPositionOpts() {
+  const dayId = document.getElementById('mtdDay')?.value;
+  const sel   = document.getElementById('mtdPosition');
+  if (!dayId || !sel) return;
+  const day = tripDays.find(d => d.id === dayId);
+  let opts = `<option value="0">⬆️ 放在最前面</option>`;
+  day.items.forEach((it, i) => {
+    opts += `<option value="${i + 1}">↓ 放在「${it.name.slice(0, 16)}」之後</option>`;
+  });
+  opts += `<option value="-1" selected>⬇️ 放在最後面</option>`;
+  sel.innerHTML = opts;
+}
+
+function saveMoveItemToDay(itemId, fromDayId) {
+  const toDayId   = document.getElementById('mtdDay').value;
+  const newPeriod = document.getElementById('mtdPeriod').value;
+  const pos       = parseInt(document.getElementById('mtdPosition').value);
+
+  const fromDay = tripDays.find(d => d.id === fromDayId);
+  const toDay   = tripDays.find(d => d.id === toDayId);
+
+  // 從來源日移出
+  const itemIdx = fromDay.items.findIndex(i => i.id === itemId);
+  const [item]  = fromDay.items.splice(itemIdx, 1);
+
+  // 更新時段
+  item.period = newPeriod;
+
+  // 插入目標日
+  if (pos === -1 || pos >= toDay.items.length) {
+    toDay.items.push(item);
+  } else {
+    toDay.items.splice(pos, 0, item);
+  }
+
+  saveAll(); closeModal();
+  currentDay  = toDayId;
+  currentView = 'trip';
+  setNav('nav-trip');
+  renderAll();
+  showToast(`✅ 已移到 ${toDay.dateLabel}`);
+}
+
 // ── 管理員模式 ──
 // 🔐 密碼設定：修改下方 ADMIN_PASSWORD 的值即可
 const ADMIN_PASSWORD = '233009';
@@ -3920,247 +4010,9 @@ function dlHtml() {
   const expJson  = JSON.stringify(expenses, null, 2);
   let out = htmlSrc
     .replace(/const TRIP_DAYS\s*=\s*\[[\s\S]*?\](?=\s*;)/, 'const TRIP_DAYS = ' + daysJson)
-    .replace(/const DEFAULT_EXPENSES\s*=\s*\[[\s\S]*?\](?=\s*;)/, 'const DEFAULT_EXPENSES = ' + expJson);
-  const blob = new Blob([out], { type: 'text/html;charset=utf-8' });
-  const a    = document.createElement('a');
-  a.href     = URL.createObjectURL(blob);
-  a.download = 'busan_trip_' + new Date().toISOString().split('T')[0] + '.html';
-  a.click();
-  showToast('⬇️ HTML 已下載，上傳 GitHub 即可！');
-}
-
-function resetData() {
-  if (!confirm('確定重設為初始資料？所有在 App 內的修改將遺失。')) return;
-  tripDays = JSON.parse(JSON.stringify(TRIP_DAYS));
-  expenses = JSON.parse(JSON.stringify(DEFAULT_EXPENSES));
-  saveAll(); renderAll();
-  showToast('♻️ 已重設為初始資料');
-}
-
-// ── 倒數計時 ──
-function startCd() {
-  if (cdInterval) clearInterval(cdInterval);
-  cdInterval = setInterval(updateCd, 1000);
-  updateCd();
-}
-
-function updateCd() {
-  const el   = document.getElementById('cdDigits');
-  const fill = document.getElementById('cdFill');
-  const lbl  = document.getElementById('cdLabel');
-  if (!el) return;
-
-  const now = new Date();
-
-  // ── VBP 倒數模式 ──
-  if (cdMode === 'vbp24' || cdMode === 'vbp48') {
-    const diff = cdTarget - now;
-    if (lbl) lbl.textContent = (cdMode === 'vbp24' ? '⏱️ 24H 倒數中' : '⏱️ 48H 倒數中');
-    const nowLbl = document.getElementById('cdNowLabel');
-    if (nowLbl) nowLbl.style.display = 'none';     // VBP 中隱藏「現在時間」
-
-    if (diff <= 0) {
-      cancelPassCd(true); // VBP 過期 → 自動回純時鐘
-      return;
-    }
-    const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
-    const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-    const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-    el.textContent = `${h}:${m}:${s}`;
-    el.style.color = '';
-    if (fill) {
-      const total = (cdMode === 'vbp24' ? 24 : 48) * 3600000;
-      const pct   = Math.max(0, Math.min(100, (diff / total) * 100));
-      fill.style.width = pct + '%';
-      fill.className   = 'cd-fill' + (pct < 20 ? ' red' : pct < 50 ? ' yellow' : '');
-    }
-    return;
-  }
-
-  // ── 純時鐘模式（預設）──
-  if (lbl) lbl.textContent = '⏱️ VBP';
-  const nowLbl = document.getElementById('cdNowLabel');
-  if (nowLbl) nowLbl.style.display = '';           // 顯示「現在時間」
-  const yyyy = now.getFullYear();
-  const mo   = String(now.getMonth() + 1).padStart(2, '0');
-  const dd   = String(now.getDate()).padStart(2, '0');
-  const hh   = String(now.getHours()).padStart(2, '0');
-  const mm   = String(now.getMinutes()).padStart(2, '0');
-  const ss   = String(now.getSeconds()).padStart(2, '0');
-  el.textContent = `${yyyy}/${mo}/${dd}  ${hh}:${mm}:${ss}`;
-  el.style.color = 'var(--text)';
-  if (fill) { fill.style.width = '0%'; fill.className = 'cd-fill'; }
-}
-
-function showCdSettings() {
-  const isVbp = cdMode !== 'trip';
-  const vbpInfo = isVbp ? (() => {
-    const diff = cdTarget - new Date();
-    if (diff <= 0) return '（已過期）';
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0');
-    return `（剩餘 ${h}:${m}）`;
-  })() : '';
-
-  showModal(`
-    <h2 style="font-weight:800;font-size:1rem;color:var(--text);margin-bottom:4px">⏱️ 釜山 PASS 倒數設定</h2>
-    <p style="font-size:.73rem;color:var(--text3);margin-bottom:16px">點擊後從現在起算 PASS 剩餘有效時間</p>
-    <div style="display:grid;gap:10px">
-      <button class="btn btn-teal w-full" onclick="startPassCd(24)" style="font-size:.92rem;padding:14px">
-        🎫 24H PASS 倒數</button>
-      <button class="btn btn-gold w-full" onclick="startPassCd(48)" style="font-size:.92rem;padding:14px">
-        🎫 48H PASS 倒數</button>
-      ${isVbp ? `
-      <div style="border-top:1px solid var(--border);padding-top:10px">
-        <div style="font-size:.68rem;color:var(--text3);text-align:center;margin-bottom:8px">
-          目前：${cdMode === 'vbp24' ? '24H' : '48H'} VBP 倒數中 ${vbpInfo}
-        </div>
-        <button class="btn btn-red w-full" onclick="cancelPassCd(false)" style="font-size:.85rem;padding:11px">
-          🗑️ 取消 VBP 倒數</button>
-      </div>` : ''}
-      <button class="btn btn-ghost w-full" onclick="closeModal()">關閉</button>
-    </div>`);
-}
-
-function startPassCd(hours) {
-  cdTarget = new Date(Date.now() + hours * 3600000);
-  cdMode   = hours === 24 ? 'vbp24' : 'vbp48';
-  localStorage.setItem('bs_cd',      cdTarget.toISOString());
-  localStorage.setItem('bs_cd_mode', cdMode);
-  startCd(); closeModal(); showToast('⏱️ ' + hours + 'H VBP 倒數已啟動！');
-}
-
-// 取消 VBP 倒數，還原純時鐘
-// silent=true 時不顯示 toast（VBP 自動過期時用）
-function cancelPassCd(silent) {
-  cdTarget = null;
-  cdMode   = 'none';
-  localStorage.removeItem('bs_cd');
-  localStorage.removeItem('bs_cd_mode');
-  startCd();
-  if (!silent) {
-    closeModal();
-    // 跳回今天對應的行程日 + 當前時間捲動
-    const todayStr = new Date().toISOString().split('T')[0];
-    const match = tripDays.find(d => d.date === todayStr);
-    if (match) {
-      currentDay  = match.id;
-      currentView = 'trip';
-      setNav('nav-trip');
-      renderAll();
-      setTimeout(scrollToCurrent, 300);
-    }
-    showToast('✅ 已取消 VBP 倒數');
-  }
-}
-
-// ── 動態時間高亮（標記「現在」的行程）──
-function highlightCurrentItem() {
-  document.querySelectorAll('.trip-card.now').forEach(c => c.classList.remove('now'));
-  const todayStr = new Date().toISOString().split('T')[0];
-  const day      = tripDays.find(d => d.date === todayStr);
-  if (!day || currentDay !== day.id) return;
-
-  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
-  const timed  = day.items
-    .filter(it => it.time)
-    .sort((a, b) => {
-      const [ah, am] = a.time.split(':').map(Number);
-      const [bh, bm] = b.time.split(':').map(Number);
-      return (ah * 60 + am) - (bh * 60 + bm);
-    });
-  if (!timed.length) return;
-
-  let current = null;
-  for (let i = 0; i < timed.length; i++) {
-    const [hh, mm]  = timed[i].time.split(':').map(Number);
-    const itemMin   = hh * 60 + mm;
-    const nextMin   = i + 1 < timed.length
-      ? (() => { const [nh, nm] = timed[i + 1].time.split(':').map(Number); return nh * 60 + nm; })()
-      : Infinity;
-    if (nowMin >= itemMin && nowMin < nextMin) { current = timed[i]; break; }
-  }
-  if (!current && timed.length) {
-    const [fh, fm] = timed[0].time.split(':').map(Number);
-    if (nowMin < fh * 60 + fm) current = timed[0];
-  }
-  if (current) {
-    const card = document.getElementById('card-' + current.id);
-    if (card) { card.classList.add('now'); card.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-  }
-}
-
-function scrollToCurrent() { highlightCurrentItem(); }
-
-// ── 導覽切換 ──
-function switchView(v) {
-  currentView = v;
-  const navMap = { trip: 'nav-trip', expenses: 'nav-exp', fx: 'nav-fx', offline: 'nav-offline' };
-  setNav(navMap[v] || 'nav-trip');
-  renderAll();
-}
-
-function setNav(id) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
-}
-
-// ── Modal ──
-function showModal(html) {
-  document.getElementById('modalContainer').innerHTML = `
-    <div class="modal-overlay" id="modalOverlay">
-      <div class="modal-box" id="modalBox">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-          <div style="width:34px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 0 auto;flex:1;max-width:34px;"></div>
-          <button onclick="closeModal()" aria-label="關閉"
-            style="width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
-                   background:var(--bg);color:var(--text2);font-size:.85rem;cursor:pointer;
-                   display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px">✕</button>
-        </div>
-        ${html}
-      </div>
-    </div>`;
-  const overlay = document.getElementById('modalOverlay');
-  let downOnOverlay = false;
-  overlay.addEventListener('mousedown',  e => { downOnOverlay = e.target === overlay; });
-  overlay.addEventListener('mouseup',    e => { if (downOnOverlay && e.target === overlay) closeModal(); });
-  overlay.addEventListener('touchstart', e => { downOnOverlay = e.target === overlay; }, { passive: true });
-  overlay.addEventListener('touchend',   e => { if (downOnOverlay && e.target === overlay) closeModal(); });
-}
-
-function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
-
-// ── Toast ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ── 啟動 ──
-// 若在 LINE 內開啟，自動跳到外部瀏覽器（加 ?openExternalBrowser=1 參數）
-(function(){
-  var ua = navigator.userAgent || '';
-  if (/Line/i.test(ua) && !/openExternalBrowser/.test(location.search)) {
-    var sep = location.search ? '&' : '?';
-    location.replace(location.href + sep + 'openExternalBrowser=1');
-  }
-})();
-init();
-
-// 長按「💱」開啟離線資訊
-document.addEventListener('DOMContentLoaded', () => {
-  const fxBtn = document.getElementById('nav-fx');
-  if (!fxBtn) return;
-  let pressTimer;
-  const startPress = () => { pressTimer = setTimeout(() => switchView('offline'), 600); };
-  const endPress   = () => clearTimeout(pressTimer);
-  fxBtn.addEventListener('touchstart', startPress);
-  fxBtn.addEventListener('touchend',   endPress);
-  fxBtn.addEventListener('mousedown',  startPress);
-  fxBtn.addEventListener('mouseup',    endPress);
-});
-</script>
-
-
-</body></html>
+    .replace(/const DEFAULT_EXPENSES\s*=\s*\[[\s\S]*?\](?=\s*;)/, 'const DEFAULT_EXPENSES = ' + expJson)
+    // 清除殘留的靜態渲染內容，避免下次開啟時顯示舊畫面
+    .replace(/(<div id="modalContainer">)[\s\S]*?(<\/div>\s*\n?<div id="drawerContainer">)/, '$1$2')
+    .replace(/(<main id="main"[^>]*>)[\s\S]*?(<\/main>)/, '$1$2')
+    .replace(/(<div id="adminBar")[^>]*>/, '$1 style="display:none">')
+    .replace(/</body></html>
